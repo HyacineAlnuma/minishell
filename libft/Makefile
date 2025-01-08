@@ -6,7 +6,7 @@
 #    By: halnuma <halnuma@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/18 08:45:55 by halnuma           #+#    #+#              #
-#    Updated: 2024/12/25 16:43:13 by halnuma          ###   ########.fr        #
+#    Updated: 2025/01/08 12:38:06 by halnuma          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -67,7 +67,7 @@ HEADERS			= $(P_INC)libft.h 			$(P_INC)ft_printf.h \
 
 all: 			libft $(NAME)
 
-$(NAME): 		$(OBJ_ALL) Makefile $(P_INC)
+$(NAME): 		$(OBJ_ALL) Makefile $(P_INC) $(LIBFT)
 				@cp $(LIBFT) $(NAME)
 				@$(AR) $(NAME) $(OBJ_ALL)
 				@echo -n "$(_CYAN)$(_BOLD)]$(_END)"

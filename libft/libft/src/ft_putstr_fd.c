@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 12:25:51 by halnuma           #+#    #+#             */
-/*   Updated: 2024/11/18 16:00:30 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/01/08 12:45:28 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 
 void	ft_putstr_fd(char *s, int fd)
 {
+	int	s_len;
+
+	s_len = ft_strlen(s);
 	while (*s)
-		write(fd, s++, 1);
+		write(fd, s, s_len);
 }
