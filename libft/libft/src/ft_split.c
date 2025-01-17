@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 12:56:27 by halnuma           #+#    #+#             */
-/*   Updated: 2024/11/13 11:48:35 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/01/17 10:16:50 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,13 @@ static char	**create_final_array(const char *str, char c)
 	last_sep = 0;
 	parts = 0;
 	i = 0;
-	while (str[i])
+	while (i <= ft_strlen(str))
 	{
-		if (str[i] == c || i == (ft_strlen(str) - 1))
+		if (str[i] == c || i == ft_strlen(str))
 		{
-			if (i - last_sep > 1)
+			if ((i - last_sep) > 0)
 				parts++;
-			last_sep = i;
+			last_sep = i + 1;
 		}
 		i++;
 	}

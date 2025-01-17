@@ -6,7 +6,7 @@
 #    By: halnuma <halnuma@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/18 08:45:55 by halnuma           #+#    #+#              #
-#    Updated: 2025/01/17 10:05:05 by halnuma          ###   ########.fr        #
+#    Updated: 2025/01/17 10:05:25 by halnuma          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -109,4 +109,3 @@ re:
 				@$(MAKE) fclean --no-print-directory
 				@$(MAKE) all --no-print-directory
 				@echo "$(_CYAN)libft rebuilt!$(_END)"
-				@echp "yo"
