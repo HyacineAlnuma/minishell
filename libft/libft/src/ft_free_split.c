@@ -6,12 +6,11 @@
 /*   By: halnuma <halnuma@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 09:34:49 by halnuma           #+#    #+#             */
-/*   Updated: 2025/01/27 09:37:47 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/01/27 15:29:15 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-
 
 void	*ft_free_split(char **res)
 {
