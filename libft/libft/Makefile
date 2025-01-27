@@ -41,7 +41,7 @@ MAIN 			= ft_atoi 				ft_bzero				\
 				ft_itoa					ft_strmapi				\
 				ft_striteri				ft_putchar_fd			\
 				ft_putstr_fd			ft_putendl_fd			\
-				ft_putnbr_fd
+				ft_putnbr_fd			ft_free_split
 
 BONUS 			= ft_lstnew_bonus		ft_lstadd_front_bonus	\
 				ft_lstsize_bonus		ft_lstlast_bonus		\
