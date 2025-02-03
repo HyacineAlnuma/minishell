@@ -14,7 +14,7 @@ _BOLD			= \e[1m
 
 # ------ VARIABLES ------
 
-NAME			= 42SP
+NAME			= minishell
 CC				= cc
 AR				= ar -rcs
 CFLAGS			= -Wall -Wextra -Werror
