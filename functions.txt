@@ -1,3 +1,0 @@
-rl_clear_history: Clears the history list by freeing the memory of each element.
-rl_replace_line: Replaces the contents of rl_line_buffer with text.
-add_history: Adds string to the history list.
