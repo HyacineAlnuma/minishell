@@ -16,14 +16,14 @@ _BOLD			= \e[1m
 
 NAME			= minishell
 CC				= cc
-AR				= ar -rcs
 CFLAGS			= -Wall -Wextra -Werror
+FLAGS			= -lreadline
 
 # ------ PATHS ------
 
-P_OBJ 			= obj/
 P_SRC 			= src/
-P_UTILS			= $(P_SRC)utils/
+P_PARSING		= $(P_SRC)parsing/
+P_EXEC			= $(P_SRC)exec/
 P_INC			= includes/
 P_LIB			= libft/
 
@@ -31,17 +31,16 @@ P_LIB			= libft/
 
 MAIN			= main
 
-UTILS			=
+PARSING			= 
+
+EXEC			= 
 
 HDR_SRC			= libft
 
 SRC_MAIN		= $(addprefix $(P_SRC), $(addsuffix .c, $(MAIN)))
-SRC_UTILS		= $(addprefix $(P_UTILS), $(addsuffix .c, $(UTILS)))
+SRC_PARSING		= $(addprefix $(P_PARSING), $(addsuffix .c, $(PARSING)))
+SRC_EXEC		= $(addprefix $(P_EXEC), $(addsuffix .c, $(EXEC)))
 SRC_ALL			= $(SRC_MAIN) $(SRC_UTILS)
-
-OBJ_MAIN 		= $(addprefix $(P_OBJ), $(addsuffix .o, $(MAIN)))
-OBJ_UTILS 		= $(addprefix $(P_OBJ), $(addsuffix .o, $(UTILS)))
-OBJ_ALL 		= $(OBJ_MAIN) $(OBJ_UTILS)
 
 HEADERS			= $(addprefix $(P_INC), $(addsuffix .h, $(HDR_SRC)))
 LIBFT			= $(P_LIB)libft.a
@@ -51,7 +50,7 @@ LIBFT			= $(P_LIB)libft.a
 all: 			libft $(NAME)
 
 $(NAME): 		$(SRC_ALL) Makefile $(HEADERS) $(LIBFT)
-				@$(CC) $(CFLAGS) -I $(P_INC) $(SRC_ALL) $(LIBFT) -o $@
+				@$(CC) $(CFLAGS) $(FLAGS) -I $(P_INC) $(SRC_ALL) $(LIBFT) -o $@
 				@echo "$(_YELLOW)Compiling $(SRC_ALL)$(_END)"
 				@echo "$(_GREEN)$(_BOLD)$(NAME) compiled!$(_END)"
 

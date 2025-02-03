@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: halnuma <halnuma@student.42.fr>            +#+  +:+       +#+        */
+/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 17:11:02 by halnuma           #+#    #+#             */
-/*   Updated: 2025/01/27 09:43:37 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/02/03 11:09:20 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,13 @@
 # include <limits.h>
 # include <unistd.h>
 # include <stdarg.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <sys/stat.h>
+# include <dirent.h>
+# include <string.h>
+# include <stdio.h>
+# include <fcntl.h>
 
 typedef struct s_list
 {
