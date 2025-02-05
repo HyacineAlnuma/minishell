@@ -17,7 +17,7 @@ _BOLD			= \e[1m
 NAME			= minishell
 CC				= cc
 AR				= ar -rcs
-CFLAGS			= -Wall -Wextra -Werror
+CFLAGS			= -Wall -Wextra -Werror -lreadline
 
 # ------ PATHS ------
 
