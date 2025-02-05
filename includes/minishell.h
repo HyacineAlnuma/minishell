@@ -1,27 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/02/05 10:07:12 by secros           ###   ########.fr       */
+/*   Created: 2025/02/05 10:02:33 by secros            #+#    #+#             */
+/*   Updated: 2025/02/05 10:04:18 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-#include "ft_printf.h"
-#include "minishell.h"
-#include <readline/readline.h>
-#include <readline/history.h>
+#ifndef MINISHELL_H
+# define MINISHELL_H
 
-int	main(int ac, char **av)
+typedef struct	s_com t_com;
+
+struct t_com
 {
-	char	*input;
+	char	*command;
+	char	**argument;
+	char	**option;
+};
 
-	(void) ac;
-	(void) av;
-	input = readline("Prompt :");
-	ft_printf("%s", input);
-}
+#endif
