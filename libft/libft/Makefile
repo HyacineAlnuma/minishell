@@ -47,7 +47,7 @@ BONUS 			= ft_lstnew_bonus		ft_lstadd_front_bonus	\
 				ft_lstsize_bonus		ft_lstlast_bonus		\
 				ft_lstadd_back_bonus	ft_lstdelone_bonus		\
 				ft_lstclear_bonus		ft_lstiter_bonus		\
-				ft_lstmap_bonus
+				ft_lstmap_bonus			ft_lst_remove_if		
 
 # SRCALL 			= $(MAIN) $(BONUS)
 # OBJ 			= $(MAIN:.c=.o)
