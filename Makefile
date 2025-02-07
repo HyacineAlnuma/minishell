@@ -16,8 +16,8 @@ _BOLD			= \e[1m
 
 NAME			= minishell
 CC				= cc
-CFLAGS			= -Wall -Wextra -Werror
-FLAGS			= -lreadline
+AR				= ar -rcs
+CFLAGS			= -Wall -Wextra -Werror -lreadline -g3
 
 # ------ PATHS ------
 
@@ -29,7 +29,7 @@ P_LIB			= libft/
 
 # ------ FILES ------
 
-MAIN			= main
+MAIN			= main				parsing
 
 PARSING			= 
 

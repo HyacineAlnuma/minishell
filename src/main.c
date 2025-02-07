@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 10:41:15 by halnuma           #+#    #+#             */
-/*   Updated: 2025/02/07 12:54:33 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/02/07 13:36:04 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,6 @@ void	export(t_exec *cmd, t_list **env)
 {
 	t_list	*new_line;
 
-
 	new_line = ft_lstnew(cmd->opt[1]);
 	if (!new_line)
 		return ;
@@ -202,7 +201,7 @@ void	exec_cmds(t_exec **cmds, char **envp, t_list **env)
 	int		i = 0;
 	int		j = 0;
 	int		k = 0;
-	pid_t	pid[3];
+	pid_t	pid[5];
 	int		cmd_nb = 5;
 	int		pipefd[2 * cmd_nb];
 	char	*path;
@@ -262,6 +261,7 @@ int	main(int ac, char **av, char **envp)
 {
 	t_exec	*cmds[6];
 	t_list	**env;
+	int i = 0;
 
 	(void)ac;
 	(void)av;

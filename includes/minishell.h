@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/05 09:27:29 by halnuma           #+#    #+#             */
-/*   Updated: 2025/02/05 14:19:08 by halnuma          ###   ########.fr       */
+/*   Created: 2025/02/05 10:02:33 by secros            #+#    #+#             */
+/*   Updated: 2025/02/07 13:40:59 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@
 # include <fcntl.h>
 # include <sys/wait.h>
 # include <linux/limits.h>
+
+# define CHARSET " \t\n\v\f\r"
 
 typedef struct s_exec
 {
