@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 10:41:15 by halnuma           #+#    #+#             */
-/*   Updated: 2025/02/05 16:16:07 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/02/07 12:54:33 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,27 @@ t_exec	*init_struct(void)
 
 	cmd = malloc(sizeof(t_exec));
 	cmd->opt = malloc(sizeof(char *) * 3);
-	cmd->cmd = "cat";
+	cmd->cmd = "env";
 	cmd->opt[0] = "";
-	cmd->opt[1] = "test.txt";
+	//cmd->opt[1] = "test.txt";
 	// cmd->opt[2] = "test";
 	return (cmd);
 }
 
 t_exec	*init_struct2(void)
+{
+	t_exec	*cmd;
+
+	cmd = malloc(sizeof(t_exec));
+	cmd->opt = malloc(sizeof(char *) * 2);
+	cmd->cmd = "grep";
+	cmd->opt[0] = "";
+	cmd->opt[1] = "CODE";
+	// cmd->opt[2] = "test";
+	return (cmd);
+}
+
+t_exec	*init_struct3(void)
 {
 	t_exec	*cmd;
 
@@ -38,15 +51,28 @@ t_exec	*init_struct2(void)
 	return (cmd);
 }
 
-t_exec	*init_struct3(void)
+t_exec	*init_struct4(void)
 {
 	t_exec	*cmd;
 
 	cmd = malloc(sizeof(t_exec));
 	cmd->opt = malloc(sizeof(char *) * 2);
-	cmd->cmd = "pwd";
+	cmd->cmd = "grep";
 	cmd->opt[0] = "";
-	//cmd->opt[1] = "FOO=bar";
+	cmd->opt[1] = "5";
+	// cmd->opt[2] = "test";
+	return (cmd);
+}
+
+t_exec	*init_struct5(void)
+{
+	t_exec	*cmd;
+
+	cmd = malloc(sizeof(t_exec));
+	cmd->opt = malloc(sizeof(char *) * 2);
+	cmd->cmd = "wc";
+	cmd->opt[0] = "";
+	cmd->opt[1] = "-l";
 	// cmd->opt[2] = "test";
 	return (cmd);
 }
@@ -57,24 +83,24 @@ void	echo(t_exec *cmd)
 		ft_printf("%s", cmd->opt[2]);
 	else
 		ft_printf("%s\n", cmd->opt[1]);
+	exit(EXIT_SUCCESS);
 }
 
 void	cd(t_exec *cmd)
 {
 	chdir(cmd->opt[1]);
+	exit(EXIT_SUCCESS);
 }
 
 void	pwd(void)
 {
 	char	pwd[PATH_MAX];
 
-	// pwd = getenv("OLDPWD");
-	// ft_printf("%s\n", pwd);
-	//pwd = NULL;
 	if (getcwd(pwd, sizeof(pwd)) != NULL)
 		ft_printf("%s\n", pwd);
 	else
 		perror("getcwd() error");
+	exit(EXIT_SUCCESS);
 }
 
 void	export(t_exec *cmd, t_list **env)
@@ -86,6 +112,7 @@ void	export(t_exec *cmd, t_list **env)
 	if (!new_line)
 		return ;
 	ft_lstadd_back(env, new_line);
+	exit(EXIT_SUCCESS);
 }
 
 void	unset(t_exec *cmd, t_list **env)
@@ -107,6 +134,7 @@ void	unset(t_exec *cmd, t_list **env)
 		ptr = ptr->next;
 	}
 	ft_lst_remove_if(env, data_ref, ft_strncmp);
+	exit(EXIT_SUCCESS);
 }
 
 void	exit_program(t_exec *cmd)
@@ -126,6 +154,7 @@ void	print_env(t_list **env)
 		ft_printf("%s\n", ptr->content);
 		ptr = ptr->next;
 	}
+	exit(EXIT_SUCCESS);
 }
 
 t_list	**lst_env(char **envp)
@@ -149,143 +178,99 @@ t_list	**lst_env(char **envp)
 	return (lst_env);
 }
 
-int	main(int ac, char **av, char **envp)
+
+void	exec_builtins(t_exec *cmd, t_list **env)
 {
-	t_exec	*cmd;
-	int		pipefd[2];
+	if (!ft_strncmp(cmd->cmd, "echo", 5))
+		echo(cmd);
+	else if (!ft_strncmp(cmd->cmd, "cd", 3))
+		cd(cmd);
+	else if (!ft_strncmp(cmd->cmd, "pwd", 4))
+		pwd();
+	else if (!ft_strncmp(cmd->cmd, "export", 7))
+		export(cmd, env);
+	else if (!ft_strncmp(cmd->cmd, "unset", 6))
+		unset(cmd, env);
+	else if (!ft_strncmp(cmd->cmd, "env", 4))
+		print_env(env);
+	else if (!ft_strncmp(cmd->cmd, "exit", 5))
+		exit_program(cmd);
+}
+
+void	exec_cmds(t_exec **cmds, char **envp, t_list **env)
+{
+	int		i = 0;
+	int		j = 0;
+	int		k = 0;
+	pid_t	pid[3];
+	int		cmd_nb = 5;
+	int		pipefd[2 * cmd_nb];
 	char	*path;
 	char	*exe;
-	pid_t	pid1;
-	pid_t	pid2;
 
-	if (ac > 1)
+	while (i < cmd_nb)
 	{
-		(void)av;
+		if (pipe(pipefd + i * 2) == -1)
+		{
+			perror("pipe");
+			exit(EXIT_FAILURE);
+		}
+		i++;
 	}
-	if (pipe(pipefd) == -1)
+	while (cmds[j])
 	{
-		perror("pipe");
-		exit(EXIT_FAILURE);
-	}
-	pid1 = fork();
-	if (pid1 == -1)
-	{
-		perror("fork");
-		exit(EXIT_FAILURE);
-	}
-	else if (pid1 == 0)
-	{
-		close(pipefd[0]);
-		dup2(pipefd[1], 1);
-		cmd = init_struct();
-		path = "/bin/";
-		exe = ft_strjoin(path, cmd->cmd);
-		execve(exe, cmd->opt, envp);
-	}
-	else
-	{
-		//wait(NULL);
-		pid2 = fork();
-		if (pid2 == -1)
+		if ((pid[j] = fork()) == -1)
 		{
 			perror("fork");
 			exit(EXIT_FAILURE);
 		}
-		else if (pid2 == 0)
+		else if (pid[j] == 0)
 		{
-			close(pipefd[1]);
-			dup2(pipefd[0], 0);
-			cmd = init_struct2();
+			if (cmds[j + 1])
+				dup2(pipefd[k + 1], 1);
+			if (j)
+				dup2(pipefd[k - 2], 0);
+			i = 0;
+			while (i < cmd_nb * 2)
+			{
+				close(pipefd[i]);
+				i++;
+			}
+			exec_builtins(cmds[j], env);
 			path = "/bin/";
-			exe = ft_strjoin(path, cmd->cmd);
-			execve(exe, cmd->opt, envp);
+			exe = ft_strjoin(path, cmds[j]->cmd);
+			execve(exe, cmds[j]->opt, envp);
 		}
+		j++;
+		k += 2;
+	}
+	i = 0;
+	while (i < cmd_nb * 2)
+	{
+		close(pipefd[i]);
+		i++;
+	}
+	i = 0;
+	while (i < cmd_nb)
+	{
+		waitpid(pid[i], NULL, 0);
+		i++;
 	}
 }
-// int	main(int ac, char **av, char **envp)
-// {
-// 	t_exec	*cmd;
-// 	char	*path;
-// 	char	*exe;
-// 	t_list	**env;
-// 	//pid_t	pid;
-// 	pid_t	pid2;
-// 	pid_t	pid3;
-// 	pid_t	pid4;
 
+int	main(int ac, char **av, char **envp)
+{
+	t_exec	*cmds[6];
+	t_list	**env;
 
-// 	if (ac > 1)
-// 	{
-// 		(void)av;
-// 	}
-// 	env = lst_env(envp);
-// 	// pid = fork();
-// 	// if (pid == 0)
-// 	// {
-// 	// 	cmd = init_struct();
-// 	// 	if (!ft_strncmp(cmd->cmd, "ls", 2))
-// 	// 	{
-// 	// 		path = "/bin/";
-// 	// 		exe = ft_strjoin(path, cmd->cmd);
-// 	// 		execve(exe, cmd->opt, envp);
-// 	// 	}
-// 	// }
-// 	// else if (!ft_strncmp(cmd->cmd, "echo", 4))
-// 	// 	echo(cmd);
-// 	// else if (!ft_strncmp(cmd->cmd, "cd", 2))
-// 	// 	cd(cmd);
-// 	// else if (!ft_strncmp(cmd->cmd, "pwd", 3))
-// 	// 	pwd();
-// 	// else if (!ft_strncmp(cmd->cmd, "export", 6))
-// 	// 	export(cmd, env);
-// 	// else if (!ft_strncmp(cmd->cmd, "unset", 5))
-// 	// 	unset(cmd, env);
-// 	// else if (!ft_strncmp(cmd->cmd, "env", 3))
-// 	// 	print_env(env);
-// 	// else if (!ft_strncmp(cmd->cmd, "exit", 4))
-// 	// 	exit_program(cmd);
-// 	// cmd = init_struct3();
-// 	// if (!ft_strncmp(cmd->cmd, "export", 6))
-// 	// 	export(cmd, env);
-// 	// cmd = init_struct();
-// 	// if (!ft_strncmp(cmd->cmd, "env", 3))
-// 	// 	print_env(env);
-// 	//waitpid(pid, NULL, 0);
-// 	pid4 = fork();
-// 	if (pid4 == 0)
-// 	{
-// 		cmd = init_struct();
-// 		if (!ft_strncmp(cmd->cmd, "pwd", 6))
-// 			pwd();
-// 		//exit(EXIT_SUCCESS);
-// 	}
-// 	//waitpid(pid4, NULL, 0);
-// 	pid2 = fork();
-// 	if (pid2 == 0)
-// 	{
-// 		cmd = init_struct2();
-// 		if (!ft_strncmp(cmd->cmd, "cd", 2))
-// 		{
-// 			path = "/bin/";
-// 			exe = ft_strjoin(path, cmd->cmd);
-// 			execve(exe, cmd->opt, envp);
-// 		}
-// 	}
-// 	//waitpid(pid2, NULL, 0);
-// 	pid3 = fork();
-// 	if (pid3 == 0)
-// 	{
-// 		cmd = init_struct();
-// 		if (!ft_strncmp(cmd->cmd, "pwd", 6))
-// 			pwd();
-// 		//exit(EXIT_SUCCESS);
-// 	}
-// 	// if (pid3 == 0)
-// 	// {
-// 	// 	cmd = init_struct3();
-// 	// 	if (!ft_strncmp(cmd->cmd, "pwd", 3))
-// 	// 		pwd();
-// 	// 	//exit(EXIT_SUCCESS);
-// 	// }
-// 	return (0);
-// }
+	(void)ac;
+	(void)av;
+	cmds[0] = init_struct();
+	cmds[1] = init_struct2();
+	cmds[2] = init_struct3();
+	cmds[3] = init_struct4();
+	cmds[4] = init_struct5();
+	cmds[5] = NULL;
+	env = lst_env(envp);
+	exec_cmds(cmds, envp, env);
+}

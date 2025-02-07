@@ -50,7 +50,7 @@ LIBFT			= $(P_LIB)libft.a
 all: 			libft $(NAME)
 
 $(NAME): 		$(SRC_ALL) Makefile $(HEADERS) $(LIBFT)
-				@$(CC) $(CFLAGS) $(FLAGS) -I $(P_INC) $(SRC_ALL) $(LIBFT) -o $@
+				@$(CC) $(FLAGS) -I $(P_INC) $(SRC_ALL) $(LIBFT) -o $@
 				@echo "$(_YELLOW)Compiling $(SRC_ALL)$(_END)"
 				@echo "$(_GREEN)$(_BOLD)$(NAME) compiled!$(_END)"
 
