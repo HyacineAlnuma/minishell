@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 10:41:15 by halnuma           #+#    #+#             */
-/*   Updated: 2025/02/07 13:36:04 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/02/07 13:57:51 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,7 +156,7 @@ void	print_env(t_list **env)
 	exit(EXIT_SUCCESS);
 }
 
-t_list	**lst_env(char **envp)
+t_list	**lst_enve(char **envp)
 {
 	int		i;
 	t_list	**lst_env;
@@ -201,12 +201,14 @@ void	exec_cmds(t_exec **cmds, char **envp, t_list **env)
 	int		i = 0;
 	int		j = 0;
 	int		k = 0;
-	pid_t	pid[5];
-	int		cmd_nb = 5;
-	int		pipefd[2 * cmd_nb];
+	pid_t	*pid;
+	int		cmd_nb;
 	char	*path;
 	char	*exe;
 
+	cmd_nb = ft_tablen((char **)cmds);
+	pid = malloc(sizeof(int) * cmd_nb);
+	int		pipefd[2 * cmd_nb];
 	while (i < cmd_nb)
 	{
 		if (pipe(pipefd + i * 2) == -1)
@@ -257,20 +259,16 @@ void	exec_cmds(t_exec **cmds, char **envp, t_list **env)
 	}
 }
 
-int	main(int ac, char **av, char **envp)
+void	exec(t_exec **cmds, t_list **env, char **envp)
 {
-	t_exec	*cmds[6];
-	t_list	**env;
-	int i = 0;
+	//t_exec	*cmds[6];
+	//int i = 0;
 
-	(void)ac;
-	(void)av;
-	cmds[0] = init_struct();
-	cmds[1] = init_struct2();
-	cmds[2] = init_struct3();
-	cmds[3] = init_struct4();
-	cmds[4] = init_struct5();
-	cmds[5] = NULL;
-	env = lst_env(envp);
+	// cmds[0] = init_struct();
+	// cmds[1] = init_struct2();
+	// cmds[2] = init_struct3();
+	// cmds[3] = init_struct4();
+	// cmds[4] = init_struct5();
+	// cmds[5] = NULL;
 	exec_cmds(cmds, envp, env);
 }

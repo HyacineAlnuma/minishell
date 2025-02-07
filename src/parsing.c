@@ -6,16 +6,12 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/02/07 13:40:16 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/02/07 13:58:58 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-#include <errno.h>
-#include <stdio.h>
 #include "minishell.h"
-#include <readline/readline.h>
-#include <readline/history.h>
+
 
 static void	free_the_mallocs(void **pt)
 {
@@ -87,7 +83,7 @@ void	set_struct(char ***tab, t_exec **command)
 	while (command[i])
 	{
 		command[i]->cmd = tab[i][0];
-		command[i]->opt = remove_first(tab[i]); // Malloc so fail possible errno ?
+		command[i]->opt = tab[i]; // Malloc so fail possible errno ?
 		i++;
 	}
 }
@@ -190,36 +186,60 @@ t_exec	**parsing(char *str)
 	return (command);
 }
 
-int	main(int ac, char **av)
+t_list	**lst_env(char **envp)
+{
+	int		i;
+	t_list	**lst_env;
+	t_list	*new_line;
+
+	i = 0;
+	lst_env = (t_list **)malloc(sizeof(t_list **));
+	if (!lst_env)
+		return (NULL);
+	while (envp[i])
+	{
+		new_line = ft_lstnew(envp[i]);
+		if (!new_line)
+			return (NULL);
+		ft_lstadd_back(lst_env, new_line);
+		i++;
+	}
+	return (lst_env);
+}
+
+int	main(int ac, char **av, char **envp)
 {
 	char	*input;
+	t_list	**env;
 	t_exec	**command;
-	int		i;
-	int		j;
+	// int		i;
+	// int		j;
 
 	(void) ac;
 	(void) av;
 	command = NULL;
+	env = lst_env(envp);
 	while (1)
-	{	
-		i = 0;
+	{
+		//i = 0;
 		input = readline("Prompt :");
 		command = parsing(input);
 		free(input);
 		if (!command)
 			return (0);
-		while (command[i])
-		{
-			ft_printf("COM : [%s] ", command[i]->cmd);
-			j = 0;
-			while (command[i]->opt[j])
-			{
-				ft_printf("opt %d : [%s], ", j, command[i]->opt[j]);
-				j++;
-			}
-			i++;
-			ft_printf("|PIPE|");
-		}
-		ft_printf("\n");
+		// while (command[i])
+		// {
+		// 	ft_printf("COM : [%s] ", command[i]->cmd);
+		// 	j = 0;
+		// 	while (command[i]->opt[j])
+		// 	{
+		// 		ft_printf("opt %d : [%s], ", j, command[i]->opt[j]);
+		// 		j++;
+		// 	}
+		// 	i++;
+		// 	ft_printf("|PIPE|");
+		// }
+		// ft_printf("\n");
+		exec(command, env, envp);
 	}
 }
