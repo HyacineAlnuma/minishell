@@ -14,7 +14,7 @@ _CYAN			= \033[0;36m
 
 NAME			= libft.a
 CC 				= cc
-CFLAGS 			= -Wall -Wextra -Werror
+CFLAGS 			= -Wall -Wextra -Werror -g3
 
 # ----- PATHS -----
 
