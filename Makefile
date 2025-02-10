@@ -16,8 +16,8 @@ _BOLD			= \e[1m
 
 NAME			= minishell
 CC				= cc
-CFLAGS			= -Wall -Wextra -Werror
-FLAGS			= -lreadline
+AR				= ar -rcs
+CFLAGS			= -Wall -Wextra -Werror -lreadline -g3
 
 # ------ PATHS ------
 
@@ -29,13 +29,13 @@ P_LIB			= libft/
 
 # ------ FILES ------
 
-MAIN			= main
+MAIN			= main				parsing
 
 PARSING			= 
 
 EXEC			= 
 
-HDR_SRC			= libft
+HDR_SRC			= libft				minishell
 
 SRC_MAIN		= $(addprefix $(P_SRC), $(addsuffix .c, $(MAIN)))
 SRC_PARSING		= $(addprefix $(P_PARSING), $(addsuffix .c, $(PARSING)))
@@ -50,7 +50,7 @@ LIBFT			= $(P_LIB)libft.a
 all: 			libft $(NAME)
 
 $(NAME): 		$(SRC_ALL) Makefile $(HEADERS) $(LIBFT)
-				@$(CC) $(CFLAGS) $(FLAGS) -I $(P_INC) $(SRC_ALL) $(LIBFT) -o $@
+				@$(CC) $(CFLAGS) -I $(P_INC) $(SRC_ALL) $(LIBFT) -o $@
 				@echo "$(_YELLOW)Compiling $(SRC_ALL)$(_END)"
 				@echo "$(_GREEN)$(_BOLD)$(NAME) compiled!$(_END)"
 
