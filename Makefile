@@ -35,7 +35,7 @@ PARSING			=
 
 EXEC			= 
 
-HDR_SRC			= libft
+HDR_SRC			= libft				minishell
 
 SRC_MAIN		= $(addprefix $(P_SRC), $(addsuffix .c, $(MAIN)))
 SRC_PARSING		= $(addprefix $(P_PARSING), $(addsuffix .c, $(PARSING)))
