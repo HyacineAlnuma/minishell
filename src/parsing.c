@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/02/10 10:11:35 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/02/10 14:18:55 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,7 +193,7 @@ t_list	**lst_env(char **envp)
 	t_list	*new_line;
 
 	i = 0;
-	lst_env = (t_list **)malloc(sizeof(t_list **));
+	lst_env = (t_list **)ft_calloc(sizeof(t_list **), 1);
 	if (!lst_env)
 		return (NULL);
 	while (envp[i])
@@ -209,6 +209,8 @@ t_list	**lst_env(char **envp)
 
 void	print_ascii_bis(void)
 {
+	printf("\x1B[35m%s", ASCII22);
+	printf("\x1B[35m%s", ASCII23);
 	printf("\x1B[35m%s", ASCII24);
 	printf("\x1B[31m%s", ASCII25);
 	printf("\x1B[31m%s", ASCII26);
@@ -221,11 +223,13 @@ void	print_ascii_bis(void)
 	printf("\x1B[31m%s", ASCII33);
 	printf("\x1B[31m%s", ASCII34);
 	printf("\x1B[31m%s", ASCII35);
+	printf("\n\n");
 	printf("\x1B[37m");
 }
 
 void	print_ascii(void)
 {
+	printf("\n\n");
 	printf("\x1B[34m%s", ASCII1);
 	printf("\x1B[34m%s", ASCII2);
 	printf("\x1B[34m%s", ASCII3);
@@ -247,8 +251,6 @@ void	print_ascii(void)
 	printf("\x1B[35m%s", ASCII19);
 	printf("\x1B[35m%s", ASCII20);
 	printf("\x1B[35m%s", ASCII21);
-	printf("\x1B[35m%s", ASCII22);
-	printf("\x1B[35m%s", ASCII23);
 	print_ascii_bis();
 }
 

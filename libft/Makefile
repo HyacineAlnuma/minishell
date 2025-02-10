@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: halnuma <halnuma@student.42.fr>            +#+  +:+       +#+         #
+#    By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/18 08:45:55 by halnuma           #+#    #+#              #
-#    Updated: 2025/01/17 10:05:25 by halnuma          ###   ########.fr        #
+#    Updated: 2025/02/10 15:16:27 by halnuma          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,7 +37,7 @@ P_OBJ 			= obj/
 P_PRINTF 		= ft_printf/
 P_UTILS			= $(P_PRINTF)utils/
 P_INC			= includes/
-P_LIB			= libft/
+P_LIB			= libc/
 P_GNL			= gnl/
 
 # ------ FILES ------
