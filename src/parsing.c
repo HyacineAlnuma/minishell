@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/02/11 12:42:26 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/11 12:50:37 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,35 +28,6 @@ static void	free_the_mallocs(void **pt)
 	free(pt);
 	pt = NULL;
 }
-
-/* static t_exec	*alloc_command(t_exec **previous)
-{
-	t_exec	*current;
-	size_t	i;
-
-	if (!previous)
-	{
-		current = ft_calloc(sizeof(t_exec *), 2);
-		if (!current)
-			return (NULL);
-		current[0] = ft_calloc(sizeof(t_exec), 1);
-			if (!current[0])
-				return (free(current), NULL);
-		return (current);
-	}
-	i = 0;
-	while (previous[i])
-		i++;
-	current = ft_calloc(sizeof(t_exec *), i + 2);
-	if (!current)
-		return (NULL);
-	current[i] = ft_calloc(sizeof(t_exec), 1);
-	if (!current[i])
-		return (free_the_mallocs((void **) previous));
-	ft_memcpy(current, previous, (sizeof(t_exec *) * i));
-	return (free(previous), current);
-}
- */
 
 char	**remove_first(char **tab)
 {
@@ -83,7 +54,7 @@ void	set_struct(char ***tab, t_exec **command)
 	while (command[i])
 	{
 		command[i]->cmd = tab[i][0];
-		command[i]->opt = tab[i]; // Malloc so fail possible errno ?
+		command[i]->opt = tab[i];
 		i++;
 	}
 }
@@ -249,7 +220,7 @@ t_exec	**parsing(char *str, t_list **env)
 	else if (count == 2)
 	{
 		tmp = readline("pipe> ");
-		str = ft_strjoin(str, tmp);
+		str = ft_strappend(str, tmp);
 		free(tmp);
 		return (parsing(str, env));
 	}
