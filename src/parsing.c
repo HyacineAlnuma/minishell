@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/02/11 11:43:56 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/11 12:42:26 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -227,8 +227,8 @@ char	*handle_env(char *str, t_list **env)
 				len++;
 			var_env = ft_substr(str, i, len);
 			new_str = ft_substr(str, 0, i);
-			new_str = ft_strjoin(new_str, find_node(env, var_env));
-			new_str = ft_strjoin(new_str, &str[i + len]);
+			new_str = ft_strappend(new_str, find_node(env, var_env));
+			new_str = ft_strappend(new_str, (str + i + len));
 			free(str);
 			return (new_str);
 		}
