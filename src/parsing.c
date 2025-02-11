@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/02/11 10:31:12 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/02/11 11:43:56 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,6 +139,28 @@ static int	synthax_error(char *str)
 	return (0);
 }
 
+/* void	handle_quote(char ***command)
+{
+	size_t	i[3];
+	int		quote;
+
+	quote = 0;
+	ft_bzero(i, sizeof(size_t) * 3);
+	while (command[i[0]])
+	{
+		while (command[i[0]][i[1]])
+		{
+			while (command[i[0]][i[1]][i[2]]);
+			{
+				if (command[i[0]][i[1]][i[2]] == '"' && quote == 0)
+					quote = 1;
+				if (command[i[0]][i[1]][i[2]] == '\'' && quote == 0)
+					quote = 2;
+			}
+		}
+	}
+}
+ */
 char ***divide_arg(char *str)
 {
 	char ***command;
@@ -162,10 +184,60 @@ char ***divide_arg(char *str)
 			free_the_mallocs((void **) command);
 	}
 	free_the_mallocs((void **) args);
+	// handle_quote(command);
 	return (command);
 }
 
-t_exec	**parsing(char *str)
+char	*find_node(t_list **env, char *var_env)
+{
+	size_t	i;
+	t_list	*lst;
+
+	i = 0;
+	lst = *env;
+	var_env = ft_strappend(var_env, "=");
+	while (lst)
+	{
+		if (!ft_strcmp((char *)lst->content, var_env + 1))
+		{
+			while (((char *)lst->content)[i] != '=')
+				i++;
+			return (&((char *)lst->content)[i + 1]);
+		}
+		lst = lst->next;
+	}
+	return (NULL);
+}
+
+char	*handle_env(char *str, t_list **env)
+{
+	size_t	i;
+	size_t	len;
+	char	*var_env;
+	char	*new_str;
+
+	(void)env;
+	i = 0;
+	while (str[i])
+	{
+		len = 0;
+		if (str[i] == '$' && str[i + 1] && str[i + 1] != ' ')
+		{
+			while (str[i + len] && str[i + len] != ' ')	
+				len++;
+			var_env = ft_substr(str, i, len);
+			new_str = ft_substr(str, 0, i);
+			new_str = ft_strjoin(new_str, find_node(env, var_env));
+			new_str = ft_strjoin(new_str, &str[i + len]);
+			free(str);
+			return (new_str);
+		}
+		i++;
+	}
+	return (str);
+}
+
+t_exec	**parsing(char *str, t_list **env)
 {
 	size_t	count;
 	t_exec	**command;
@@ -179,10 +251,11 @@ t_exec	**parsing(char *str)
 		tmp = readline("pipe> ");
 		str = ft_strjoin(str, tmp);
 		free(tmp);
-		return (parsing(str));
+		return (parsing(str, env));
 	}
 	add_history(str);
 	count = count_char(str, '|');
+	str = handle_env(str, env);
 	command = create_struct(divide_arg(str), count + 1);
 	return (command);
 }
@@ -260,35 +333,24 @@ int	main(int ac, char **av, char **envp)
 	char	*input;
 	t_list	**env;
 	t_exec	**command;
-	// int		i;
-	// int		j;
 
-	(void) ac;
 	(void) av;
+	if (ac != 1)
+	{
+		write (2, "Error\nBad arguments", 19);
+		return (1);
+	}
 	print_ascii();
 	command = NULL;
 	env = lst_env(envp);
 	while (1)
 	{
-		//i = 0;
 		input = readline("Prompt :");
-		command = parsing(input);
-		free(input);
+		command = parsing(input, env);
+		
 		if (!command)
 			return (0);
-		// while (command[i])
-		// {
-		// 	ft_printf("COM : [%s] ", command[i]->cmd);
-		// 	j = 0;
-		// 	while (command[i]->opt[j])
-		// 	{
-		// 		ft_printf("opt %d : [%s], ", j, command[i]->opt[j]);
-		// 		j++;
-		// 	}
-		// 	i++;
-		// 	ft_printf("|PIPE|");
-		// }
-		// ft_printf("\n");
+
 		exec(command, env, envp);
 	}
 }
