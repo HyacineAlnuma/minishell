@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/02/11 10:31:12 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/02/11 11:00:12 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ t_exec	**create_struct(char ***tab, size_t count)
 		}
 	}
 	set_struct(tab, command);
+	//ft_free_split(*tab);
 	return (command);
 }
 
@@ -162,6 +163,7 @@ char ***divide_arg(char *str)
 			free_the_mallocs((void **) command);
 	}
 	free_the_mallocs((void **) args);
+	free(str);
 	return (command);
 }
 
@@ -273,7 +275,7 @@ int	main(int ac, char **av, char **envp)
 		//i = 0;
 		input = readline("Prompt :");
 		command = parsing(input);
-		free(input);
+		//free(input);
 		if (!command)
 			return (0);
 		// while (command[i])
@@ -289,6 +291,6 @@ int	main(int ac, char **av, char **envp)
 		// 	ft_printf("|PIPE|");
 		// }
 		// ft_printf("\n");
-		exec(command, env, envp);
+		exec(command, envp);
 	}
 }

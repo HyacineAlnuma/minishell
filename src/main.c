@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 10:41:15 by halnuma           #+#    #+#             */
-/*   Updated: 2025/02/10 15:56:30 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/02/11 12:56:13 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,10 +79,20 @@ t_exec	*init_struct5(void)
 
 void	echo(t_exec *cmd)
 {
-	if (!ft_strncmp(cmd->opt[1], "-n", 2))
-		ft_printf("%s", cmd->opt[2]);
-	else
-		ft_printf("%s\n", cmd->opt[1]);
+	int	i;
+
+	i = 1;
+	if (!ft_strncmp(cmd->opt[1], "-n", 3))
+		i++;
+	while (cmd->opt[i])
+	{
+		ft_printf("%s", cmd->opt[i]);
+		if (cmd->opt[i + 1])
+			ft_printf(" ");
+		i++;
+	}
+	if (ft_strncmp(cmd->opt[1], "-n", 3))
+		ft_printf("\n");
 	exit(EXIT_SUCCESS);
 }
 
@@ -190,14 +200,38 @@ void	export(t_exec *cmd, t_list **env)
 	ft_lstadd_back(env, new_line);
 }
 
-void	exit_program(t_exec *cmd)
+void	free_all(t_list **env, t_exec **cmds)
+{
+	int		i;
+	int		j;
+
+	ft_lstclear(env, NULL);
+	i = 0;
+	(void)env;
+	// (void)j;
+	while (cmds[i])
+	{
+		//free(cmds[i]->cmd);
+		j = 0;
+		while (cmds[i]->opt[j])
+		{
+			free(cmds[i]->opt[j]);
+			j++;
+		}
+		free(cmds[i]->opt);
+		i++;
+	}
+	free(cmds);
+}
+
+void	exit_program(t_exec **cmds, t_list **env)
 {
 	// pid_t	ppid;
 
 	// ppid = getppid();
 	// kill(ppid, SIGUSR1);
-	free(cmd->opt);
-	free(cmd);
+	free_all(env, cmds);
+	rl_clear_history();
 	exit(EXIT_SUCCESS);
 }
 
@@ -310,7 +344,7 @@ int	check_cmd(char *cmd)
 	return (0);
 }
 
-void	exec_cmds(t_exec **cmds, char **envp, t_list **env)
+void	exec_cmds(t_exec **cmds, char **envp)
 {
 	int		i = 0;
 	int		j = 0;
@@ -320,11 +354,13 @@ void	exec_cmds(t_exec **cmds, char **envp, t_list **env)
 	char	*exe;
 	char	*path;
 	int	status = 0;
+	t_list	**env;
 
 	//signal(SIGUSR1, &sig_handler);
 	cmd_nb = ft_tablen((char **)cmds);
 	pid = malloc(sizeof(int) * cmd_nb);
 	int		pipefd[2 * cmd_nb];
+	env = lst_env(envp);
 	while (i < cmd_nb)
 	{
 		if (pipe(pipefd + i * 2) == -1)
@@ -375,7 +411,7 @@ void	exec_cmds(t_exec **cmds, char **envp, t_list **env)
 	if (!ft_strncmp(cmds[j]->cmd, "cd", 3))
 		cd(cmds[j], env);
 	if (!ft_strncmp(cmds[j]->cmd, "exit", 5))
-		exit_program(cmds[j]);
+		exit_program(cmds, env);
 	if (!ft_strncmp(cmds[j]->cmd, "export", 7))
 		export(cmds[j], env);
 	if (!ft_strncmp(cmds[j]->cmd, "unset", 6))
@@ -393,10 +429,11 @@ void	exec_cmds(t_exec **cmds, char **envp, t_list **env)
 		//printf("process:%d status:%d\n", i, status);
 		i++;
 	}
+	free_all(env, cmds);
 }
 
 
-void	exec(t_exec **cmds, t_list **env, char **envp)
+void	exec(t_exec **cmds, char **envp)
 {
 	//t_exec	*cmds[6];
 	//int i = 0;
@@ -407,5 +444,5 @@ void	exec(t_exec **cmds, t_list **env, char **envp)
 	// cmds[3] = init_struct4();
 	// cmds[4] = init_struct5();
 	// cmds[5] = NULL;
-	exec_cmds(cmds, envp, env);
+	exec_cmds(cmds, envp);
 }
