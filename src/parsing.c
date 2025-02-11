@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/02/10 14:18:55 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/02/11 10:25:51 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,10 +177,12 @@ t_exec	**parsing(char *str)
 	else if (count == 2)
 	{
 		tmp = readline("pipe> ");
-		str = ft_strappend(str, tmp);
+		str = ft_strjoin(str, tmp);
 		free(tmp);
 		return (parsing(str));
 	}
+	//printf("string:%s\n", str);
+	add_history(str);
 	count = count_char(str, '|');
 	command = create_struct(divide_arg(str), count + 1);
 	return (command);
