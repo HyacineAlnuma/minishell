@@ -1,10 +1,11 @@
-<<<<<<< HEAD
-111
-222
-333
-444
-555
-=======
-"Hello world"
-"Hello" w
->>>>>>> 1e027521d92cfa6c2cb0af7a08c8e33060e6bba0
+includes
+libft
+Makefile
+minishell
+README.md
+src
+test.txt
+y.txt
+1
+2
+3

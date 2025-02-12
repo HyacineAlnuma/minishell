@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:02:33 by secros            #+#    #+#             */
-/*   Updated: 2025/02/11 10:48:21 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/02/12 12:25:28 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,9 +70,10 @@ typedef struct s_exec
 	char	**opt;
 	char	*infile;
 	char	*outfile;
+	int		append;
 }	t_exec;
 
-void	exec(t_exec **cmds, char **envp);
+void	exec(t_exec **cmds, char **envp, t_list **env);
 t_list	**lst_env(char **envp);
 
 #endif

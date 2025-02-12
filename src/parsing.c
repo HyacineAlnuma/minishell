@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/02/11 11:00:12 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/02/12 12:27:22 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -267,6 +267,7 @@ int	main(int ac, char **av, char **envp)
 
 	(void) ac;
 	(void) av;
+	printf("oeoeoe\n");
 	print_ascii();
 	command = NULL;
 	env = lst_env(envp);
@@ -291,6 +292,6 @@ int	main(int ac, char **av, char **envp)
 		// 	ft_printf("|PIPE|");
 		// }
 		// ft_printf("\n");
-		exec(command, envp);
+		exec(command, envp, env);
 	}
 }
