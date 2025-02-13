@@ -29,7 +29,7 @@ P_LIB			= libft/
 
 # ------ FILES ------
 
-MAIN			= main				parsing
+MAIN			= main parsing print_ascii parse_env create_struct utils
 
 PARSING			= 
 

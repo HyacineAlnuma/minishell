@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:02:33 by secros            #+#    #+#             */
-/*   Updated: 2025/02/10 13:24:21 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/02/13 10:13:49 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,16 @@ typedef struct s_exec
 	char	*outfile;
 }	t_exec;
 
+//utils
+void	free_the_mallocs(void **pt);
+void	print_ascii(void);
+
+//parsing
+char	*handle_env(char *str, t_list **env);
+t_exec	**create_struct(char ***tab, size_t count);
+t_list	**lst_env(char **envp);
+
+//exec
 void	exec(t_exec **cmds, t_list **env, char **envp);
 
 #endif

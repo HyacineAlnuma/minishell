@@ -6,85 +6,16 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/02/13 10:00:43 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/13 10:19:42 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-
-static void	free_the_mallocs(void **pt)
-{
-	size_t	i;
-
-	i = 0;
-	if (!pt)
-		return ;
-	while (pt[i])
-	{
-		free(pt[i]);
-		pt[i++] = NULL;
-	}
-	free(pt);
-	pt = NULL;
-}
-
-char	**remove_first(char **tab)
-{
-	size_t	j;
-	char **new_tab;
-
-	new_tab = ft_calloc(sizeof(char *), (ft_tablen(tab)));
-	if (!new_tab)
-		return (NULL);
-	j = 1;
-	while (tab[j])
-	{
-		new_tab[j - 1] = tab[j];
-		j++;
-	}
-	return (new_tab);
-}
-
-void	set_struct(char ***tab, t_exec **command)
-{
-	size_t	i;
-
-	i = 0;
-	while (command[i])
-	{
-		command[i]->cmd = tab[i][0];
-		command[i]->opt = tab[i];
-		i++;
-	}
-}
-
-t_exec	**create_struct(char ***tab, size_t count)
-{
-	t_exec	**command;
-	size_t	i;
-
-	i = 0;
-	command = ft_calloc(sizeof(t_exec *), (count + 1));
-	if (!command)
-		return (NULL);
-	while (i < count)
-	{
-		command[i] = malloc(sizeof(t_exec));
-		if (!command[i++])
-		{
-			free_the_mallocs((void **) command);
-			return (NULL);
-		}
-	}
-	set_struct(tab, command);
-	return (command);
-}
-
 static int	synthax_error(char *str)
 {
 	size_t	j;
-	int	i;
+	int		i;
 
 	j = 0;
 	i = 0;
@@ -93,7 +24,7 @@ static int	synthax_error(char *str)
 		i = 1;
 		while (str[j] && str[j] != '|')
 		{
-			if (!(str[j] == ' ' || !(str[j] >= 9 && str[j] <= 13)))
+			if (!(str[j] == ' ' || (str[j] >= 9 && str[j] <= 13)))
 				i = 0;
 			j++;
 		}
@@ -110,9 +41,9 @@ static int	synthax_error(char *str)
 	return (0);
 }
 
-char ***divide_arg(char *str)
+char	***divide_arg(char *str)
 {
-	char ***command;
+	char	***command;
 	char	**args;
 	size_t	tablen;
 
@@ -136,65 +67,12 @@ char ***divide_arg(char *str)
 	return (command);
 }
 
-char	*find_node(t_list **env, char *var_env)
-{
-	size_t	i;
-	t_list	*lst;
-
-	i = 0;
-	lst = *env;
-	if (!var_env)
-		return (NULL);
-	var_env = ft_strappend(var_env, "=");
-	while (lst)
-	{
-		if (!ft_strcmp((char *)lst->content, var_env + 1))
-		{
-			while (((char *)lst->content)[i] != '=')
-				i++;
-			return (&((char *)lst->content)[i + 1]);
-		}
-		lst = lst->next;
-	}
-	return (NULL);
-}
-
-char	*handle_env(char *str, t_list **env)
-{
-	size_t	i;
-	size_t	len;
-	char	*var_env;
-	char	*new_str;
-
-	(void)env;
-	i = 0;
-	while (str[i])
-	{
-		len = 0;
-		if (str[i] == '$' && str[i + 1] && str[i + 1] != ' ')
-		{
-			while (str[i + len] && str[i + len] != ' ' && str[i + len] != '/')	
-				len++;
-			var_env = ft_substr(str, i, len);	//Ca va etre fun a securiser !
-			new_str = ft_substr(str, 0, i);
-			new_str = ft_strappend(new_str, find_node(env, var_env));
-			new_str = ft_strappend(new_str, (str + i + len));
-			free(str);
-			return (new_str);
-		}
-		i++;
-	}
-	return (str);
-}
-
 t_exec	**parsing(char *str, t_list **env)
 {
 	size_t	count;
 	t_exec	**command;
 	char	*tmp;
 
-	if (!str)
-		return (NULL);
 	count = synthax_error(str);
 	if (!str || count == 1)
 		return (free(str), NULL);
@@ -210,74 +88,6 @@ t_exec	**parsing(char *str, t_list **env)
 	str = handle_env(str, env);
 	command = create_struct(divide_arg(str), count + 1);
 	return (command);
-}
-
-t_list	**lst_env(char **envp)
-{
-	int		i;
-	t_list	**lst_env;
-	t_list	*new_line;
-
-	i = 0;
-	lst_env = (t_list **)ft_calloc(sizeof(t_list **), 1);
-	if (!lst_env)
-		return (NULL);
-	while (envp[i])
-	{
-		new_line = ft_lstnew(envp[i]);
-		if (!new_line)
-			return (NULL);
-		ft_lstadd_back(lst_env, new_line);
-		i++;
-	}
-	return (lst_env);
-}
-
-void	print_ascii_bis(void)
-{
-	printf("\x1B[35m%s", ASCII22);
-	printf("\x1B[35m%s", ASCII23);
-	printf("\x1B[35m%s", ASCII24);
-	printf("\x1B[31m%s", ASCII25);
-	printf("\x1B[31m%s", ASCII26);
-	printf("\x1B[31m%s", ASCII27);
-	printf("\x1B[31m%s", ASCII28);
-	printf("\x1B[31m%s", ASCII29);
-	printf("\x1B[31m%s", ASCII30);
-	printf("\x1B[31m%s", ASCII31);
-	printf("\x1B[31m%s", ASCII32);
-	printf("\x1B[31m%s", ASCII33);
-	printf("\x1B[31m%s", ASCII34);
-	printf("\x1B[31m%s", ASCII35);
-	printf("\n\n");
-	printf("\x1B[37m");
-}
-
-void	print_ascii(void)
-{
-	printf("\n\n");
-	printf("\x1B[34m%s", ASCII1);
-	printf("\x1B[34m%s", ASCII2);
-	printf("\x1B[34m%s", ASCII3);
-	printf("\x1B[34m%s", ASCII4);
-	printf("\x1B[34m%s", ASCII5);
-	printf("\x1B[34m%s", ASCII6);
-	printf("\x1B[36m%s", ASCII7);
-	printf("\x1B[36m%s", ASCII8);
-	printf("\x1B[36m%s", ASCII9);
-	printf("\x1B[36m%s", ASCII10);
-	printf("\x1B[36m%s", ASCII11);
-	printf("\x1B[36m%s", ASCII12);
-	printf("\x1B[36m%s", ASCII13);
-	printf("\x1B[36m%s", ASCII14);
-	printf("\x1B[35m%s", ASCII15);
-	printf("\x1B[35m%s", ASCII16);
-	printf("\x1B[35m%s", ASCII17);
-	printf("\x1B[35m%s", ASCII18);
-	printf("\x1B[35m%s", ASCII19);
-	printf("\x1B[35m%s", ASCII20);
-	printf("\x1B[35m%s", ASCII21);
-	print_ascii_bis();
 }
 
 int	main(int ac, char **av, char **envp)
