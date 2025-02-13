@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/02/11 12:50:37 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/11 12:52:18 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,21 +113,15 @@ static int	synthax_error(char *str)
 /* void	handle_quote(char ***command)
 {
 	size_t	i[3];
-	int		quote;
+	size_t	quote[2];
 
-	quote = 0;
+	quote[0] = 0;
 	ft_bzero(i, sizeof(size_t) * 3);
 	while (command[i[0]])
 	{
 		while (command[i[0]][i[1]])
 		{
-			while (command[i[0]][i[1]][i[2]]);
-			{
-				if (command[i[0]][i[1]][i[2]] == '"' && quote == 0)
-					quote = 1;
-				if (command[i[0]][i[1]][i[2]] == '\'' && quote == 0)
-					quote = 2;
-			}
+			if (strchr(command[i[0]][i[1]], '\'') || strchr(command[i[0]][i[1]], '"'))
 		}
 	}
 }
