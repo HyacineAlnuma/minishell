@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 10:41:15 by halnuma           #+#    #+#             */
-/*   Updated: 2025/02/10 15:56:30 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/02/13 09:23:13 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -407,5 +407,7 @@ void	exec(t_exec **cmds, t_list **env, char **envp)
 	// cmds[3] = init_struct4();
 	// cmds[4] = init_struct5();
 	// cmds[5] = NULL;
+	if (!cmds)
+		return ;
 	exec_cmds(cmds, envp, env);
 }

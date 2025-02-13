@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/02/11 12:52:18 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/13 10:00:43 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ static int	synthax_error(char *str)
 		i = 1;
 		while (str[j] && str[j] != '|')
 		{
-			if (!(str[j] == ' ' || (str[j] >= 9 && str[j] <= 13)))
+			if (!(str[j] == ' ' || !(str[j] >= 9 && str[j] <= 13)))
 				i = 0;
 			j++;
 		}
@@ -110,22 +110,6 @@ static int	synthax_error(char *str)
 	return (0);
 }
 
-/* void	handle_quote(char ***command)
-{
-	size_t	i[3];
-	size_t	quote[2];
-
-	quote[0] = 0;
-	ft_bzero(i, sizeof(size_t) * 3);
-	while (command[i[0]])
-	{
-		while (command[i[0]][i[1]])
-		{
-			if (strchr(command[i[0]][i[1]], '\'') || strchr(command[i[0]][i[1]], '"'))
-		}
-	}
-}
- */
 char ***divide_arg(char *str)
 {
 	char ***command;
@@ -149,7 +133,6 @@ char ***divide_arg(char *str)
 			free_the_mallocs((void **) command);
 	}
 	free_the_mallocs((void **) args);
-	// handle_quote(command);
 	return (command);
 }
 
@@ -160,6 +143,8 @@ char	*find_node(t_list **env, char *var_env)
 
 	i = 0;
 	lst = *env;
+	if (!var_env)
+		return (NULL);
 	var_env = ft_strappend(var_env, "=");
 	while (lst)
 	{
@@ -188,9 +173,9 @@ char	*handle_env(char *str, t_list **env)
 		len = 0;
 		if (str[i] == '$' && str[i + 1] && str[i + 1] != ' ')
 		{
-			while (str[i + len] && str[i + len] != ' ')	
+			while (str[i + len] && str[i + len] != ' ' && str[i + len] != '/')	
 				len++;
-			var_env = ft_substr(str, i, len);
+			var_env = ft_substr(str, i, len);	//Ca va etre fun a securiser !
 			new_str = ft_substr(str, 0, i);
 			new_str = ft_strappend(new_str, find_node(env, var_env));
 			new_str = ft_strappend(new_str, (str + i + len));
@@ -208,6 +193,8 @@ t_exec	**parsing(char *str, t_list **env)
 	t_exec	**command;
 	char	*tmp;
 
+	if (!str)
+		return (NULL);
 	count = synthax_error(str);
 	if (!str || count == 1)
 		return (free(str), NULL);
@@ -302,7 +289,7 @@ int	main(int ac, char **av, char **envp)
 	(void) av;
 	if (ac != 1)
 	{
-		write (2, "Error\nBad arguments", 19);
+		write (2, "Error\nBad arguments\n", 20);
 		return (1);
 	}
 	print_ascii();
@@ -312,10 +299,6 @@ int	main(int ac, char **av, char **envp)
 	{
 		input = readline("Prompt :");
 		command = parsing(input, env);
-		
-		if (!command)
-			return (0);
-
 		exec(command, env, envp);
 	}
 }
