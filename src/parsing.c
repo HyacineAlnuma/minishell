@@ -6,11 +6,12 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/02/13 10:56:28 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/13 11:12:56 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "color.h"
 
 static int	synthax_error(char *str)
 {
@@ -97,7 +98,7 @@ void	print_prompt(t_list **env)
 	prompt = find_node(env, "$USER");
 	ft_printf("%s%s%s ", BG_BLUE, prompt, RESET);
 	prompt = find_node(env, "$PWD");
-	ft_printf("%s%s%s\n", FG_BRIGHT_GREEN, prompt, RESET);
+	ft_printf("%s%s%s%s\n", BOLD, FG_BRIGHT_GREEN, prompt, RESET);
 }
 
 int	main(int ac, char **av, char **envp)
