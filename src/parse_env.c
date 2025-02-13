@@ -6,13 +6,13 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:05:15 by secros            #+#    #+#             */
-/*   Updated: 2025/02/13 10:18:59 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/13 10:52:49 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	*find_node(t_list **env, char *var_env)
+char	*find_node(t_list **env, char *var_env)
 {
 	size_t	i;
 	t_list	*lst;
@@ -21,7 +21,7 @@ static char	*find_node(t_list **env, char *var_env)
 	lst = *env;
 	if (!var_env)
 		return (NULL);
-	var_env = ft_strappend(var_env, "=");
+	var_env = ft_strjoin(var_env, "=");
 	while (lst)
 	{
 		if (!ft_strcmp((char *)lst->content, var_env + 1))

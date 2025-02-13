@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/02/13 10:19:42 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/13 10:56:28 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,16 @@ t_exec	**parsing(char *str, t_list **env)
 	return (command);
 }
 
+void	print_prompt(t_list **env)
+{
+	char	*prompt;
+
+	prompt = find_node(env, "$USER");
+	ft_printf("%s%s%s ", BG_BLUE, prompt, RESET);
+	prompt = find_node(env, "$PWD");
+	ft_printf("%s%s%s\n", FG_BRIGHT_GREEN, prompt, RESET);
+}
+
 int	main(int ac, char **av, char **envp)
 {
 	char	*input;
@@ -107,7 +117,8 @@ int	main(int ac, char **av, char **envp)
 	env = lst_env(envp);
 	while (1)
 	{
-		input = readline("Prompt :");
+		print_prompt(env);
+		input = readline("minishell % ");
 		command = parsing(input, env);
 		exec(command, env, envp);
 	}
