@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 10:41:15 by halnuma           #+#    #+#             */
-/*   Updated: 2025/02/14 09:47:01 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/02/14 11:37:41 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,6 +152,8 @@ void	cd(t_exec *cmd, t_list **env)
 		perror("getcwd() error");
 	ptr = *env;
 	previouspwd = get_previous_pwd(env);
+	if (!cmd->opt[1])
+		return ;
 	if (!ft_strncmp(cmd->opt[1], "-", 2))
 		cmd->opt[1] = previouspwd;
 	if (!chdir(cmd->opt[1]))
@@ -379,6 +381,8 @@ void	exec_cmds(t_exec **cmds, char **envp, t_list **env, int pipe_nb)
 	char	*path;
 	int	status = 0;
 	int		pipefd[2 * pipe_nb];
+	char	pwd[PATH_MAX];
+
 	// int		outfile_fd;
 	// int		infile_fd;
 
@@ -436,7 +440,14 @@ void	exec_cmds(t_exec **cmds, char **envp, t_list **env, int pipe_nb)
 			}
 			else if (!exec_builtins(cmds[j], env))
 			{
-				path = "/bin/";
+				if (!ft_strcmp(cmds[j]->cmd, "./"))
+				{
+					getcwd(pwd, sizeof(pwd));
+					cmds[j]->cmd[0] = '/';
+					path = pwd;
+				}
+				else
+					path = "/bin/";
 				exe = ft_strjoin(path, cmds[j]->cmd);
 				execve(exe, cmds[j]->opt, envp);
 			}
