@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 10:41:15 by halnuma           #+#    #+#             */
-/*   Updated: 2025/02/14 11:06:52 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/14 11:10:03 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -474,7 +474,7 @@ void	exec_cmds(t_exec **cmds, char **envp, t_list **env)
 }
 
 
-void	exec(t_exec **cmds, char **envp, t_list **env)
+void	exec(t_exec **cmds, t_list **env, char **envp)
 {
 	//t_exec	*cmds[6];
 	//int i = 0;
