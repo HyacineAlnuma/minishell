@@ -1,0 +1,3 @@
+In minishell
+	-> "some document that exit"
+		= Do the weird loop where you have to exit twice to acually exit minishell

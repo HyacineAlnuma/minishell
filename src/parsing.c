@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/02/14 11:44:42 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/14 13:38:04 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,9 +97,9 @@ void	print_prompt(t_list **env)
 	char	*prompt;
 
 	prompt = find_node(env, "$USER");
-	ft_printf("%s%s%s ", BG_BLUE, prompt, RESET);
+	ft_printf("%s%s%s ", BG_RED, prompt, RESET);
 	prompt = find_node(env, "$PWD");
-	ft_printf("%s%s%s%s\n", BOLD, FG_BRIGHT_GREEN, prompt, RESET);
+	ft_printf("%s%s%s%s\n", BOLD, FG_BRIGHT_BLUE, prompt, RESET);
 }
 
 int	main(int ac, char **av, char **envp)

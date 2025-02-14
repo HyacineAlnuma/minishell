@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:05:15 by secros            #+#    #+#             */
-/*   Updated: 2025/02/13 10:52:49 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/14 13:37:54 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,28 +35,40 @@ char	*find_node(t_list **env, char *var_env)
 	return (NULL);
 }
 
+char	*replace_env(char *str, t_list **env, size_t index, size_t len)
+{
+	char	*var_env;
+	char	*new_str;
+
+	var_env = ft_substr(str, index, len); //Ca va etre fun a securiser !
+	new_str = ft_substr(str, 0, index);
+	new_str = ft_strappend(new_str, find_node(env, var_env));
+	new_str = ft_strappend(new_str, (str + index + len));
+	free(str);
+	return (new_str);
+}
+
 char	*handle_env(char *str, t_list **env)
 {
 	size_t	i;
 	size_t	len;
-	char	*var_env;
-	char	*new_str;
 
 	(void)env;
 	i = 0;
 	while (str[i])
 	{
-		len = 0;
+		len = 1;
 		if (str[i] == '$' && str[i + 1] && str[i + 1] != ' ')
 		{
-			while (str[i + len] && str[i + len] != ' ' && str[i + len] != '/')
+			if (str[i + len] >= '0' && str[i + len] <= '9')
+			{
+				while (str[i + len] && str[i + len] >= '0' && str[i + len] <= '9')
+					len++;
+				return (handle_env(replace_env(str, env, i, len), env));
+			}
+			while (str[i + len] && str[i + len] != ' ' && str[i + len] != '/' && str[i + len] != '$')
 				len++;
-			var_env = ft_substr(str, i, len); //Ca va etre fun a securiser !
-			new_str = ft_substr(str, 0, i);
-			new_str = ft_strappend(new_str, find_node(env, var_env));
-			new_str = ft_strappend(new_str, (str + i + len));
-			free(str);
-			return (new_str);
+			return (handle_env(replace_env(str, env, i, len), env));
 		}
 		i++;
 	}
