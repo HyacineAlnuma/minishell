@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/02/14 11:11:17 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/14 11:22:16 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,7 @@ int	main(int ac, char **av, char **envp)
 	if (ac != 1)
 	{
 		write (2, "Error\nBad arguments\n", 20);
+		fflush(stderr);
 		return (1);
 	}
 	print_ascii();
