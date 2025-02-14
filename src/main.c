@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 10:41:15 by halnuma           #+#    #+#             */
-/*   Updated: 2025/02/12 13:24:42 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/02/14 09:47:01 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -369,25 +369,21 @@ int	check_cmd(char *cmd)
 	- Here doc -> force a nous
 */
 
-void	exec_cmds(t_exec **cmds, char **envp, t_list **env)
+void	exec_cmds(t_exec **cmds, char **envp, t_list **env, int pipe_nb)
 {
 	int		i = 0;
 	int		j = 0;
 	int		k = 0;
 	pid_t	*pid;
-	int		cmd_nb;
-	int		pipe_nb;
 	char	*exe;
 	char	*path;
 	int	status = 0;
+	int		pipefd[2 * pipe_nb];
 	// int		outfile_fd;
 	// int		infile_fd;
 
 	//signal(SIGUSR1, &sig_handler);
-	cmd_nb = ft_tablen((char **)cmds);
-	pipe_nb = cmd_nb - 1;
-	pid = malloc(sizeof(int) * cmd_nb);
-	int		pipefd[2 * pipe_nb];
+	pid = malloc(sizeof(int) * (pipe_nb + 1));
 	while (i < pipe_nb)
 	{
 		if (pipe(pipefd + i * 2) == -1)
@@ -464,7 +460,7 @@ void	exec_cmds(t_exec **cmds, char **envp, t_list **env)
 		i++;
 	}
 	i = 0;
-	while (i < cmd_nb)
+	while (i < (pipe_nb + 1))
 	{
 		waitpid(pid[i], &status, 0);
 		//printf("process:%d status:%d\n", i, status);
@@ -476,7 +472,13 @@ void	exec_cmds(t_exec **cmds, char **envp, t_list **env)
 
 void	exec(t_exec **cmds, char **envp, t_list **env)
 {
-	exec_cmds(cmds, envp, env);
+	int		pipe_nb;
+
+	pipe_nb = ft_tablen((char **)cmds) - 1;
+	// printf("pipenb:%d\n", pipe_nb);
+	// (void)envp;
+	// (void)env;
+	exec_cmds(cmds, envp, env, pipe_nb);
 }
 
 // int	main(int ac, char **av, char **envp)
