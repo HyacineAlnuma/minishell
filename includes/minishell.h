@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
+/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:02:33 by secros            #+#    #+#             */
-/*   Updated: 2025/02/14 11:43:50 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/14 13:57:35 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,15 @@
 # define ASCII34 "__/|__/  |__/|__/|_______/ |__"
 # define ASCII35 "/  |__/ \\_______/|__/|__/|__/\n"
 
+/*
+	Here_doc:
+		-Check si - : enlever les tab au debut de chaque ligne
+		-Check si "" : Envoyer a l'exec
+		-Si pas de "" : Remplacer les variables d'env puis envoyer au formattage
+			-Recupere la string du formattage, la mettre dans une struct -> here_doc = 1, str dans les opt, si !cmd -> cmd = NULL
+*/
+
+
 typedef struct s_exec
 {
 	char	*cmd;
@@ -73,6 +82,17 @@ typedef struct s_exec
 	int		append;
 	int		here_doc;
 }	t_exec;
+
+typedef struct s_fork
+{
+	t_exec	**cmds;
+	t_exec	*cmd;
+	pid_t	*pid;
+	int		*pipefd;
+	int		pipe_nb;
+	int		current_cmd;
+	int		current_pipe;
+}	t_fork;
 
 //utils
 void	free_the_mallocs(void **pt);

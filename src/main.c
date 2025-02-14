@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
+/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 10:41:15 by halnuma           #+#    #+#             */
-/*   Updated: 2025/02/14 11:43:35 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/14 13:58:04 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -364,30 +364,45 @@ int	check_cmd(char *cmd)
 	return (0);
 }
 
-/*
-	- Si outfile -> mettre la sortie standard sur le fd du file (tout en l'envoyant aussi dans le pipe)
-		- Check if (!append) pour savoir si > ou >>
-	- Si infile -> mettre l'entrée standard sur le fd du file (tout en recuperant aussi la sortie du pipe)
-	- Here doc -> force a nous
-*/
-
-void	exec_cmds(t_exec **cmds, char **envp, t_list **env, int pipe_nb)
+void	manage_files(t_exec *cmd)
 {
-	int		i = 0;
-	int		j = 0;
-	int		k = 0;
-	pid_t	*pid;
-	char	*exe;
-	char	*path;
-	int	status = 0;
-	int		pipefd[2 * pipe_nb];
-	char	pwd[PATH_MAX];
+	int		outfile_fd;
+	int		infile_fd;
 
-	// int		outfile_fd;
-	// int		infile_fd;
+	if (cmd->outfile)
+	{
+		if (cmd->append)
+			outfile_fd = open(cmd->outfile, O_CREAT | O_RDWR | O_APPEND);
+		else
+			outfile_fd = open(cmd->outfile, O_CREAT | O_RDWR);
+		dup2(outfile_fd, STDOUT_FILENO);
+		close(outfile_fd);
+	}
+	if (cmd->infile)
+	{
+		infile_fd = open(cmd->infile, O_CREAT | O_RDWR);
+		dup2(infile_fd, STDIN_FILENO);
+		close(infile_fd);
+	}
+}
 
-	//signal(SIGUSR1, &sig_handler);
-	pid = malloc(sizeof(int) * (pipe_nb + 1));
+void	close_pipes(int *pipefd, int pipe_nb)
+{
+	int	i;
+
+	i = 0;
+	while (i < pipe_nb * 2)
+	{
+		close(pipefd[i]);
+		i++;
+	}
+}
+
+void	open_pipes(int *pipefd, int pipe_nb)
+{
+	int	i;
+
+	i = 0;
 	while (i < pipe_nb)
 	{
 		if (pipe(pipefd + i * 2) == -1)
@@ -397,86 +412,132 @@ void	exec_cmds(t_exec **cmds, char **envp, t_list **env, int pipe_nb)
 		}
 		i++;
 	}
-	while (cmds[j])
+}
+
+void	duplicate_pipes(t_exec **cmds, int *pipefd, int current_cmd, int current_pipe)
+{
+	if (cmds[current_cmd + 1])
+		dup2(pipefd[current_pipe + 1], STDOUT_FILENO);
+	if (current_cmd)
+		dup2(pipefd[current_pipe - 2], STDIN_FILENO);
+}
+
+void	exec_cmd(t_exec *cmd, t_list **env, char **envp)
+{
+	char	*exe;
+	char	*path;
+	char	pwd[PATH_MAX];
+
+	if (!check_cmd(cmd->cmd))
 	{
-		if ((pid[j] = fork()) == -1)
-		{
-			perror("fork");
-			exit(EXIT_FAILURE);
-		}
-		else if (pid[j] == 0)
-		{
-			// if (cmds[j]->outfile)
-			// {
-			// 	if (cmds[j]->append)
-			// 		outfile_fd = open(cmds[j]->outfile, O_CREAT | O_RDWR | O_APPEND);
-			// 	else
-			// 		outfile_fd = open(cmds[j]->outfile, O_CREAT | O_RDWR);
-			// 	dup2(outfile_fd, STDOUT_FILENO);
-			// 	close(outfile_fd);
-			// }
-			// if (cmds[j]->infile)
-			// {
-			// 	infile_fd = open(cmds[j]->infile, O_CREAT | O_RDWR);
-			// 	dup2(infile_fd, STDIN_FILENO);
-			// 	close(infile_fd);
-			// }
-			if (cmds[j + 1])
-				dup2(pipefd[k + 1], STDOUT_FILENO);
-			if (j)
-				dup2(pipefd[k - 2], STDIN_FILENO);
-			i = 0;
-			while (i < pipe_nb * 2)
-			{
-				close(pipefd[i]);
-				i++;
-			}
-			if (!check_cmd(cmds[j]->cmd))
-			{
-				//printf("%s: command not found.\n", cmds[j]->cmd);
-				ft_putstr_fd(cmds[j]->cmd, 2);
-				ft_putstr_fd(": command not found.\n", 2);
-				exit(EXIT_FAILURE);
-			}
-			else if (!exec_builtins(cmds[j], env))
-			{
-				if (!ft_strcmp(cmds[j]->cmd, "./"))
-				{
-					getcwd(pwd, sizeof(pwd));
-					cmds[j]->cmd[0] = '/';
-					path = pwd;
-				}
-				else
-					path = "/bin/";
-				exe = ft_strjoin(path, cmds[j]->cmd);
-				execve(exe, cmds[j]->opt, envp);
-			}
-		}
-		j++;
-		k += 2;
+		ft_putstr_fd(cmd->cmd, 2);
+		ft_putstr_fd(": command not found.\n", 2);
+		exit(EXIT_FAILURE);
 	}
-	j--;
-	if (!ft_strncmp(cmds[j]->cmd, "cd", 3))
-		cd(cmds[j], env);
-	if (!ft_strncmp(cmds[j]->cmd, "exit", 5))
+	else if (!exec_builtins(cmd, env))
+	{
+		if (!ft_strcmp(cmd->cmd, "./"))
+		{
+			getcwd(pwd, sizeof(pwd));
+			cmd->cmd[0] = '/';
+			path = pwd;
+		}
+		else
+			path = "/bin/";
+		exe = ft_strjoin(path, cmd->cmd);
+		execve(exe, cmd->opt, envp);
+	}
+}
+
+void	exec_parent_builtins(t_exec **cmds, t_exec *cmd, t_list **env, pid_t *pid)
+{
+	if (!ft_strncmp(cmd->cmd, "cd", 3))
+		cd(cmd, env);
+	if (!ft_strncmp(cmd->cmd, "exit", 5))
 		exit_program(cmds, env, pid);
-	if (!ft_strncmp(cmds[j]->cmd, "export", 7))
-		export(cmds[j], env);
-	if (!ft_strncmp(cmds[j]->cmd, "unset", 6))
-		unset(cmds[j], env);
+	if (!ft_strncmp(cmd->cmd, "export", 7))
+		export(cmd, env);
+	if (!ft_strncmp(cmd->cmd, "unset", 6))
+		unset(cmd, env);
+}
+
+void	wait_all_pid(pid_t *pid, int pipe_nb)
+{
+	int		i;
+	int		status;
+
 	i = 0;
-	while (i < pipe_nb * 2)
-	{
-		close(pipefd[i]);
-		i++;
-	}
-	i = 0;
+	status = 0;
 	while (i < (pipe_nb + 1))
 	{
 		waitpid(pid[i], &status, 0);
 		//printf("process:%d status:%d\n", i, status);
 		i++;
 	}
+}
+
+void	exec_fork(t_fork fork_info, t_list **env, char **envp)
+{
+	if (fork_info.pid[fork_info.current_cmd] == -1)
+	{
+		perror("fork");
+		exit(EXIT_FAILURE);
+	}
+	else if (fork_info.pid[fork_info.current_cmd] == 0)
+	{
+		//manage_files(cmds[j]);		\\ A rajouter quand le parsing gerera les files
+		duplicate_pipes(fork_info.cmds, fork_info.pipefd, fork_info.current_cmd, fork_info.current_pipe);
+		close_pipes(fork_info.pipefd, fork_info.pipe_nb);
+		exec_cmd(fork_info.cmd, env, envp);
+	}
+}
+
+void	exec_cmds(t_exec **cmds, char **envp, t_list **env, int pipe_nb)
+{
+	int		j;
+	int		k;
+	pid_t	*pid;
+	int		pipefd[2 * pipe_nb];
+	t_fork	fork_info;
+
+	j = 0;
+	k = 0;
+	//fork_info = NULL;
+	pid = malloc(sizeof(int) * (pipe_nb + 1));
+	open_pipes(pipefd, pipe_nb);
+	fork_info.cmds = cmds;
+	fork_info.pid = malloc(sizeof(int) * (pipe_nb + 1));
+	if (!fork_info.pid)
+	{
+		/////
+	}
+	fork_info.pipefd = pipefd;
+	fork_info.pipe_nb = pipe_nb;
+	while (cmds[j])
+	{
+		fork_info.cmd = cmds[j];
+		fork_info.current_cmd = j;
+		fork_info.current_pipe = k;
+		fork_info.pid[j] = fork();
+		exec_fork(fork_info, env, envp);
+		// if (pid[j] == -1)
+		// {
+		// 	perror("fork");
+		// 	exit(EXIT_FAILURE);
+		// }
+		// else if (pid[j] == 0)
+		// {
+		// 	//manage_files(cmds[j]);		\\ A rajouter quand le parsing gerera les files
+		// 	duplicate_pipes(cmds, pipefd, j, k);
+		// 	close_pipes(pipefd, pipe_nb);
+		// 	exec_cmd(cmds[j], env, envp);
+		// }
+		j++;
+		k += 2;
+	}
+	exec_parent_builtins(cmds, cmds[--j], env, pid);
+	close_pipes(pipefd, pipe_nb);
+	wait_all_pid(pid, pipe_nb);
 	//free_all(env, cmds, pid);
 }
 
