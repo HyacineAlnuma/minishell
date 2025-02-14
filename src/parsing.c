@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/02/13 11:25:17 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/14 11:06:22 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ char	***divide_arg(char *str)
 			free_the_mallocs((void **) command);
 	}
 	free_the_mallocs((void **) args);
+	free(str);
 	return (command);
 }
 

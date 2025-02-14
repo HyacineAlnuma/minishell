@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:02:33 by secros            #+#    #+#             */
-/*   Updated: 2025/02/13 11:23:15 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/14 11:05:05 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ typedef struct s_exec
 	char	**opt;
 	char	*infile;
 	char	*outfile;
+	int		append;
 }	t_exec;
 
 //utils
