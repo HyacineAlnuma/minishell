@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
+/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:02:33 by secros            #+#    #+#             */
-/*   Updated: 2025/02/13 11:04:03 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/14 10:20:58 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,13 @@
 # define ASCII34 "__/|__/  |__/|__/|_______/ |__"
 # define ASCII35 "/  |__/ \\_______/|__/|__/|__/\n"
 
+/*
+	Here_doc:
+		-Check si - : enlever les tab au debut de chaque ligne
+		-Check si "" : Envoyer a l'exec
+		-Si pas de "" : Remplacer les variables d'env puis envoyer au formattage
+			-Recupere la string du formattage, la mettre dans une struct -> here_doc = 1, str dans les opt, si !cmd cdm = echo
+*/
 
 
 typedef struct s_exec
