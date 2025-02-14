@@ -1,16 +1,1 @@
-User : halnuma
-ls : includes
-libft
-Makefile
-README.md
-src
-test.txt
-y.txt
-User : halnuma
-ls : includes
-libft
-Makefile
-README.md
-src
-test.txt
-y.txt
+yo la team

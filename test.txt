@@ -1,11 +1,3 @@
-includes
-libft
-Makefile
-minishell
-README.md
-src
-test.txt
-y.txt
-1
-2
-3
+YO
+L
+EOF
