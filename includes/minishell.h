@@ -6,7 +6,11 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:02:33 by secros            #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2025/02/14 10:20:58 by halnuma          ###   ########.fr       */
+=======
+/*   Updated: 2025/02/14 11:43:50 by secros           ###   ########.fr       */
+>>>>>>> 8d872fbe05858b16672e52d6a0a2dd48c5537960
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +68,7 @@
 # define ASCII34 "__/|__/  |__/|__/|_______/ |__"
 # define ASCII35 "/  |__/ \\_______/|__/|__/|__/\n"
 
+<<<<<<< HEAD
 /*
 	Here_doc:
 		-Check si - : enlever les tab au debut de chaque ligne
@@ -73,12 +78,16 @@
 */
 
 
+=======
+>>>>>>> 8d872fbe05858b16672e52d6a0a2dd48c5537960
 typedef struct s_exec
 {
 	char	*cmd;
 	char	**opt;
 	char	*infile;
 	char	*outfile;
+	int		append;
+	int		here_doc;
 }	t_exec;
 
 //utils

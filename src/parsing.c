@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/02/13 11:12:56 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/14 11:44:42 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ char	***divide_arg(char *str)
 			free_the_mallocs((void **) command);
 	}
 	free_the_mallocs((void **) args);
+	free(str);
 	return (command);
 }
 
@@ -111,6 +112,7 @@ int	main(int ac, char **av, char **envp)
 	if (ac != 1)
 	{
 		write (2, "Error\nBad arguments\n", 20);
+		fflush(stderr);
 		return (1);
 	}
 	print_ascii();
@@ -119,7 +121,7 @@ int	main(int ac, char **av, char **envp)
 	while (1)
 	{
 		print_prompt(env);
-		input = readline("minishell % ");
+		input = readline("Minishell % ");
 		command = parsing(input, env);
 		exec(command, env, envp);
 	}

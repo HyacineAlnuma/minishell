@@ -6,14 +6,14 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 11:04:05 by secros            #+#    #+#             */
-/*   Updated: 2025/02/13 11:20:08 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/13 11:24:40 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef COLOR_H
 # define COLOR_H
 
-
+//Background color
 # define BG_BLACK   "\033[40m"
 # define BG_RED     "\033[41m"
 # define BG_GREEN   "\033[42m"
@@ -32,6 +32,7 @@
 # define BG_BRIGHT_CYAN    "\033[106m"
 # define BG_BRIGHT_WHITE   "\033[107m"
 
+//text color
 # define FG_BLACK   "\033[30m"
 # define FG_RED     "\033[31m"
 # define FG_GREEN   "\033[0;32m"
@@ -50,8 +51,11 @@
 # define FG_BRIGHT_CYAN    "\033[96m"
 # define FG_BRIGHT_WHITE   "\033[97m"
 
-# define BOLD "\033[1m"
+//other text modifier
+# define BOLD 	"\033[1m"
+# define ITALIC "\033[3m"
 
-# define RESET "\033[0m"
+//reset text
+# define RESET 	"\033[0m"
 
 #endif
