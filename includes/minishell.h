@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:02:33 by secros            #+#    #+#             */
-/*   Updated: 2025/02/14 13:57:35 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/02/19 12:01:39 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 # include <signal.h>
 
 # define CHARSET " \t\n\v\f\r"
+# define HD_TEMP_FILE "here_doc_temp.txt"
 
 # define ASCII1 " /$$      /$$           /$$                                   "
 # define ASCII2 "                  /$$                     /$$      /$$ /$$    "
@@ -90,8 +91,8 @@ typedef struct s_fork
 	pid_t	*pid;
 	int		*pipefd;
 	int		pipe_nb;
-	int		current_cmd;
-	int		current_pipe;
+	int		cur_cmd;
+	int		cur_pipe;
 }	t_fork;
 
 //utils
@@ -103,6 +104,8 @@ char	*handle_env(char *str, t_list **env);
 t_exec	**create_struct(char ***tab, size_t count);
 t_list	**lst_env(char **envp);
 char	*find_node(t_list **env, char *var_env);
+t_exec	**parsing(char *str, t_list **env);
+t_list	**lst_env(char **envp);
 
 //exec
 void	exec(t_exec **cmds, t_list **env, char **envp);

@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 10:41:15 by halnuma           #+#    #+#             */
-/*   Updated: 2025/02/14 13:58:04 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/02/19 14:59:26 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,16 +123,15 @@ char	*get_previous_pwd(t_list **env)
 	{
 		if (!ft_strncmp(ptr->content, "OLDPWD=", 4))
 		{
-			i = 0;
+			i = -1;
 			str = ptr->content;
-			while (str[i])
+			while (str[++i])
 			{
 				if (str[i] == '=')
 				{
 					i++;
 					break ;
 				}
-				i++;
 			}
 			previouspwd = &str[i];
 		}
@@ -148,12 +147,12 @@ void	cd(t_exec *cmd, t_list **env)
 	char	oldpwd[PATH_MAX];
 	char	*previouspwd;
 
+	if (!cmd->opt[1])
+		return ;
 	if (!getcwd(oldpwd, sizeof(oldpwd)))
 		perror("getcwd() error");
 	ptr = *env;
 	previouspwd = get_previous_pwd(env);
-	if (!cmd->opt[1])
-		return ;
 	if (!ft_strncmp(cmd->opt[1], "-", 2))
 		cmd->opt[1] = previouspwd;
 	if (!chdir(cmd->opt[1]))
@@ -270,40 +269,19 @@ void	print_env(t_list **env)
 int	exec_builtins(t_exec *cmd, t_list **env)
 {
 	if (!ft_strncmp(cmd->cmd, "echo", 5))
-	{
 		echo(cmd);
-		return (1);
-	}
 	else if (!ft_strncmp(cmd->cmd, "cd", 3))
-	{
 		exit(EXIT_SUCCESS);
-		return (1);
-	}
 	else if (!ft_strncmp(cmd->cmd, "pwd", 4))
-	{
 		pwd();
-		return (1);
-	}
 	else if (!ft_strncmp(cmd->cmd, "export", 7))
-	{
 		exit(EXIT_SUCCESS);
-		return (1);
-	}
 	else if (!ft_strncmp(cmd->cmd, "unset", 6))
-	{
 		exit(EXIT_SUCCESS);
-		return (1);
-	}
 	else if (!ft_strncmp(cmd->cmd, "env", 4))
-	{
 		print_env(env);
-		return (1);
-	}
 	else if (!ft_strncmp(cmd->cmd, "exit", 5))
-	{
 		exit(EXIT_SUCCESS);
-		return (1);
-	}
 	return (0);
 }
 
@@ -372,15 +350,15 @@ void	manage_files(t_exec *cmd)
 	if (cmd->outfile)
 	{
 		if (cmd->append)
-			outfile_fd = open(cmd->outfile, O_CREAT | O_RDWR | O_APPEND);
+			outfile_fd = open(cmd->outfile, O_RDWR | O_CREAT, S_IWUSR | S_IRUSR | O_APPEND);
 		else
-			outfile_fd = open(cmd->outfile, O_CREAT | O_RDWR);
+			outfile_fd = open(cmd->outfile, O_RDWR | O_CREAT, S_IWUSR | S_IRUSR);
 		dup2(outfile_fd, STDOUT_FILENO);
 		close(outfile_fd);
 	}
 	if (cmd->infile)
 	{
-		infile_fd = open(cmd->infile, O_CREAT | O_RDWR);
+		infile_fd = open(cmd->infile, O_RDWR | O_CREAT, S_IWUSR | S_IRUSR);
 		dup2(infile_fd, STDIN_FILENO);
 		close(infile_fd);
 	}
@@ -414,12 +392,24 @@ void	open_pipes(int *pipefd, int pipe_nb)
 	}
 }
 
-void	duplicate_pipes(t_exec **cmds, int *pipefd, int current_cmd, int current_pipe)
+void	dup_pipes(t_exec **cmds, int *pipefd, int cur_cmd, int cur_pipe)
 {
-	if (cmds[current_cmd + 1])
-		dup2(pipefd[current_pipe + 1], STDOUT_FILENO);
-	if (current_cmd)
-		dup2(pipefd[current_pipe - 2], STDIN_FILENO);
+	int	temp_file_fd;
+	//char buffer[1000];
+
+	if (cmds[cur_cmd + 1])
+		dup2(pipefd[cur_pipe + 1], STDOUT_FILENO);
+	if (cur_cmd)
+		dup2(pipefd[cur_pipe - 2], STDIN_FILENO);
+	if (!cmds[cur_cmd + 1] && cmds[cur_cmd]->here_doc == 2)
+	{
+		temp_file_fd = open(HD_TEMP_FILE, O_RDWR | O_CREAT, S_IWUSR | S_IRUSR);
+		//write(temp_file_fd, "", 1);
+		//read(temp_file_fd, buffer, 1000);
+		//printf("buffer:%s\n", buffer);
+		dup2(temp_file_fd, STDOUT_FILENO);
+		close(temp_file_fd);
+	}
 }
 
 void	exec_cmd(t_exec *cmd, t_list **env, char **envp)
@@ -476,81 +466,79 @@ void	wait_all_pid(pid_t *pid, int pipe_nb)
 	}
 }
 
-void	exec_fork(t_fork fork_info, t_list **env, char **envp)
+void	exec_process(t_fork *f, t_list **env, char **envp)
 {
-	if (fork_info.pid[fork_info.current_cmd] == -1)
+	f->pid[f->cur_cmd] = fork();
+	if (f->pid[f->cur_cmd] == -1)
 	{
 		perror("fork");
 		exit(EXIT_FAILURE);
 	}
-	else if (fork_info.pid[fork_info.current_cmd] == 0)
+	else if (f->pid[f->cur_cmd] == 0)
 	{
 		//manage_files(cmds[j]);		\\ A rajouter quand le parsing gerera les files
-		duplicate_pipes(fork_info.cmds, fork_info.pipefd, fork_info.current_cmd, fork_info.current_pipe);
-		close_pipes(fork_info.pipefd, fork_info.pipe_nb);
-		exec_cmd(fork_info.cmd, env, envp);
+		dup_pipes(f->cmds, f->pipefd, f->cur_cmd, f->cur_pipe);
+		close_pipes(f->pipefd, f->pipe_nb);
+		exec_cmd(f->cmd, env, envp);
 	}
 }
 
-void	exec_cmds(t_exec **cmds, char **envp, t_list **env, int pipe_nb)
+void	init_fork(t_fork *fork_info, t_exec **cmds, int pipe_nb, int cur_pipe)
 {
-	int		j;
-	int		k;
-	pid_t	*pid;
-	int		pipefd[2 * pipe_nb];
-	t_fork	fork_info;
+	fork_info->cmds = cmds;
+	fork_info->pipe_nb = pipe_nb;
+	fork_info->cur_pipe = cur_pipe;
+}
 
-	j = 0;
-	k = 0;
-	//fork_info = NULL;
-	pid = malloc(sizeof(int) * (pipe_nb + 1));
+void	init_fork_bis(t_fork *f, int *pfd, t_exec *cmd, int cur_cmd, int *pid)
+{
+	f->cmd = cmd;
+	f->pipefd = pfd;
+	f->cur_cmd = cur_cmd;
+	f->pid = pid;
+}
+
+int	exec_cmds(t_exec **cmds, char **envp, t_list **env, int pipe_nb, pid_t *pid)
+{
+	int		cur_cmd;
+	int		cur_pipe;
+	int		pipefd[1024];
+	t_fork	*fork_info;
+
+	cur_cmd = 0;
+	cur_pipe = 0;
 	open_pipes(pipefd, pipe_nb);
-	fork_info.cmds = cmds;
-	fork_info.pid = malloc(sizeof(int) * (pipe_nb + 1));
-	if (!fork_info.pid)
+	while (cmds[cur_cmd])
 	{
-		/////
+		fork_info = ft_calloc(sizeof(t_fork), 1);
+		if (!fork_info)
+			return (0);
+		init_fork(fork_info, cmds, pipe_nb, cur_pipe);
+		init_fork_bis(fork_info, pipefd, cmds[cur_cmd], cur_cmd, pid);
+		exec_process(fork_info, env, envp);
+		cur_cmd++;
+		cur_pipe += 2;
 	}
-	fork_info.pipefd = pipefd;
-	fork_info.pipe_nb = pipe_nb;
-	while (cmds[j])
-	{
-		fork_info.cmd = cmds[j];
-		fork_info.current_cmd = j;
-		fork_info.current_pipe = k;
-		fork_info.pid[j] = fork();
-		exec_fork(fork_info, env, envp);
-		// if (pid[j] == -1)
-		// {
-		// 	perror("fork");
-		// 	exit(EXIT_FAILURE);
-		// }
-		// else if (pid[j] == 0)
-		// {
-		// 	//manage_files(cmds[j]);		\\ A rajouter quand le parsing gerera les files
-		// 	duplicate_pipes(cmds, pipefd, j, k);
-		// 	close_pipes(pipefd, pipe_nb);
-		// 	exec_cmd(cmds[j], env, envp);
-		// }
-		j++;
-		k += 2;
-	}
-	exec_parent_builtins(cmds, cmds[--j], env, pid);
+	exec_parent_builtins(cmds, cmds[--cur_cmd], env, pid);
 	close_pipes(pipefd, pipe_nb);
 	wait_all_pid(pid, pipe_nb);
+	//unlink(HD_TEMP_FILE);
 	//free_all(env, cmds, pid);
+	return (1);
 }
 
 
 void	exec(t_exec **cmds, t_list **env, char **envp)
 {
 	int		pipe_nb;
+	pid_t	*pid;
 
 	pipe_nb = ft_tablen((char **)cmds) - 1;
+	pid = malloc(sizeof(int) * (pipe_nb + 1));
 	// printf("pipenb:%d\n", pipe_nb);
 	// (void)envp;
 	// (void)env;
-	exec_cmds(cmds, envp, env, pipe_nb);
+	exec_cmds(cmds, envp, env, pipe_nb, pid);
 }
 
 // int	main(int ac, char **av, char **envp)
