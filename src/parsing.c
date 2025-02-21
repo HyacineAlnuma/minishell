@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/02/14 13:38:04 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/21 15:18:29 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static int	synthax_error(char *str)
 
 	j = 0;
 	i = 0;
-	while (str[j])
+	while (str && str[j])
 	{
 		i = 1;
 		while (str[j] && str[j] != '|')
@@ -35,11 +35,50 @@ static int	synthax_error(char *str)
 			i++;
 		}
 		if (i > 1)
-			return (write (2, "zsh: parse count near `|'", 26), 1);
+			return (write (2, "zsh: parse count near `|'\n", 27), 1);
 	}
 	if (i == 1)
 		return (2);
 	return (0);
+}
+
+void	finish_quote(char **str, char c)
+{
+	char	*next;
+
+	if (c == '\'')
+		next = readline("quote>");
+	if (c == '"')
+		next = readline("dquote>");
+	if (c == '|')
+		next = readline("pipe>");
+	*str = ft_strappend(*str, next);
+	free (next);
+}
+
+void	synthax_quote(char *str)
+{
+	size_t	i;
+	char	c;
+
+	i = 0;
+	c = 0;
+	while (str && str[i])
+	{
+		if (str[i] == '"' || str[i] == '\'' || str[i] == '|')
+			c = str[i++];
+		/* if (c == '|')
+			pipe_check(str, i); 
+		else*/
+		// ft_printf("char :%c\n", c);
+		while (str[i] && str[i] != c && c != 0)
+			i++;
+		if (str[i] == c)
+			c = 0;
+		if (!str[i++] && c != 0)
+			finish_quote(&str, c);
+	}
+	ft_printf("%s", str);
 }
 
 char	***divide_arg(char *str)
@@ -120,9 +159,14 @@ int	main(int ac, char **av, char **envp)
 	env = lst_env(envp);
 	while (1)
 	{
-		print_prompt(env);
+		// print_prompt(env);
 		input = readline("Minishell % ");
-		command = parsing(input, env);
-		exec(command, env, envp);
+		if (!input)
+			break ;
+		ft_printf("string : %s", input);
+		synthax_quote(input);
+		// command = parsing(input, env);
+		if (command)
+			exec(command, env, envp);
 	}
 }
