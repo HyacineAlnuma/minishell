@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 10:41:15 by halnuma           #+#    #+#             */
-/*   Updated: 2025/02/14 11:43:35 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/24 15:13:45 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ t_exec	*init_struct(void)
 	return (cmd);
 }
 
-t_exec	*init_struct2(void)
+/* t_exec	*init_struct2(void)
 {
 	t_exec	*cmd;
 
@@ -42,7 +42,7 @@ t_exec	*init_struct2(void)
 	cmd->append = 0;
 	// cmd->opt[2] = "test";
 	return (cmd);
-}
+} */
 
 t_exec	*init_struct3(void)
 {
