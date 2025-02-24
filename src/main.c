@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 10:41:15 by halnuma           #+#    #+#             */
-/*   Updated: 2025/02/19 14:59:26 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/02/24 14:43:48 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -285,12 +285,6 @@ int	exec_builtins(t_exec *cmd, t_list **env)
 	return (0);
 }
 
-void	sig_handler(int signum)
-{
-	if (signum == SIGUSR1)
-		exit(EXIT_SUCCESS);
-}
-
 int	check_builtins(char *cmd)
 {
 	if (!ft_strncmp(cmd, "echo", 5))
@@ -346,6 +340,7 @@ void	manage_files(t_exec *cmd)
 {
 	int		outfile_fd;
 	int		infile_fd;
+	int		str_len;
 
 	if (cmd->outfile)
 	{
@@ -361,6 +356,13 @@ void	manage_files(t_exec *cmd)
 		infile_fd = open(cmd->infile, O_RDWR | O_CREAT, S_IWUSR | S_IRUSR);
 		dup2(infile_fd, STDIN_FILENO);
 		close(infile_fd);
+	}
+	if (cmd->here_doc == 1)
+	{
+		infile_fd = open(HD_TEMP_FILE, O_RDWR | O_CREAT, S_IWUSR | S_IRUSR);
+		str_len = ft_strlen(cmd->formatted);
+		write(infile_fd, cmd->formatted, str_len);
+		dup2(infile_fd, STDIN_FILENO);
 	}
 }
 
@@ -404,11 +406,13 @@ void	dup_pipes(t_exec **cmds, int *pipefd, int cur_cmd, int cur_pipe)
 	if (!cmds[cur_cmd + 1] && cmds[cur_cmd]->here_doc == 2)
 	{
 		temp_file_fd = open(HD_TEMP_FILE, O_RDWR | O_CREAT, S_IWUSR | S_IRUSR);
-		//write(temp_file_fd, "", 1);
-		//read(temp_file_fd, buffer, 1000);
-		//printf("buffer:%s\n", buffer);
 		dup2(temp_file_fd, STDOUT_FILENO);
 		close(temp_file_fd);
+	}
+	if (!cmds[cur_cmd + 1] && cmds[cur_cmd]->here_doc > 2)
+	{
+		dup2(cmds[cur_cmd]->here_doc, STDOUT_FILENO);
+		close(cmds[cur_cmd]->here_doc);
 	}
 }
 
@@ -476,7 +480,7 @@ void	exec_process(t_fork *f, t_list **env, char **envp)
 	}
 	else if (f->pid[f->cur_cmd] == 0)
 	{
-		//manage_files(cmds[j]);		\\ A rajouter quand le parsing gerera les files
+		//manage_files(f->cmds[f->cur_cmd]);		\\ A rajouter quand le parsing gerera les files
 		dup_pipes(f->cmds, f->pipefd, f->cur_cmd, f->cur_pipe);
 		close_pipes(f->pipefd, f->pipe_nb);
 		exec_cmd(f->cmd, env, envp);
@@ -522,7 +526,7 @@ int	exec_cmds(t_exec **cmds, char **envp, t_list **env, int pipe_nb, pid_t *pid)
 	exec_parent_builtins(cmds, cmds[--cur_cmd], env, pid);
 	close_pipes(pipefd, pipe_nb);
 	wait_all_pid(pid, pipe_nb);
-	//unlink(HD_TEMP_FILE);
+	unlink(HD_TEMP_FILE);
 	//free_all(env, cmds, pid);
 	return (1);
 }

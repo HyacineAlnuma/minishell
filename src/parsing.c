@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/02/19 16:07:56 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/02/24 14:38:03 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,6 @@ t_exec	**parsing(char *str, t_list **env)
 		free(tmp);
 		return (parsing(str, env));
 	}
-	add_history(str);
 	count = count_char(str, '|');
 	str = handle_env(str, env);
 	command = create_struct(divide_arg(str), count + 1);
@@ -116,7 +115,7 @@ char	*remove_file_name(char *str)
 	return (&str[i + 1]);
 }
 
-char	*format_here_doc(char *str, t_list **env, char **envp)
+int	format_here_doc(char *str, t_list **env, char **envp)
 {
 	int		i;
 	size_t	j;
@@ -126,10 +125,12 @@ char	*format_here_doc(char *str, t_list **env, char **envp)
 	t_exec	**cmds;
 	int		k = -1;
 	int		temp_file_fd;
+	int		hd_fd;
 	char	*buffer;
 	char	*char_buf;
 	int		begin_part;
 	int		g = 0;
+	int		f_len;
 
 	i = 0;
 	j = 0;
@@ -186,47 +187,55 @@ char	*format_here_doc(char *str, t_list **env, char **envp)
 		i++;
 	}
 	formated = ft_strappend(formated, &str[begin_part]);
+	hd_fd = open(HD_TEMP_FILE, O_RDWR | O_CREAT, S_IWUSR | S_IRUSR);
+	f_len = ft_strlen(formated);
+	write(hd_fd, formated, f_len);
 	free(buffer);
 	free(char_buf);
-	return (formated);
+	free(formated);
+	return (hd_fd);
 }
 
 int	main(int ac, char **av, char **envp)
 {
-	char *s = "$(ls) nb: $(env | grep CODE | wc -l)";
-	char *formated;
-	char *dup;
-	t_list	**env;
-
-	env = lst_env(envp);
-	dup = ft_strdup(s);
-	formated = format_here_doc(dup, env, envp);
-	printf("%s\n", formated);
-	// printf("%s\n", s);
-	(void)ac;
-	(void)av;
-
-
-
-	// char	*input;
+	// char *s = "$(ls) nb: $(env | grep CODE | wc -l)";
+	// char *formated;
+	// char *dup;
 	// t_list	**env;
-	// t_exec	**command;
 
-	// (void) av;
-	// if (ac != 1)
-	// {
-	// 	write (2, "Error\nBad arguments\n", 20);
-	// 	fflush(stderr);
-	// 	return (1);
-	// }
-	// print_ascii();
-	// command = NULL;
 	// env = lst_env(envp);
-	// while (1)
-	// {
-	// 	print_prompt(env);
-	// 	input = readline("Minishell % ");
-	// 	command = parsing(input, env);
-	// 	exec(command, env, envp);
-	// }
+	// dup = ft_strdup(s);
+	// formated = format_here_doc(dup, env, envp);
+	// printf("%s\n", formated);
+	// // printf("%s\n", s);
+	// (void)ac;
+	// (void)av;
+
+
+
+	char	*input;
+	t_list	**env;
+	t_exec	**command;
+
+	(void) av;
+	if (ac != 1)
+	{
+		write (2, "Error\nBad arguments\n", 20);
+		fflush(stderr);
+		return (1);
+	}
+	print_ascii();
+	command = NULL;
+	env = lst_env(envp);
+	signal(SIGINT, sig_handler);
+	while (1)
+	{
+		if (g_sigint_received)
+			g_sigint_received = 0;
+		print_prompt(env);
+		input = readline("Minishell % ");
+		add_history(input);
+		command = parsing(input, env);
+		exec(command, env, envp);
+	}
 }
