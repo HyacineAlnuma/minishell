@@ -6,12 +6,14 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/02/24 14:38:03 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/02/26 12:45:48 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "color.h"
+
+sig_atomic_t	g_sigint_flag;
 
 static int	synthax_error(char *str)
 {
@@ -151,7 +153,7 @@ int	format_here_doc(char *str, t_list **env, char **envp)
 			if (j == ft_strlen(str))
 			{
 				perror("parse error");
-				return (NULL);
+				return (0);
 			}
 			str[i] = '\0';
 			formated = ft_strappend(formated, &str[begin_part]);
@@ -167,7 +169,7 @@ int	format_here_doc(char *str, t_list **env, char **envp)
 			if (!temp_file_fd || temp_file_fd == -1)
 			{
 				perror("file error");
-				return (NULL);
+				return (0);
 			}
 			buf_size = ft_strlen(buffer);
 			ft_bzero(buffer, buf_size);
@@ -228,12 +230,17 @@ int	main(int ac, char **av, char **envp)
 	command = NULL;
 	env = lst_env(envp);
 	signal(SIGINT, sig_handler);
+	signal(SIGQUIT, sig_handler);
 	while (1)
 	{
-		if (g_sigint_received)
-			g_sigint_received = 0;
+		g_sigint_flag = 0;
 		print_prompt(env);
 		input = readline("Minishell % ");
+		g_sigint_flag = 1;
+		// printf("exit rl g:%d\n", g_sigint_received);
+		// printf("g:%d\n", g_sigint_received);
+		if (!input)
+			break ;
 		add_history(input);
 		command = parsing(input, env);
 		exec(command, env, envp);

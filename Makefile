@@ -31,7 +31,7 @@ P_LIB			= libft/
 
 MAIN			= main parsing			print_ascii 	\
 				parse_env 				create_struct 	\
-				utils					handle_signal
+				utils					handle_signal	
 
 PARSING			= 
 

@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:02:33 by secros            #+#    #+#             */
-/*   Updated: 2025/02/24 14:42:09 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/02/26 12:45:54 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 
 # define CHARSET " \t\n\v\f\r"
 # define HD_TEMP_FILE "tmp/here_doc_temp.txt"
+# define CMD_NOT_FOUND 127
 
 # define ASCII1 " /$$      /$$           /$$                                   "
 # define ASCII2 "                  /$$                     /$$      /$$ /$$    "
@@ -78,10 +79,10 @@ typedef struct s_exec
 {
 	char	*cmd;
 	char	**opt;
-	char	*formatted;
-	char	*infile;
-	char	*outfile;
-	int		append;
+	char	**infile;
+	char	**outfile;
+	int		hd_fd;
+	int		*append;
 	int		here_doc;
 }	t_exec;
 
@@ -96,7 +97,7 @@ typedef struct s_fork
 	int		cur_pipe;
 }	t_fork;
 
-static volatile sig_atomic_t	g_sigint_received = 0;
+extern sig_atomic_t g_sigint_flag;
 
 //utils
 void	free_the_mallocs(void **pt);

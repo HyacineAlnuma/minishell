@@ -6,91 +6,91 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 10:41:15 by halnuma           #+#    #+#             */
-/*   Updated: 2025/02/24 14:43:48 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/02/26 11:05:11 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_exec	*init_struct(void)
-{
-	t_exec	*cmd;
+// t_exec	*init_struct(void)
+// {
+// 	t_exec	*cmd;
 
-	cmd = malloc(sizeof(t_exec));
-	cmd->opt = malloc(sizeof(char *) * 3);
-	cmd->cmd = "ls";
-	cmd->opt[0] = "";
-	cmd->infile = NULL;
-	cmd->outfile = NULL;
-	cmd->append = 0;
-	//cmd->opt[1] = "test.txt";
-	// cmd->opt[2] = "test";
-	return (cmd);
-}
+// 	cmd = malloc(sizeof(t_exec));
+// 	cmd->opt = malloc(sizeof(char *) * 3);
+// 	cmd->cmd = "ls";
+// 	cmd->opt[0] = "";
+// 	cmd->infile = NULL;
+// 	cmd->outfile = NULL;
+// 	cmd->append = 0;
+// 	//cmd->opt[1] = "test.txt";
+// 	// cmd->opt[2] = "test";
+// 	return (cmd);
+// }
 
-t_exec	*init_struct2(void)
-{
-	t_exec	*cmd;
+// t_exec	*init_struct2(void)
+// {
+// 	t_exec	*cmd;
 
-	cmd = malloc(sizeof(t_exec));
-	cmd->opt = malloc(sizeof(char *) * 2);
-	cmd->cmd = "cat";
-	cmd->opt[0] = "";
-	//cmd->opt[1] = "CODE";
-	cmd->infile = "y.txt";
-	cmd->outfile = "test.txt";
-	cmd->append = 0;
-	// cmd->opt[2] = "test";
-	return (cmd);
-}
+// 	cmd = malloc(sizeof(t_exec));
+// 	cmd->opt = malloc(sizeof(char *) * 2);
+// 	cmd->cmd = "cat";
+// 	cmd->opt[0] = "";
+// 	//cmd->opt[1] = "CODE";
+// 	cmd->infile = "y.txt";
+// 	cmd->outfile = "test.txt";
+// 	cmd->append = 0;
+// 	// cmd->opt[2] = "test";
+// 	return (cmd);
+// }
 
-t_exec	*init_struct3(void)
-{
-	t_exec	*cmd;
+// t_exec	*init_struct3(void)
+// {
+// 	t_exec	*cmd;
 
-	cmd = malloc(sizeof(t_exec));
-	cmd->opt = malloc(sizeof(char *) * 2);
-	cmd->cmd = "wc";
-	cmd->opt[0] = "";
-	cmd->opt[1] = "-l";
-	cmd->infile = NULL;
-	cmd->outfile = NULL;
-	cmd->append = 0;
-	// cmd->opt[2] = "test";
-	return (cmd);
-}
+// 	cmd = malloc(sizeof(t_exec));
+// 	cmd->opt = malloc(sizeof(char *) * 2);
+// 	cmd->cmd = "wc";
+// 	cmd->opt[0] = "";
+// 	cmd->opt[1] = "-l";
+// 	cmd->infile = NULL;
+// 	cmd->outfile = NULL;
+// 	cmd->append = 0;
+// 	// cmd->opt[2] = "test";
+// 	return (cmd);
+// }
 
-t_exec	*init_struct4(void)
-{
-	t_exec	*cmd;
+// t_exec	*init_struct4(void)
+// {
+// 	t_exec	*cmd;
 
-	cmd = malloc(sizeof(t_exec));
-	cmd->opt = malloc(sizeof(char *) * 2);
-	cmd->cmd = "grep";
-	cmd->opt[0] = "";
-	cmd->opt[1] = "5";
-	cmd->infile = NULL;
-	cmd->outfile = NULL;
-	cmd->append = 0;
-	// cmd->opt[2] = "test";
-	return (cmd);
-}
+// 	cmd = malloc(sizeof(t_exec));
+// 	cmd->opt = malloc(sizeof(char *) * 2);
+// 	cmd->cmd = "grep";
+// 	cmd->opt[0] = "";
+// 	cmd->opt[1] = "5";
+// 	cmd->infile = NULL;
+// 	cmd->outfile = NULL;
+// 	cmd->append = 0;
+// 	// cmd->opt[2] = "test";
+// 	return (cmd);
+// }
 
-t_exec	*init_struct5(void)
-{
-	t_exec	*cmd;
+// t_exec	*init_struct5(void)
+// {
+// 	t_exec	*cmd;
 
-	cmd = malloc(sizeof(t_exec));
-	cmd->opt = malloc(sizeof(char *) * 2);
-	cmd->cmd = "wc";
-	cmd->opt[0] = "";
-	cmd->opt[1] = "-l";
-	cmd->infile = NULL;
-	cmd->outfile = NULL;
-	cmd->append = 0;
-	// cmd->opt[2] = "test";
-	return (cmd);
-}
+// 	cmd = malloc(sizeof(t_exec));
+// 	cmd->opt = malloc(sizeof(char *) * 2);
+// 	cmd->cmd = "wc";
+// 	cmd->opt[0] = "";
+// 	cmd->opt[1] = "-l";
+// 	cmd->infile = NULL;
+// 	cmd->outfile = NULL;
+// 	cmd->append = 0;
+// 	// cmd->opt[2] = "test";
+// 	return (cmd);
+// }
 
 void	echo(t_exec *cmd)
 {
@@ -317,7 +317,6 @@ int	check_cmd(char *cmd)
 	i = 0;
 	paths = getenv("PATH");
 	paths = ft_strjoin(paths, ":");
-	//printf("%s\n", paths);
 	path = paths;
 	while (paths[i])
 	{
@@ -326,7 +325,6 @@ int	check_cmd(char *cmd)
 			paths[i] = '\0';
 			path = ft_strjoin(path, "/");
 			path = ft_strjoin(path, cmd);
-			//printf("%s\n", path);
 			if (!access(path, F_OK))
 				return (1);
 			path = &paths[i + 1];
@@ -338,31 +336,39 @@ int	check_cmd(char *cmd)
 
 void	manage_files(t_exec *cmd)
 {
-	int		outfile_fd;
-	int		infile_fd;
-	int		str_len;
+	int		outfile_fd[1024];
+	int		infile_fd[1024];
+	// int		str_len;
+	int		i;
 
 	if (cmd->outfile)
 	{
-		if (cmd->append)
-			outfile_fd = open(cmd->outfile, O_RDWR | O_CREAT, S_IWUSR | S_IRUSR | O_APPEND);
-		else
-			outfile_fd = open(cmd->outfile, O_RDWR | O_CREAT, S_IWUSR | S_IRUSR);
-		dup2(outfile_fd, STDOUT_FILENO);
-		close(outfile_fd);
+		i = -1;
+		while (cmd->outfile[++i])
+		{
+			if (cmd->append[i])
+				outfile_fd[i] = open(cmd->outfile[i], O_RDWR | O_CREAT, S_IWUSR | S_IRUSR | O_APPEND);
+			else
+				outfile_fd[i] = open(cmd->outfile[i], O_RDWR | O_CREAT, S_IWUSR | S_IRUSR);
+			dup2(outfile_fd[i], STDOUT_FILENO);
+			close(outfile_fd[i]);
+		}
 	}
 	if (cmd->infile)
 	{
-		infile_fd = open(cmd->infile, O_RDWR | O_CREAT, S_IWUSR | S_IRUSR);
-		dup2(infile_fd, STDIN_FILENO);
-		close(infile_fd);
+		i = -1;
+		while (cmd->outfile[++i])
+		{
+			infile_fd[i] = open(cmd->infile[i], O_RDWR | O_CREAT, S_IWUSR | S_IRUSR);
+			dup2(infile_fd[i], STDIN_FILENO);
+			close(infile_fd[i]);
+		}
 	}
 	if (cmd->here_doc == 1)
 	{
-		infile_fd = open(HD_TEMP_FILE, O_RDWR | O_CREAT, S_IWUSR | S_IRUSR);
-		str_len = ft_strlen(cmd->formatted);
-		write(infile_fd, cmd->formatted, str_len);
-		dup2(infile_fd, STDIN_FILENO);
+			infile_fd[i] = open(cmd->infile[i], O_RDWR | S_IWUSR | S_IRUSR);
+			dup2(infile_fd[i], STDIN_FILENO);
+			close(infile_fd[i]);
 	}
 }
 
@@ -426,7 +432,7 @@ void	exec_cmd(t_exec *cmd, t_list **env, char **envp)
 	{
 		ft_putstr_fd(cmd->cmd, 2);
 		ft_putstr_fd(": command not found.\n", 2);
-		exit(EXIT_FAILURE);
+		exit(CMD_NOT_FOUND);
 	}
 	else if (!exec_builtins(cmd, env))
 	{
@@ -455,19 +461,33 @@ void	exec_parent_builtins(t_exec **cmds, t_exec *cmd, t_list **env, pid_t *pid)
 		unset(cmd, env);
 }
 
+int	last_status_code(int status, int instruction)
+{
+	static int	status_code;
+
+	if (!instruction && WIFEXITED(status))
+		status_code = WEXITSTATUS(status);
+	else
+		return (status_code);
+	return (0);
+}
+
 void	wait_all_pid(pid_t *pid, int pipe_nb)
 {
 	int		i;
 	int		status;
+	// int		t;
 
 	i = 0;
 	status = 0;
 	while (i < (pipe_nb + 1))
 	{
 		waitpid(pid[i], &status, 0);
-		//printf("process:%d status:%d\n", i, status);
+		last_status_code(status, 0);
 		i++;
 	}
+	// t = last_status_code(0, 1);
+	// printf("status:%d\n", t);
 }
 
 void	exec_process(t_fork *f, t_list **env, char **envp)

@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:01:37 by secros            #+#    #+#             */
-/*   Updated: 2025/02/24 11:39:05 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/02/26 12:53:29 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,14 @@
 
 void	sig_handler(int signum)
 {
-	(void)signum;
-	g_sigint_received = 1;
-	printf("\n");
+	if (signum == SIGINT)
+	{
+		printf("\n");
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		if (!g_sigint_flag)
+			rl_redisplay();
+	}
+	else
+		return ;
 }
