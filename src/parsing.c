@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/02/24 15:13:13 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/03 16:58:28 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,11 +181,72 @@ void	print_prompt(t_list **env)
 	ft_printf("%s%s%s%s\n", BOLD, FG_BRIGHT_BLUE, prompt, RESET);
 }
 
+int	is_space(char c)
+{
+	if (c == ' ' || (c >= 9 && c <= 13))
+		return (1);
+	return (0);
+}
+
+/* New parsing in progress
+	New system, string cut down in token separate by whitespace or quote or pipe
+		Need to separete pipe also
+			Handle pipe first before they could get unquoted
+		unify token ex (He"lo" -> Hello) only the one with no whitespace in between
+		if token = '|'
+			cut lst in two before | after
+		repeat for the after part
+		handle env variable and quote
+		remove quote;
+	create the struct
+		(first element of lst) = 1
+		handle redirection (and heredoc)
+			set token to infile / outfile
+		if first element token = command else token = option
+		if token = pipe
+			new_struct and repeat with the other lst
+	when lst = null
+		parsing end
+		destroy the lst but keep content;
+		send strut to exect
+
+*/
+
+char	*parsing_v2(char *str, size_t *i)
+{
+	unsigned int	count;
+	char			*token;
+	char			quote;
+
+	count = 0;
+	quote = 0;
+	while (is_space(str[*i]))
+		*i += 1;
+	if (str[*i] == '"' || str[*i] == '\'')
+		quote = str[*i + count++];
+	while(str[*i + count] && (!is_space(str[*i + count]) || quote)) // need to add a test for | to return an [|] token
+	{
+		if (str[*i + count] == quote)
+		{
+			count++;
+			break ;
+		}
+		else if (!quote && (str[*i + count] == '"' || str[*i + count] == '\''))
+			break ;
+		count++;
+	}
+	token = ft_substr(str, *i, count);
+	*i += count;
+	return (token);
+}
+
+
 int	main(int ac, char **av, char **envp)
 {
 	char	*input;
 	t_list	**env;
 	t_exec	**command;
+	size_t	i = 0;
 
 	(void) av;
 	if (ac != 1)
@@ -203,9 +264,13 @@ int	main(int ac, char **av, char **envp)
 		input = readline("hell % ");
 		if (!input)
 			break ;
-		input = synthax_quote(input);
-		ft_printf("%s\n", input);
+		// input = synthax_quote(input);
+		// ft_printf("%s\n", input);
 		// command = parsing(input, env);
+		while (input[i])
+		{
+			ft_printf("%s\n", parsing_v2(input, &i));
+		}
 		if (command)
 			exec(command, env, envp);
 	}
