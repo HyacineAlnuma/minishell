@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/03/03 16:58:28 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/03 17:07:53 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,7 +212,7 @@ int	is_space(char c)
 
 */
 
-char	*parsing_v2(char *str, size_t *i)
+char	*token_splitter(char *str, size_t *i)
 {
 	unsigned int	count;
 	char			*token;
@@ -224,14 +224,15 @@ char	*parsing_v2(char *str, size_t *i)
 		*i += 1;
 	if (str[*i] == '"' || str[*i] == '\'')
 		quote = str[*i + count++];
-	while(str[*i + count] && (!is_space(str[*i + count]) || quote)) // need to add a test for | to return an [|] token
+	while(str[*i + count] && (!is_space(str[*i + count]) || quote))
 	{
-		if (str[*i + count] == quote)
+		if (str[*i + count] == quote || (!quote && str[*i] == '|'))
 		{
 			count++;
 			break ;
 		}
-		else if (!quote && (str[*i + count] == '"' || str[*i + count] == '\''))
+		else if (!quote && (str[*i + count] == '"' || str[*i + count] == '|' \
+		|| str[*i + count] == '\''))
 			break ;
 		count++;
 	}
@@ -260,6 +261,7 @@ int	main(int ac, char **av, char **envp)
 	env = lst_env(envp);
 	while (1)
 	{
+		i = 0;
 		print_prompt(env);
 		input = readline("hell % ");
 		if (!input)
