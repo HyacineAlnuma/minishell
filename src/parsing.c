@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/03/04 14:05:55 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/04 17:27:11 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,9 +184,9 @@ void	print_prompt(t_list **env)
 /* New parsing in progress
 	New system, string cut down in token separate by whitespace or quote or pipe OK
 		Need to separete pipe also OK
-			Handle pipe first before they could get unquoted
+			Handle pipe first before they could get unquoted OK pipe don't get unquoted (except """|")
 		unify token ex (He"lo" -> Hello) only the one with no whitespace in between OK
-		if token = '|'
+		if token = '|' handle later in the parsing
 			cut lst in two before | after
 		repeat for the after part
 		handle env variable and quote
@@ -268,28 +268,69 @@ char	*remove_quote(char *str)
 	return (str);
 }
 
-void	parsing_v2(char *str)
+t_exec	*create_exec(t_list *tokens)
+{
+	int		first;
+	t_exec 	*exec;
+	char	**opt;
+	int		j = 0;
+
+	first = 1;
+	exec = ft_calloc(sizeof(t_exec), 1);
+	opt = ft_calloc(sizeof(char *), 64);
+	while (tokens)
+	{
+		if (ft_strcmp((char *)tokens->content, "|"))
+			return NULL; //should create another struct
+		else if (ft_strcmp((char *)tokens->content, ">>"))
+			exec->outfile = tokens->content;
+		else if (ft_strcmp((char *)tokens->content, ">"))
+			exec->outfile = tokens->content;
+		else if (ft_strcmp((char *)tokens->content, "<<"))
+			return NULL;
+		else if (ft_strcmp((char *)tokens->content, "<"))
+			exec->infile = (char *)tokens->content;
+		else if (first == 1)
+		{
+			first = 0;
+			exec->cmd = (char *)tokens->content;
+		}
+		else
+			opt[j++] = (char *)tokens->content;
+		tokens = tokens->next;
+	}
+	exec->opt = opt;
+	return (exec);
+}
+
+t_exec	**parsing_v2(char *str)
 {
 	size_t	i;
 	t_list	*tokens;
 	t_list	*new;
 	char	*token;
+	t_exec 	**exec;
 
 	i = 0;
+	exec = ft_calloc(sizeof(t_exec *), 2);
 	tokens = NULL;
 	while (str[i])
 	{
 		token = split_token(str, &i);
-		while (str[i] && ((str[i] == '\'' || str[i] == '"') || ((!is_space(str[i]) && !is_redir(str[i]))&& (str[i - 1] == '\'' || str[i - 1] == '"'))))
+		while (str[i] && ((is_redir(str[i]) && is_redir(str[i - 1])) || \
+		((!is_space(str[i]) && !is_redir(str[i])) && (!is_space(str[i - 1]) && \
+		!is_redir(str[i - 1])))))
 			token = ft_strappend(remove_quote(token), remove_quote(split_token(str, &i)));
 		new = ft_lstnew(token);
 		ft_lstadd_back(&tokens, new);
 	}
+	exec[0] = create_exec(tokens);
 	while (tokens)
 	{
 		ft_printf("[%s]\n", (char *)tokens->content);
 		tokens = tokens->next;
 	}
+	return (exec);
 }
 
 int	main(int ac, char **av, char **envp)
@@ -317,7 +358,7 @@ int	main(int ac, char **av, char **envp)
 		// input = synthax_quote(input);
 		// ft_printf("%s\n", input);
 		// command = parsing(input, env);
-		parsing_v2(input);
+		command = parsing_v2(input);
 		if (command)
 			exec(command, env, envp);
 	}
