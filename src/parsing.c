@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/03/03 17:07:53 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/04 14:05:55 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,18 +181,11 @@ void	print_prompt(t_list **env)
 	ft_printf("%s%s%s%s\n", BOLD, FG_BRIGHT_BLUE, prompt, RESET);
 }
 
-int	is_space(char c)
-{
-	if (c == ' ' || (c >= 9 && c <= 13))
-		return (1);
-	return (0);
-}
-
 /* New parsing in progress
-	New system, string cut down in token separate by whitespace or quote or pipe
-		Need to separete pipe also
+	New system, string cut down in token separate by whitespace or quote or pipe OK
+		Need to separete pipe also OK
 			Handle pipe first before they could get unquoted
-		unify token ex (He"lo" -> Hello) only the one with no whitespace in between
+		unify token ex (He"lo" -> Hello) only the one with no whitespace in between OK
 		if token = '|'
 			cut lst in two before | after
 		repeat for the after part
@@ -212,7 +205,21 @@ int	is_space(char c)
 
 */
 
-char	*token_splitter(char *str, size_t *i)
+int	is_space(char c)
+{
+	if (c == ' ' || (c >= 9 && c <= 13))
+		return (1);
+	return (0);
+}
+
+int	is_redir(char c)
+{
+	if (c == '>' || c == '<' || c =='|')
+		return (1);
+	return (0);
+}
+
+char	*split_token(char *str, size_t *i)
 {
 	unsigned int	count;
 	char			*token;
@@ -226,13 +233,13 @@ char	*token_splitter(char *str, size_t *i)
 		quote = str[*i + count++];
 	while(str[*i + count] && (!is_space(str[*i + count]) || quote))
 	{
-		if (str[*i + count] == quote || (!quote && str[*i] == '|'))
+		if (str[*i + count] == quote || (!quote && is_redir(str[*i])))
 		{
 			count++;
 			break ;
 		}
-		else if (!quote && (str[*i + count] == '"' || str[*i + count] == '|' \
-		|| str[*i + count] == '\''))
+		else if (!quote && (is_redir(str[*i + count]) \
+		|| str[*i + count] == '"' || str[*i + count] == '\''))
 			break ;
 		count++;
 	}
@@ -241,13 +248,55 @@ char	*token_splitter(char *str, size_t *i)
 	return (token);
 }
 
+char	*remove_quote(char *str)
+{
+	char	*tmp;
+
+	if (!str)
+		return (NULL);
+	if (str[0] == '\'' || str[0] == '"')
+	{
+		tmp = ft_substr(str, 1, ft_strlen(str) - 2);
+		free(str);
+		if (tmp[0] == '\0')
+		{
+			free(tmp);
+			tmp = NULL;
+		}
+		str = tmp;
+	}
+	return (str);
+}
+
+void	parsing_v2(char *str)
+{
+	size_t	i;
+	t_list	*tokens;
+	t_list	*new;
+	char	*token;
+
+	i = 0;
+	tokens = NULL;
+	while (str[i])
+	{
+		token = split_token(str, &i);
+		while (str[i] && ((str[i] == '\'' || str[i] == '"') || ((!is_space(str[i]) && !is_redir(str[i]))&& (str[i - 1] == '\'' || str[i - 1] == '"'))))
+			token = ft_strappend(remove_quote(token), remove_quote(split_token(str, &i)));
+		new = ft_lstnew(token);
+		ft_lstadd_back(&tokens, new);
+	}
+	while (tokens)
+	{
+		ft_printf("[%s]\n", (char *)tokens->content);
+		tokens = tokens->next;
+	}
+}
 
 int	main(int ac, char **av, char **envp)
 {
 	char	*input;
 	t_list	**env;
 	t_exec	**command;
-	size_t	i = 0;
 
 	(void) av;
 	if (ac != 1)
@@ -261,7 +310,6 @@ int	main(int ac, char **av, char **envp)
 	env = lst_env(envp);
 	while (1)
 	{
-		i = 0;
 		print_prompt(env);
 		input = readline("hell % ");
 		if (!input)
@@ -269,10 +317,7 @@ int	main(int ac, char **av, char **envp)
 		// input = synthax_quote(input);
 		// ft_printf("%s\n", input);
 		// command = parsing(input, env);
-		while (input[i])
-		{
-			ft_printf("%s\n", parsing_v2(input, &i));
-		}
+		parsing_v2(input);
 		if (command)
 			exec(command, env, envp);
 	}
