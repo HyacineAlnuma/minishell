@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:05:15 by secros            #+#    #+#             */
-/*   Updated: 2025/02/21 14:33:31 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/08 18:27:50 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,15 +58,15 @@ char	*handle_env(char *str, t_list **env)
 	while (str[i])
 	{
 		len = 1;
-		if (str[i] == '$' && str[i + 1] && str[i + 1] != ' ')
+		if (str[i] == '$' && ft_isalnum(str[i + 1]))
 		{
-			if (str[i + len] >= '0' && str[i + len] <= '9')
+			if (ft_isdigit(str[i + len]))
 			{
-				while (str[i + len] && str[i + len] >= '0' && str[i + len] <= '9')
+				while (ft_isdigit(str[i + len]))
 					len++;
 				return (handle_env(replace_env(str, env, i, len), env));
 			}
-			while (str[i + len] && str[i + len] != ' ' && str[i + len] != '/' && str[i + len] != '$')
+			while (str[i + len] && ft_isalpha(str[i + len]))
 				len++;
 			return (handle_env(replace_env(str, env, i, len), env));
 		}

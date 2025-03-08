@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/03/04 17:27:11 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/08 19:29:21 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -267,7 +267,7 @@ char	*remove_quote(char *str)
 	}
 	return (str);
 }
-
+/* 
 t_exec	*create_exec(t_list *tokens)
 {
 	int		first;
@@ -301,36 +301,109 @@ t_exec	*create_exec(t_list *tokens)
 	}
 	exec->opt = opt;
 	return (exec);
+} */
+
+void	*add_empty(t_list **lst)
+{
+	t_list	*new;
+
+	new = ft_lstnew(NULL);
+	if (!new)
+		return (NULL);
+	ft_lstadd_back(lst, new);
+	return (new);
 }
 
-t_exec	**parsing_v2(char *str)
+void	clear_to(t_list	*start, t_list *end)
+{
+	t_list	*tmp;
+	t_list	*next;
+
+	tmp = start->next;
+	while (tmp && tmp != end)
+	{
+		next = tmp->next;
+		ft_lstdelone(tmp, free);
+		tmp = next;
+	}
+	start->next = end;
+}
+
+int	merge_tokens(t_list **tokens)
+{
+	t_list	*tmp;
+	t_list	*prev;
+	char	*new_token;
+
+	tmp = *tokens;
+	while (tmp)
+	{
+		new_token = NULL;
+		prev = tmp;
+		while (tmp && tmp->content)
+		{
+			new_token = ft_strappend(new_token,	(char *)tmp->content);
+			tmp = tmp->next;
+		}
+		while (tmp && !tmp->content)
+			tmp = tmp->next;
+		free (prev->content);
+		prev->content = new_token;
+		clear_to(prev, tmp);
+	}
+	return (1);
+}
+
+int	env_handling(t_list *tokens, t_list **env)
+{
+	char	*token;
+
+	while (tokens)
+	{
+		token = (char *)tokens->content;
+		if (token && token[0] != '\'')
+			tokens->content = handle_env(token, env);
+		tokens->content = remove_quote((char *)tokens->content);
+		tokens = tokens->next;
+	}
+	return (1);
+}
+
+t_list	*parsing_v2(char *str, t_list **env)
 {
 	size_t	i;
 	t_list	*tokens;
 	t_list	*new;
 	char	*token;
-	t_exec 	**exec;
 
 	i = 0;
-	exec = ft_calloc(sizeof(t_exec *), 2);
 	tokens = NULL;
 	while (str[i])
 	{
-		token = split_token(str, &i);
-		while (str[i] && ((is_redir(str[i]) && is_redir(str[i - 1])) || \
-		((!is_space(str[i]) && !is_redir(str[i])) && (!is_space(str[i - 1]) && \
-		!is_redir(str[i - 1])))))
-			token = ft_strappend(remove_quote(token), remove_quote(split_token(str, &i)));
-		new = ft_lstnew(token);
+		token = split_token(str, &i);														//TODO	Maybe change the tokens to be separate by space tokens [ec]["h"][o][ ][...]
+		new = ft_lstnew(token);																//Idea add space token between instruction to merge token later
+		if (!token || !new)																	//This is for environnemnt handling (STATUS : NOT DONE)
+			return (ft_lstclear(&tokens, free), NULL);
 		ft_lstadd_back(&tokens, new);
+		if (str[i] && (is_space(str[i]) || (is_redir(str[i]) && \
+		!is_redir(str[i - 1])) || (is_redir(str[i - 1]) && !is_redir(str[i]))))
+			add_empty(&tokens);
 	}
-	exec[0] = create_exec(tokens);
+	env_handling(tokens, env);
+	merge_tokens(&tokens);
+	/*	Next step is to change environnement handling to iter over each element of the list OK
+		then remove quote tokens OK
+		then merge token into final token OK
+		count pipe to malloc (t_exec **) than malloc (t_exec) for each row;
+		count tokens to malloc two tab (char **{file, command})
+		assign each string of the tab to each different options (Use a struct for the outfile ??)
+	*/
 	while (tokens)
 	{
 		ft_printf("[%s]\n", (char *)tokens->content);
 		tokens = tokens->next;
 	}
-	return (exec);
+	return (NULL);
 }
 
 int	main(int ac, char **av, char **envp)
@@ -358,7 +431,7 @@ int	main(int ac, char **av, char **envp)
 		// input = synthax_quote(input);
 		// ft_printf("%s\n", input);
 		// command = parsing(input, env);
-		command = parsing_v2(input);
+		parsing_v2(input, env);
 		if (command)
 			exec(command, env, envp);
 	}
