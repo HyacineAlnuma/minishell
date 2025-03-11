@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:02:33 by secros            #+#    #+#             */
-/*   Updated: 2025/03/04 17:14:07 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/11 13:06:38 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ enum e_here_bool
 typedef struct s_doc
 {
 	char	*str;
-	int		append;
+	enum	append;
 }	t_doc;
 
 typedef struct s_exec

@@ -10,19 +10,19 @@ echo "hello"world|wc -c
 					[child2.1]		[child 2.2]
 					str2[0]			str3 = &str2[pipe + 1]
 									ect...
-str[0] -> echo "hello"world >>fi"le"
+str[0] -> cat <txt >>fi"le"
 
 [child 1]				[child 2]					[child 2.1]
 type cmd				type DOC					type cmd
-*str = str[0]			">>"						str[>> + 1]
-child_one = NULL;		child_one = YES				NULL
+*str = str[0]			*t_doc						str[>> + 1]
+child_one = NULL;		child_one = NULL			NULL
 child_two = NULL;		child_two = NULL;			NULL
 
 
 struct	s_tree
 {
 	enum	type;
-	char	*content;
+	void	*sheet;
 	s_tree	*child_one;
 	s_tree	*child_two;
 }	t_tree;
