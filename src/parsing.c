@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/03/08 19:29:21 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/11 11:11:32 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,23 +184,24 @@ void	print_prompt(t_list **env)
 /* New parsing in progress
 	New system, string cut down in token separate by whitespace or quote or pipe OK
 		Need to separete pipe also OK
-			Handle pipe first before they could get unquoted OK pipe don't get unquoted (except """|")
+			Handle pipe first before they could get unquoted OK
+		
 		unify token ex (He"lo" -> Hello) only the one with no whitespace in between OK
-		if token = '|' handle later in the parsing
-			cut lst in two before | after
-		repeat for the after part
-		handle env variable and quote
-		remove quote;
+		if token = '|' handle later in the parsing OK
+			cut lst in two before | after OK
+		repeat for the after part OK
+		handle env variable and quote OK
+		remove quote; OK
 	create the struct
 		(first element of lst) = 1
 		handle redirection (and heredoc)
 			set token to infile / outfile
 		if first element token = command else token = option
-		if token = pipe
-			new_struct and repeat with the other lst
+		if token = pipe OK
+			new_struct and repeat with the other lst OK
 	when lst = null
 		parsing end
-		destroy the lst but keep content;
+		destroy the lst but keep content; lst_clear with NULL
 		send strut to exect
 
 */
@@ -267,41 +268,6 @@ char	*remove_quote(char *str)
 	}
 	return (str);
 }
-/* 
-t_exec	*create_exec(t_list *tokens)
-{
-	int		first;
-	t_exec 	*exec;
-	char	**opt;
-	int		j = 0;
-
-	first = 1;
-	exec = ft_calloc(sizeof(t_exec), 1);
-	opt = ft_calloc(sizeof(char *), 64);
-	while (tokens)
-	{
-		if (ft_strcmp((char *)tokens->content, "|"))
-			return NULL; //should create another struct
-		else if (ft_strcmp((char *)tokens->content, ">>"))
-			exec->outfile = tokens->content;
-		else if (ft_strcmp((char *)tokens->content, ">"))
-			exec->outfile = tokens->content;
-		else if (ft_strcmp((char *)tokens->content, "<<"))
-			return NULL;
-		else if (ft_strcmp((char *)tokens->content, "<"))
-			exec->infile = (char *)tokens->content;
-		else if (first == 1)
-		{
-			first = 0;
-			exec->cmd = (char *)tokens->content;
-		}
-		else
-			opt[j++] = (char *)tokens->content;
-		tokens = tokens->next;
-	}
-	exec->opt = opt;
-	return (exec);
-} */
 
 void	*add_empty(t_list **lst)
 {
@@ -342,12 +308,12 @@ int	merge_tokens(t_list **tokens)
 		prev = tmp;
 		while (tmp && tmp->content)
 		{
-			new_token = ft_strappend(new_token,	(char *)tmp->content);
+			tmp->content = remove_quote((char *)tmp->content);
+			new_token = ft_strappend(new_token, (char *)tmp->content);
 			tmp = tmp->next;
 		}
 		while (tmp && !tmp->content)
 			tmp = tmp->next;
-		free (prev->content);
 		prev->content = new_token;
 		clear_to(prev, tmp);
 	}
@@ -363,10 +329,83 @@ int	env_handling(t_list *tokens, t_list **env)
 		token = (char *)tokens->content;
 		if (token && token[0] != '\'')
 			tokens->content = handle_env(token, env);
-		tokens->content = remove_quote((char *)tokens->content);
 		tokens = tokens->next;
 	}
 	return (1);
+}
+
+int	count_pipe(t_list *tokens)
+{
+	int	count;
+
+	count = 0;
+	while (tokens)
+	{
+		if (tokens->content && !strcmp((char *)tokens->content, "|"))
+			count++;
+		tokens = tokens->next;
+	}
+	return (count);
+}
+
+void	cut_pipe(t_list **tokens)
+{
+	t_list	*tmp;
+	t_list	*prev;
+
+	tmp = NULL;
+	while (*tokens)
+	{
+		if ((*tokens)->content && !strcmp((char *)(*tokens)->content, "|"))
+		{
+			tmp = *tokens;
+			break ;
+		}
+		prev = *tokens;
+		*tokens = (*tokens)->next;
+	}
+	if (*tokens)
+	{
+		(*tokens) = (*tokens)->next;
+		prev->next = NULL;
+	}
+	if (tmp)
+		ft_lstdelone(tmp, free);
+}
+
+/* t_exec	*create_struct2(t_list	*tokens)
+{
+	t_exec	*l_com;
+
+	l_com = malloc(sizeof(t_exec));
+	if (!l_com)
+		return (NULL);
+	return (l_com);
+} */
+
+t_list	**cut_instruction(t_list *tokens)
+{
+	t_list	**pipe;
+	t_exec	**com;
+	int		count;
+	int		i;
+
+	i = 0;
+	count = count_pipe(tokens);
+	pipe = malloc(sizeof(t_list *) * (count + 1));
+	if (!pipe)
+		return (NULL);
+	com = ft_calloc(sizeof(t_exec *), (count + 2));
+	if (!com)
+		return (NULL);
+	while (i <= count)
+	{
+		pipe[i++] = tokens;
+		cut_pipe(&tokens);
+	}
+	while (--i >= 0)
+		merge_tokens(&pipe[i]);
+	return (pipe);
 }
 
 t_list	*parsing_v2(char *str, t_list **env)
@@ -374,6 +413,7 @@ t_list	*parsing_v2(char *str, t_list **env)
 	size_t	i;
 	t_list	*tokens;
 	t_list	*new;
+	t_list	**piped;
 	char	*token;
 
 	i = 0;
@@ -390,18 +430,27 @@ t_list	*parsing_v2(char *str, t_list **env)
 			add_empty(&tokens);
 	}
 	env_handling(tokens, env);
-	merge_tokens(&tokens);
+	piped = cut_instruction(tokens);
 	/*	Next step is to change environnement handling to iter over each element of the list OK
+		cut lst based on pipe OK
+		create t_doc tab
 		then remove quote tokens OK
 		then merge token into final token OK
-		count pipe to malloc (t_exec **) than malloc (t_exec) for each row;
-		count tokens to malloc two tab (char **{file, command})
-		assign each string of the tab to each different options (Use a struct for the outfile ??)
 	*/
-	while (tokens)
+	while (piped[0])
 	{
-		ft_printf("[%s]\n", (char *)tokens->content);
-		tokens = tokens->next;
+		ft_printf("[%s]\n", (char *)piped[0]->content);
+		piped[0] = piped[0]->next;
+	}
+	while (piped[1])
+	{
+		ft_printf("[%s]\n", (char *)piped[1]->content);
+		piped[1] = piped[1]->next;
+	}
+	while (piped[2])
+	{
+		ft_printf("[%s]\n", (char *)piped[2]->content);
+		piped[2] = piped[2]->next;
 	}
 	return (NULL);
 }

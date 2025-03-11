@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 12:55:19 by halnuma           #+#    #+#             */
-/*   Updated: 2025/02/11 10:28:41 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/03/11 10:34:10 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,5 +50,6 @@ char	*ft_strappend(char *s1, char *s2)
 		fs[len1] = s1[len1];
 	if (s1)
 		free(s1);
+	s1 = NULL;
 	return (fs);
 }
