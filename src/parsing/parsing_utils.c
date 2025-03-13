@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   parsing_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:10:47 by secros            #+#    #+#             */
-/*   Updated: 2025/02/13 10:12:13 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/13 11:56:39 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,4 +26,46 @@ void	free_the_mallocs(void **pt)
 	}
 	free(pt);
 	pt = NULL;
+}
+
+int	count_pipe(t_list *tokens)
+{
+	int	count;
+
+	count = 0;
+	while (tokens)
+	{
+		if (tokens->content && !ft_strcmp((char *)tokens->content, "|"))
+			count++;
+		tokens = tokens->next;
+	}
+	return (count);
+}
+void	clear_to(t_list	*start, t_list *end)
+{
+	t_list	*tmp;
+	t_list	*next;
+
+	tmp = start->next;
+	while (tmp && tmp != end)
+	{
+		next = tmp->next;
+		ft_lstdelone(tmp, free);
+		tmp = next;
+	}
+	start->next = end;
+}
+
+int	is_space(char c)
+{
+	if (c == ' ' || (c >= 9 && c <= 13))
+		return (1);
+	return (0);
+}
+
+int	is_redir(char c)
+{
+	if (c == '>' || c == '<' || c =='|')
+		return (1);
+	return (0);
 }
