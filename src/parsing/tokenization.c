@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 11:38:20 by secros            #+#    #+#             */
-/*   Updated: 2025/03/13 11:58:18 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/13 14:44:59 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,28 +23,21 @@ void	*add_empty(t_list **lst)
 	return (new);
 }
 
-int	merge_tokens(t_list **tokens)
+int	merge_tokens(t_list *tokens)
 {
 	t_list	*tmp;
-	t_list	*prev;
 	char	*new_token;
 
-	tmp = *tokens;
-	while (tmp)
+	tmp = tokens;
+	new_token = NULL;
+	while (tmp && tmp->content)
 	{
-		new_token = NULL;
-		prev = tmp;
-		while (tmp && tmp->content)
-		{
-			tmp->content = remove_quote((char *)tmp->content);
-			new_token = ft_strappend(new_token, (char *)tmp->content);
-			tmp = tmp->next;
-		}
-		while (tmp && !tmp->content)
-			tmp = tmp->next;
-		prev->content = new_token;
-		clear_to(prev, tmp);
+		tmp->content = remove_quote((char *)tmp->content);
+		new_token = ft_strappend(new_token, (char *)tmp->content);
+		tmp = tmp->next;
 	}
+	tokens->content = new_token;
+	clear_to(tokens, tmp);
 	return (1);
 }
 

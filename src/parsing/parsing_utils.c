@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:10:47 by secros            #+#    #+#             */
-/*   Updated: 2025/03/13 11:56:39 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/13 17:37:32 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,17 @@ void	free_the_mallocs(void **pt)
 	pt = NULL;
 }
 
-int	count_pipe(t_list *tokens)
+int	lst_count_char(t_list *tokens, char c)
 {
-	int	count;
+	int		count;
+	char	search[2];
 
 	count = 0;
+	search[1] = '\0';
+	search[0] = c;
 	while (tokens)
 	{
-		if (tokens->content && !ft_strcmp((char *)tokens->content, "|"))
+		if (tokens->content && !ft_strcmp((char *)tokens->content, search))
 			count++;
 		tokens = tokens->next;
 	}

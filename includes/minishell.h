@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:02:33 by secros            #+#    #+#             */
-/*   Updated: 2025/03/13 11:59:02 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/13 17:27:30 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@
 # define ASCII34 "__/|__/  |__/|__/|_______/ |__"
 # define ASCII35 "/  |__/ \\_______/|__/|__/|__/\n"
 
-enum	e_here_bool
+enum e_here_bool
 {
 	FALSE,
 	TRUE,
@@ -82,6 +82,7 @@ enum e_doc
 typedef struct s_doc
 {
 	char		*str;
+	char		*str_type;
 	enum e_doc	type;
 }	t_doc;
 
@@ -98,10 +99,10 @@ typedef struct s_exec
 //utils
 void	free_the_mallocs(void **pt);
 void	print_ascii(void);
-int	count_pipe(t_list *tokens);
+int		lst_count_char(t_list *tokens, char c);
 void	clear_to(t_list	*start, t_list *end);
-int	is_space(char c);
-int	is_redir(char c);
+int		is_space(char c);
+int		is_redir(char c);
 
 //parsing
 t_list	*parsing(char *str, t_list **env);
@@ -111,6 +112,7 @@ t_list	**lst_env(char **envp);
 char	*find_node(t_list **env, char *var_env);
 char	*remove_quote(char *str);
 char	*synthax_quote(char *str);
+int		merge_tokens(t_list *tokens);
 
 //exec
 void	exec(t_exec **cmds, t_list **env, char **envp);
