@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/03/13 17:41:18 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/13 17:45:14 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,14 @@
 
 /* 
 	create the struct
-		(first element of lst) = 1
-		handle redirection (and heredoc)
-			set token to infile / outfile
-		if first element token = command else token = option
+		handle redirection (and heredoc) OK
+			set token to infile / outfile OK
 		if token = pipe OK
-			new_struct and repeat with the other lst OK
+			new_struct and repeat with the other lst 
 	when lst = null
 		parsing end
 		destroy the lst but keep content; lst_clear with NULL
-		send strut to exect
+		send strut to exec
 
 */
 
