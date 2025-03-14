@@ -6,12 +6,10 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:02:33 by secros            #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/02/14 10:20:58 by halnuma          ###   ########.fr       */
-=======
-/*   Updated: 2025/02/14 11:43:50 by secros           ###   ########.fr       */
->>>>>>> 8d872fbe05858b16672e52d6a0a2dd48c5537960
+/*   Updated: 2025/03/14 15:14:26 by halnuma          ###   ########.fr       */
 /*                                                                            */
+/* ************************************************************************** */
+
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
@@ -31,6 +29,8 @@
 # include <signal.h>
 
 # define CHARSET " \t\n\v\f\r"
+# define HD_TEMP_FILE "tmp/here_doc_temp.txt"
+# define CMD_NOT_FOUND 127
 
 # define ASCII1 " /$$      /$$           /$$                                   "
 # define ASCII2 "                  /$$                     /$$      /$$ /$$    "
@@ -68,37 +68,67 @@
 # define ASCII34 "__/|__/  |__/|__/|_______/ |__"
 # define ASCII35 "/  |__/ \\_______/|__/|__/|__/\n"
 
-<<<<<<< HEAD
-/*
-	Here_doc:
-		-Check si - : enlever les tab au debut de chaque ligne
-		-Check si "" : Envoyer a l'exec
-		-Si pas de "" : Remplacer les variables d'env puis envoyer au formattage
-			-Recupere la string du formattage, la mettre dans une struct -> here_doc = 1, str dans les opt, si !cmd cdm = echo
-*/
 
+enum e_here_bool
+{
+	FALSE,
+	TRUE,
+	TMPDOC,
+};
 
-=======
->>>>>>> 8d872fbe05858b16672e52d6a0a2dd48c5537960
+enum e_doc
+{
+	INFILE,
+	HEREDOC,
+	OUTFILE,
+	APPEND,
+};
+
+typedef struct s_doc
+{
+	char		*str;
+	char		*str_type;
+	enum e_doc	type;
+}	t_doc;
+
 typedef struct s_exec
 {
 	char	*cmd;
 	char	**opt;
-	char	*infile;
-	char	*outfile;
-	int		append;
-	int		here_doc;
+	t_doc	*docs;
 }	t_exec;
+
+typedef struct s_fork
+{
+	t_exec	**cmds;
+	t_exec	*cmd;
+	pid_t	*pid;
+	int		*pipefd;
+	int		pipe_nb;
+	int		cur_cmd;
+	int		cur_pipe;
+}	t_fork;
+
+extern sig_atomic_t g_sigint_flag;
 
 //utils
 void	free_the_mallocs(void **pt);
 void	print_ascii(void);
+int		lst_count_char(t_list *tokens, char c);
+void	clear_to(t_list	*start, t_list *end);
+int		is_space(char c);
+int		is_redir(char c);
+void	sig_handler(int signum);
 
 //parsing
+t_exec	**parsing(char *str, t_list **env);
 char	*handle_env(char *str, t_list **env);
-t_exec	**create_struct(char ***tab, size_t count);
+t_list	*create_token_list(char *str);
 t_list	**lst_env(char **envp);
 char	*find_node(t_list **env, char *var_env);
+char	*remove_quote(char *str);
+char	*synthax_quote(char *str);
+int		merge_tokens(t_list *tokens);
 
 //exec
 void	exec(t_exec **cmds, t_list **env, char **envp);

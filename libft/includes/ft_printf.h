@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: halnuma <halnuma@student.42.fr>            +#+  +:+       +#+        */
+/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 16:58:51 by halnuma           #+#    #+#             */
-/*   Updated: 2024/11/20 13:05:21 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/03/03 14:47:12 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 
 int		ft_printf(const char *input, ...);
 int		ft_print_vars(va_list vars, char next);
-void	ft_putnbr_base(size_t n, char *base);
-int		ft_ptrlen(size_t n, char *base, int count);
+void	ft_putnbr_base(ssize_t n, char *base);
+int		ft_ptrlen(ssize_t n, char *base, int count);
 int		ft_printhex(unsigned int n, int base_case);
 int		ft_hexlen(unsigned int n, char *base, int count);
 int		ft_printunbr(unsigned int n);

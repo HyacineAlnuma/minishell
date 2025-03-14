@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 14:16:13 by secros            #+#    #+#             */
-/*   Updated: 2025/02/05 14:26:58 by secros           ###   ########.fr       */
+/*   Updated: 2025/02/21 18:42:47 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static size_t	countsplit(const char *s, char *c)
 	return (word);
 }
 
-static size_t	to_next_c(const char *s, char *c, size_t index)
+size_t	to_next_c(const char *s, char *c, size_t index)
 {
 	size_t	i;
 

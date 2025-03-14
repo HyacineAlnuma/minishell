@@ -29,9 +29,9 @@ P_LIB			= libft/
 
 # ------ FILES ------
 
-MAIN			= main parsing print_ascii parse_env create_struct utils
+MAIN			= main exec print_ascii
 
-PARSING			= 
+PARSING			= parsing parse_env parsing_utils tokenization unclosed
 
 EXEC			= 
 
@@ -40,7 +40,7 @@ HDR_SRC			= libft				minishell
 SRC_MAIN		= $(addprefix $(P_SRC), $(addsuffix .c, $(MAIN)))
 SRC_PARSING		= $(addprefix $(P_PARSING), $(addsuffix .c, $(PARSING)))
 SRC_EXEC		= $(addprefix $(P_EXEC), $(addsuffix .c, $(EXEC)))
-SRC_ALL			= $(SRC_MAIN) $(SRC_UTILS)
+SRC_ALL			= $(SRC_MAIN) $(SRC_UTILS) $(SRC_PARSING)
 
 HEADERS			= $(addprefix $(P_INC), $(addsuffix .h, $(HDR_SRC)))
 LIBFT			= $(P_LIB)libft.a
@@ -50,7 +50,7 @@ LIBFT			= $(P_LIB)libft.a
 all: 			libft $(NAME)
 
 $(NAME): 		$(SRC_ALL) Makefile $(HEADERS) $(LIBFT)
-				@$(CC) $(CFLAGS) -I $(P_INC) $(SRC_ALL) $(LIBFT) -o $@
+				@$(CC) $(CFLAGS) -I $(P_INC) $(SRC_ALL) $(LIBFT) -lreadline -o $@
 				@echo "$(_YELLOW)Compiling $(SRC_ALL)$(_END)"
 				@echo "$(_GREEN)$(_BOLD)$(NAME) compiled!$(_END)"
 

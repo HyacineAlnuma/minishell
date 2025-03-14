@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printptr.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: halnuma <halnuma@student.42.fr>            +#+  +:+       +#+        */
+/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 10:23:16 by halnuma           #+#    #+#             */
-/*   Updated: 2024/11/20 09:32:04 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/03/03 14:47:05 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	ft_printptr(size_t n, char *base)
 	}
 }
 
-void	ft_putnbr_base(size_t n, char *base)
+void	ft_putnbr_base(ssize_t n, char *base)
 {
 	size_t	base_len;
 
@@ -40,7 +40,7 @@ void	ft_putnbr_base(size_t n, char *base)
 	}
 	else
 	{
-		if (n >= base_len)
+		if ((size_t) n >= base_len)
 		{
 			ft_putnbr_base((n / base_len), base);
 			ft_printchar(base[n % base_len]);
@@ -52,7 +52,7 @@ void	ft_putnbr_base(size_t n, char *base)
 	}
 }
 
-int	ft_ptrlen(size_t n, char *base, int count)
+int	ft_ptrlen(ssize_t n, char *base, int count)
 {
 	size_t	base_len;
 
@@ -64,7 +64,7 @@ int	ft_ptrlen(size_t n, char *base, int count)
 	}
 	else
 	{
-		if (n >= base_len)
+		if ((size_t) n >= base_len)
 		{
 			count++;
 			return (ft_ptrlen((n / base_len), base, count));
