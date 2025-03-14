@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:02:33 by secros            #+#    #+#             */
-/*   Updated: 2025/03/14 15:02:23 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/14 15:10:33 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@
 # include <signal.h>
 
 # define CHARSET " \t\n\v\f\r"
+# define HD_TEMP_FILE "tmp/here_doc_temp.txt"
+# define CMD_NOT_FOUND 127
 
 # define ASCII1 " /$$      /$$           /$$                                   "
 # define ASCII2 "                  /$$                     /$$      /$$ /$$    "
@@ -93,6 +95,19 @@ typedef struct s_exec
 	t_doc	*docs;
 }	t_exec;
 
+typedef struct s_fork
+{
+	t_exec	**cmds;
+	t_exec	*cmd;
+	pid_t	*pid;
+	int		*pipefd;
+	int		pipe_nb;
+	int		cur_cmd;
+	int		cur_pipe;
+}	t_fork;
+
+extern sig_atomic_t g_sigint_flag;
+
 //utils
 void	free_the_mallocs(void **pt);
 void	print_ascii(void);
@@ -100,6 +115,7 @@ int		lst_count_char(t_list *tokens, char c);
 void	clear_to(t_list	*start, t_list *end);
 int		is_space(char c);
 int		is_redir(char c);
+void	sig_handler(int signum);
 
 //parsing
 t_exec	**parsing(char *str, t_list **env);

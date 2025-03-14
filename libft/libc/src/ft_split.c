@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: halnuma <halnuma@student.42.fr>            +#+  +:+       +#+        */
+/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 12:56:27 by halnuma           #+#    #+#             */
-/*   Updated: 2025/01/17 10:16:50 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/02/19 11:37:11 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static char	**create_final_array(const char *str, char c)
 	return (res);
 }
 
-static char	*ft_strndup(const char *src, int size)
+char	*ft_strndup(const char *src, int size)
 {
 	char	*dest;
 	int		i;

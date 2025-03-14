@@ -9,3 +9,11 @@ echo must handle multiple -n (ex : echo -n -n -n -n a -n print a -n)
 Check syntax error
 return status of function
 SIGQUIT fais de la merde
+
+/*
+	Here_doc:
+		-Check si - : enlever les tab au debut de chaque ligne
+		-Check si "" : Envoyer a l'exec
+		-Si pas de "" : Remplacer les variables d'env puis envoyer au formattage
+			-Recupere la string du formattage, la mettre dans une struct -> here_doc = 1, str dans les opt, si !cmd -> cmd = NULL
+*/
