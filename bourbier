@@ -17,3 +17,9 @@ SIGQUIT fais de la merde
 		-Si pas de "" : Remplacer les variables d'env puis envoyer au formattage
 			-Recupere la string du formattage, la mettre dans une struct -> here_doc = 1, str dans les opt, si !cmd -> cmd = NULL
 */
+
+
+redirection :
+	- gere append
+	- gere redirection puis pipe
+	- gere double ou plus redirections

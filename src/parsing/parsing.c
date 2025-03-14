@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
+/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/03/14 15:03:43 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/14 15:34:21 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,11 +140,11 @@ t_doc	polish_doc(t_list **lst, t_list *tmp)
 	t_list	*to_free;
 
 	current.type = find_type((char *)(*lst)->content);
-	ft_printf("Type [%d]", current.type);
+	// ft_printf("Type [%d]", current.type);
 	(*lst) = (*lst)->next->next;
 	merge_tokens(*lst);
 	current.str = (*lst)->content;
-	ft_printf(" Name [%s]\n", current.str);
+	// ft_printf(" Name [%s]\n", current.str);
 	clear_to(tmp, *lst);
 	to_free = *lst;
 	*lst = (*lst)->next;
@@ -260,4 +260,99 @@ t_exec	**parsing(char *str, t_list **env)
 		i++;
 	}
 	return (exec);
+}
+
+char	*remove_file_name(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i] && HD_TEMP_FILE[i])
+	{
+		if (str[i] != HD_TEMP_FILE[i])
+			return (str);
+		i++;
+	}
+	return (&str[i + 1]);
+}
+
+int	format_here_doc(char *str, t_list **env, char **envp)
+{
+	int		i;
+	size_t	j;
+	char	*cmd;
+	char	*formated;
+	int		buf_size;
+	t_exec	**cmds;
+	int		k = -1;
+	int		temp_file_fd;
+	int		hd_fd;
+	char	*buffer;
+	char	*char_buf;
+	int		begin_part;
+	int		g = 0;
+	int		f_len;
+
+	i = 0;
+	j = 0;
+	begin_part = 0;
+	buffer = "\0";
+	formated = NULL;
+	char_buf = ft_calloc(sizeof(char), 2);
+	while (str[i])
+	{
+		if (str[i] == '$' && str[i + 1] == '(')
+		{
+			j = i;
+			while (str[++j])
+			{
+				if (str[j] == ')')
+					break ;
+			}
+			if (j == ft_strlen(str))
+			{
+				perror("parse error");
+				return (0);
+			}
+			str[i] = '\0';
+			formated = ft_strappend(formated, &str[begin_part]);
+			cmd = ft_strndup(&str[i + 2], (j - (i + 2)));
+			i = j + 1;
+			begin_part = i;
+			cmds = parsing(cmd, env);
+			k = -1;
+			while (cmds[++k])
+				cmds[k]->here_doc = 1;
+			exec(cmds, env, envp);
+			temp_file_fd = open(HD_TEMP_FILE, O_RDONLY);
+			if (!temp_file_fd || temp_file_fd == -1)
+			{
+				perror("file error");
+				return (0);
+			}
+			buf_size = ft_strlen(buffer);
+			ft_bzero(buffer, buf_size);
+			while (read(temp_file_fd, char_buf, 1))
+				buffer = ft_strjoin(buffer, char_buf);
+			buffer = remove_file_name(buffer);
+			g = 0;
+			while (buffer[g])
+			{
+				if (buffer[g] == '\n' && !buffer[g + 1])
+					buffer[g] = '\0';
+				g++;
+			}
+			unlink(HD_TEMP_FILE);
+			formated = ft_strappend(formated, buffer);
+		}
+		i++;
+	}
+	formated = ft_strappend(formated, &str[begin_part]);
+	hd_fd = open(HD_TEMP_FILE, O_RDWR | O_CREAT, S_IWUSR | S_IRUSR);
+	f_len = ft_strlen(formated);
+	write(hd_fd, formated, f_len);
+	free(buffer);
+	free(char_buf);
+	free(formated);
+	return (hd_fd);
 }

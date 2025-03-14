@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
+/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 10:41:15 by halnuma           #+#    #+#             */
-/*   Updated: 2025/03/14 15:12:58 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/14 15:32:17 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,8 +101,31 @@ void	pwd(void)
 	exit(EXIT_SUCCESS);
 }
 
+void	unset(t_exec *cmd, t_list **env)
+{
+	char	*data_ref;
+	t_list	*ptr;
+	int		var_size;
 
-int	main(int ac, char **av, char **envp)
+	var_size = 0;
+	while(cmd->opt[1][var_size] && cmd->opt[1][var_size] != '=')
+		var_size++;
+	ptr = *env;
+	data_ref = NULL;
+	while (ptr)
+	{
+		if (!ft_strncmp(ptr->content, cmd->opt[1], var_size))
+		{
+			data_ref = ptr->content;
+			break ;
+		}
+		ptr = ptr->next;
+	}
+	if (data_ref)
+		ft_lst_remove_if(env, data_ref, ft_strcmp);
+}
+
+void	export(t_exec *cmd, t_list **env)
 {
 	t_list	*new_line;
 
@@ -237,35 +260,43 @@ void	manage_files(t_exec *cmd)
 	int		infile_fd[1024];
 	// int		str_len;
 	int		i;
+	int		j;
+	int		k;
 
-	if (cmd->outfile)
+	j = 0;
+	i = 0;
+	k = 0;
+	while (cmd->docs[j].str)
 	{
-		i = -1;
-		while (cmd->outfile[++i])
+		if (cmd->docs[j].type == OUTFILE)
 		{
-			if (cmd->append[i])
-				outfile_fd[i] = open(cmd->outfile[i], O_RDWR | O_CREAT, S_IWUSR | S_IRUSR | O_APPEND);
-			else
-				outfile_fd[i] = open(cmd->outfile[i], O_RDWR | O_CREAT, S_IWUSR | S_IRUSR);
+			outfile_fd[i] = open(cmd->docs[j].str, O_RDWR | O_CREAT, S_IWUSR | S_IRUSR);
 			dup2(outfile_fd[i], STDOUT_FILENO);
 			close(outfile_fd[i]);
+			i++;
 		}
-	}
-	if (cmd->infile)
-	{
-		i = -1;
-		while (cmd->outfile[++i])
+		else if (cmd->docs[j].type == INFILE)
 		{
-			infile_fd[i] = open(cmd->infile[i], O_RDWR | O_CREAT, S_IWUSR | S_IRUSR);
-			dup2(infile_fd[i], STDIN_FILENO);
-			close(infile_fd[i]);
+			infile_fd[k] = open(cmd->docs[j].str, O_RDWR | O_CREAT, S_IWUSR | S_IRUSR);
+			dup2(infile_fd[k], STDIN_FILENO);
+			close(infile_fd[k]);
+			k++;
 		}
-	}
-	if (cmd->here_doc == 1)
-	{
-			infile_fd[i] = open(cmd->infile[i], O_RDWR | S_IWUSR | S_IRUSR);
-			dup2(infile_fd[i], STDIN_FILENO);
-			close(infile_fd[i]);
+		else if (cmd->docs[j].type == HEREDOC)
+		{
+			infile_fd[k] = open(cmd->docs[j].str, O_RDWR | S_IWUSR | S_IRUSR);
+			dup2(infile_fd[k], STDIN_FILENO);
+			close(infile_fd[k]);
+			k++;
+		}
+		else if (cmd->docs[j].type == APPEND)
+		{
+			outfile_fd[i] = open(cmd->docs[j].str, O_RDWR | O_CREAT, S_IWUSR | S_IRUSR | O_APPEND);
+			dup2(outfile_fd[i], STDOUT_FILENO);
+			close(outfile_fd[i]);
+			i++;
+		}
+		j++;
 	}
 }
 
@@ -306,7 +337,7 @@ void	dup_pipes(t_exec **cmds, int *pipefd, int cur_cmd, int cur_pipe)
 		dup2(pipefd[cur_pipe + 1], STDOUT_FILENO);
 	if (cur_cmd)
 		dup2(pipefd[cur_pipe - 2], STDIN_FILENO);
-	if (!cmds[cur_cmd + 1] && cmds[cur_cmd]->here_doc == 2)
+	if (!cmds[cur_cmd + 1] && cmds[cur_cmd]->here_doc)
 	{
 		temp_file_fd = open(HD_TEMP_FILE, O_RDWR | O_CREAT, S_IWUSR | S_IRUSR);
 		dup2(temp_file_fd, STDOUT_FILENO);
@@ -397,7 +428,7 @@ void	exec_process(t_fork *f, t_list **env, char **envp)
 	}
 	else if (f->pid[f->cur_cmd] == 0)
 	{
-		//manage_files(f->cmds[f->cur_cmd]);		\\ A rajouter quand le parsing gerera les files
+		manage_files(f->cmds[f->cur_cmd]);
 		dup_pipes(f->cmds, f->pipefd, f->cur_cmd, f->cur_pipe);
 		close_pipes(f->pipefd, f->pipe_nb);
 		exec_cmd(f->cmd, env, envp);

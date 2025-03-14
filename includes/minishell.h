@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:02:33 by secros            #+#    #+#             */
-/*   Updated: 2025/03/14 15:14:26 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/03/14 15:27:47 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ typedef struct s_exec
 {
 	char	*cmd;
 	char	**opt;
+	int		here_doc;
 	t_doc	*docs;
 }	t_exec;
 
