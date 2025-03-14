@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/03/13 17:45:14 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/14 15:03:43 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,7 +175,7 @@ t_doc *create_docs(t_list *lst)
 		tmp = lst;
 		lst = lst->next;
 	}
-	return (NULL);
+	return (docs);
 }
 
 int compare(char *str, char *str_ref)
@@ -190,24 +190,74 @@ int compare(char *str, char *str_ref)
 	return (ft_strcmp(str, str_ref));
 }
 
-t_list	*parsing(char *str, t_list **env)
+void	merge_all(t_list *lst)
+{
+	while (lst)
+	{
+		merge_tokens(lst);
+		lst = lst->next;
+	}
+}
+
+/* void	clear_lsts(t_list **lsts)
+{
+	int	i;
+
+	i = 0;
+	while (lsts[i])
+	{
+		ft_lstclear(&lsts[i], free);
+	}
+	free(lsts);
+} */
+
+int	lst_len(t_list *lst)
+{
+	int	i;
+
+	i = 0;
+	while (lst)
+	{
+		i++;
+		lst = lst->next;
+	}
+	return (i);
+}
+
+t_exec	**parsing(char *str, t_list **env)
 {
 	t_list	**piped;
 	t_list	*tokens;
+	t_list	*tmp;
+	t_exec	**exec;
 	int		count;
+	int		i;
+	int		j;
+	char	**tab;
 	
+	i = 0;
 	tokens = create_token_list(str);
 	env_handling(tokens, env);
 	count = lst_count_char(tokens, '|');
 	piped = cut_instruction(tokens, count);
-	create_docs(piped[0]);
-	ft_lst_remove_if(&piped[0], NULL, compare);
-	/*	Next step is to change environnement handling to iter over each element of the list OK
-		cut lst based on pipe OK
-		create t_doc tab
-		then remove quote tokens OK
-		then merge token into final token OK
-	*/
-	print_lsts(piped);
-	return (NULL);
+	exec = ft_calloc(sizeof(t_exec *), count + 2);
+	while (i <= count)
+	{
+		exec[i] = ft_calloc(sizeof(t_exec), 1);
+		exec[i]->docs = create_docs(piped[i]);
+		merge_all(piped[i]);
+		ft_lst_remove_if(&piped[i], NULL, compare);
+		tab = ft_calloc(sizeof(char *), lst_len(piped[i]) + 1);
+		tmp = piped[i];
+		j = 0;
+		while (tmp)
+		{
+			tab[j++] = tmp->content;
+			tmp = tmp->next;
+		}
+		exec[i]->cmd = tab[0];
+		exec[i]->opt = tab;
+		i++;
+	}
+	return (exec);
 }

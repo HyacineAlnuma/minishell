@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:02:33 by secros            #+#    #+#             */
-/*   Updated: 2025/03/13 17:27:30 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/14 15:02:23 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,10 +90,7 @@ typedef struct s_exec
 {
 	char	*cmd;
 	char	**opt;
-	char	*infile;
-	char	*outfile;
-	int		append;
-	int		here_doc;
+	t_doc	*docs;
 }	t_exec;
 
 //utils
@@ -105,7 +102,7 @@ int		is_space(char c);
 int		is_redir(char c);
 
 //parsing
-t_list	*parsing(char *str, t_list **env);
+t_exec	**parsing(char *str, t_list **env);
 char	*handle_env(char *str, t_list **env);
 t_list	*create_token_list(char *str);
 t_list	**lst_env(char **envp);

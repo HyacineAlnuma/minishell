@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 10:41:15 by halnuma           #+#    #+#             */
-/*   Updated: 2025/02/24 15:13:45 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/14 15:02:12 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_exec	*init_struct(void)
+/* t_exec	*init_struct(void)
 {
 	t_exec	*cmd;
 
@@ -26,7 +26,7 @@ t_exec	*init_struct(void)
 	//cmd->opt[1] = "test.txt";
 	// cmd->opt[2] = "test";
 	return (cmd);
-}
+} */
 
 /* t_exec	*init_struct2(void)
 {
@@ -44,7 +44,7 @@ t_exec	*init_struct(void)
 	return (cmd);
 } */
 
-t_exec	*init_struct3(void)
+/* t_exec	*init_struct3(void)
 {
 	t_exec	*cmd;
 
@@ -58,9 +58,9 @@ t_exec	*init_struct3(void)
 	cmd->append = 0;
 	// cmd->opt[2] = "test";
 	return (cmd);
-}
+} */
 
-t_exec	*init_struct4(void)
+/* t_exec	*init_struct4(void)
 {
 	t_exec	*cmd;
 
@@ -74,9 +74,9 @@ t_exec	*init_struct4(void)
 	cmd->append = 0;
 	// cmd->opt[2] = "test";
 	return (cmd);
-}
+} */
 
-t_exec	*init_struct5(void)
+/* t_exec	*init_struct5(void)
 {
 	t_exec	*cmd;
 
@@ -90,7 +90,7 @@ t_exec	*init_struct5(void)
 	cmd->append = 0;
 	// cmd->opt[2] = "test";
 	return (cmd);
-}
+} */
 
 void	echo(t_exec *cmd)
 {

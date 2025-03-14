@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 11:38:20 by secros            #+#    #+#             */
-/*   Updated: 2025/03/13 14:44:59 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/14 13:52:57 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ int	merge_tokens(t_list *tokens)
 
 	tmp = tokens;
 	new_token = NULL;
+	if (!tokens->content)
+		return (0);
 	while (tmp && tmp->content)
 	{
 		tmp->content = remove_quote((char *)tmp->content);
@@ -84,6 +86,8 @@ t_list	*create_token_list(char *str)
 		token = split_token(str, &i);
 		while(str[i] && is_redir(str[i]) && is_redir(str[i - 1]))
 			token = ft_strappend(token, split_token(str, &i));
+		if (token[0] == '\0')
+			return (free(token), tokens);
 		new = ft_lstnew(token);
 		if (!token || !new)
 			return (ft_lstclear(&tokens, free), NULL);

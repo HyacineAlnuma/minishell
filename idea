@@ -1,7 +1,11 @@
-export 
-env -i ./minishell
+export need to print env by alpha order
+env -i ./minishell create basic env
 garbage collector
 HEREDOC
 SHLVL
 PIPE
 Multiple redirection
+echo must handle multiple -n (ex : echo -n -n -n -n a -n print a -n)
+Check syntax error
+return status of function
+SIGQUIT fais de la merde
