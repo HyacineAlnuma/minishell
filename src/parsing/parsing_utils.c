@@ -6,17 +6,19 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:10:47 by secros            #+#    #+#             */
-/*   Updated: 2025/03/13 17:37:32 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/16 05:52:16 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	free_the_mallocs(void **pt)
+void	free_the_mallocs(void *alloc)
 {
 	size_t	i;
+	void	**pt;
 
 	i = 0;
+	pt = alloc;
 	if (!pt)
 		return ;
 	while (pt[i])

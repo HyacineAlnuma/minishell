@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/03/14 15:34:21 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/03/16 05:49:19 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,7 +224,7 @@ int	lst_len(t_list *lst)
 	return (i);
 }
 
-t_exec	**parsing(char *str, t_list **env)
+t_exec	**parsing(char *str, t_list **env, t_list **bin)
 {
 	t_list	**piped;
 	t_list	*tokens;
@@ -245,6 +245,8 @@ t_exec	**parsing(char *str, t_list **env)
 	{
 		exec[i] = ft_calloc(sizeof(t_exec), 1);
 		exec[i]->docs = create_docs(piped[i]);
+		add_garbage(exec, free_the_mallocs, bin);
+		add_garbage(exec[i]->docs, free_the_mallocs, bin);
 		merge_all(piped[i]);
 		ft_lst_remove_if(&piped[i], NULL, compare);
 		tab = ft_calloc(sizeof(char *), lst_len(piped[i]) + 1);
@@ -255,6 +257,7 @@ t_exec	**parsing(char *str, t_list **env)
 			tab[j++] = tmp->content;
 			tmp = tmp->next;
 		}
+		add_garbage(tab, free_the_mallocs, bin);
 		exec[i]->cmd = tab[0];
 		exec[i]->opt = tab;
 		i++;
@@ -319,7 +322,7 @@ int	format_here_doc(char *str, t_list **env, char **envp)
 			cmd = ft_strndup(&str[i + 2], (j - (i + 2)));
 			i = j + 1;
 			begin_part = i;
-			cmds = parsing(cmd, env);
+			cmds = parsing(cmd, env, NULL);
 			k = -1;
 			while (cmds[++k])
 				cmds[k]->here_doc = 1;

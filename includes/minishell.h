@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:02:33 by secros            #+#    #+#             */
-/*   Updated: 2025/03/14 15:46:48 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/16 05:53:00 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,13 @@ enum e_doc
 	APPEND,
 };
 
+typedef struct s_garb
+{
+	void	*obj;
+	void	(*f)(void *);
+} t_garb;
+
+
 typedef struct s_doc
 {
 	char		*str;
@@ -110,8 +117,12 @@ typedef struct s_fork
 
 extern sig_atomic_t g_sigint_flag;
 
+//garbage collector
+void 	clear_garbage(t_list **head);
+void	*add_garbage(void *pt, void (*free_pt)(void *), t_list **head);
+
 //utils
-void	free_the_mallocs(void **pt);
+void	free_the_mallocs(void *pt);
 void	print_ascii(void);
 int		lst_count_char(t_list *tokens, char c);
 void	clear_to(t_list	*start, t_list *end);
@@ -120,7 +131,7 @@ int		is_redir(char c);
 void	sig_handler(int signum);
 
 //parsing
-t_exec	**parsing(char *str, t_list **env);
+t_exec	**parsing(char *str, t_list **env, t_list **bin);
 char	*handle_env(char *str, t_list **env);
 t_list	*create_token_list(char *str);
 t_list	**lst_env(char **envp);

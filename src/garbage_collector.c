@@ -1,10 +1,5 @@
-#include "libft.h"
+#include "minishell.h"
 
-typedef struct s_garb
-{
-	void	*obj;
-	void	(*f)(void *);
-} t_garb;
 
 void clear_garbage(t_list **head)
 {

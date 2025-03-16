@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 11:45:00 by secros            #+#    #+#             */
-/*   Updated: 2025/03/14 15:12:27 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/16 05:51:18 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,10 @@ int	main(int ac, char **av, char **envp)
 	char	*input;
 	t_list	**env;
 	t_exec	**command;
+	t_list	*bin;
 
 	(void) av;
+	bin = NULL;
 	if (ac != 1)
 	{
 		write (2, "Error\nBad arguments\n", 20);
@@ -47,8 +49,9 @@ int	main(int ac, char **av, char **envp)
 		if (!input)
 			break ;
 		input = synthax_quote(input);
-		command = parsing(input, env);
+		command = parsing(input, env, &bin);
 		if (command)
 			exec(command, env, envp);
+		clear_garbage(&bin);
 	}
 }

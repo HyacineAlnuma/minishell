@@ -29,7 +29,7 @@ P_LIB			= libft/
 
 # ------ FILES ------
 
-MAIN			= main exec print_ascii
+MAIN			= main exec print_ascii garbage_collector
 
 PARSING			= parsing parse_env parsing_utils tokenization unclosed
 
