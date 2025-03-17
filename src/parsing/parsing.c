@@ -6,12 +6,11 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/03/17 12:52:50 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/17 16:14:59 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "color.h"
 
 /* 
 	create the struct
@@ -249,11 +248,15 @@ t_exec	**parsing(char *str, t_list **env, t_list **bin)
 	int		i;
 	int		j;
 	char	**tab;
-	
+
+	if (!str)
+		return (NULL);
 	i = 0;
 	if (!str)
 		return (NULL);
 	tokens = create_token_list(str);
+	if (!tokens)
+		return (NULL);
 	if (!tokens)
 		return (NULL);
 	env_handling(tokens, env);

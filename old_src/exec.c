@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 10:41:15 by halnuma           #+#    #+#             */
-/*   Updated: 2025/03/14 15:32:17 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/03/17 15:52:15 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	echo(t_exec *cmd)
 	int	i;
 
 	i = 1;
-	if (!ft_strncmp(cmd->opt[1], "-n", 3))
+	while (!ft_strncmp(cmd->opt[i], "-n", 3))
 		i++;
 	while (cmd->opt[i])
 	{
@@ -125,16 +125,91 @@ void	unset(t_exec *cmd, t_list **env)
 		ft_lst_remove_if(env, data_ref, ft_strcmp);
 }
 
+t_list	**get_alpha_env(t_list **env)
+{
+	t_list	**alpha_env;
+	t_list	*ptr;
+	t_list	*ptr_bis;
+	void	*temp;
+	char	*str_next;
+	char	*str_content;
+
+
+	alpha_env = ft_lstdup(env, NULL);
+	if (!alpha_env)
+		return (NULL);
+	ptr = *alpha_env;
+	while (ptr)
+	{
+		ptr_bis = *alpha_env;
+		while (ptr_bis && ptr_bis->next)
+		{
+			str_next = (char *)ptr_bis->next->content;
+			str_content = (char *)ptr_bis->content;
+			if (str_content[0] > str_next[0])
+			{
+				temp = ptr_bis->next->content;
+				ptr_bis->next->content = ptr_bis->content;
+				ptr_bis->content = temp;
+			}
+			ptr_bis = ptr_bis->next;
+		}
+		ptr = ptr->next;
+	}
+	return (alpha_env);
+}
+
+void	*find_smallest_var(t_list **env)
+{
+	t_list	*ptr;
+	void	*smallest;
+	char	*str_smallest;
+	char	*str_content;
+
+	ptr = *env;
+	smallest = (*env)->content;
+	while (ptr)
+	{
+		str_smallest = (char *)smallest;
+		str_content = (char *)ptr->content;
+		if (str_smallest[0] > str_content[0])
+			smallest = ptr->content;
+		ptr = ptr->next;
+	}
+	return (smallest);
+}
+
+void	print_exp_env(t_list **env)
+{
+	t_list	*ptr;
+	t_list	**alpha_env;
+
+	alpha_env = get_alpha_env(env);
+	if (!alpha_env)
+		return ;
+	ptr = *alpha_env;
+	while (ptr)
+	{
+		printf("declare -x %s\n", (char *)ptr->content);
+		ptr = ptr->next;
+	}
+	ft_lstclear(alpha_env, NULL);
+}
+
 void	export(t_exec *cmd, t_list **env)
 {
 	t_list	*new_line;
 
+	if (!cmd->opt[1])
+	{
+		print_exp_env(env);
+		return ;
+	}
 	unset(cmd, env);
 	new_line = ft_lstnew(cmd->opt[1]);
 	if (!new_line)
 		return ;
 	ft_lstadd_back(env, new_line);
-	//printf("%s\n", (char *)ft_lstlast(*env)->content);
 }
 
 void	free_all(t_list **env, t_exec **cmds, int *pid)
@@ -229,10 +304,11 @@ int	check_cmd(char *cmd)
 	char	*paths;
 	char	*path;
 	int		i;
+	struct stat fs;
 
 	if (check_builtins(cmd))
 		return (1);
-	if (!access(cmd, F_OK))
+	if (stat(cmd, &fs) == 0 && (fs.st_mode & S_IXUSR) && S_ISREG(fs.st_mode))
 		return (1);
 	i = 0;
 	paths = getenv("PATH");
@@ -258,19 +334,18 @@ void	manage_files(t_exec *cmd)
 {
 	int		outfile_fd[1024];
 	int		infile_fd[1024];
-	// int		str_len;
 	int		i;
 	int		j;
 	int		k;
 
-	j = 0;
 	i = 0;
+	j = 0;
 	k = 0;
 	while (cmd->docs[j].str)
 	{
 		if (cmd->docs[j].type == OUTFILE)
 		{
-			outfile_fd[i] = open(cmd->docs[j].str, O_RDWR | O_CREAT, S_IWUSR | S_IRUSR);
+			outfile_fd[i] = open(cmd->docs[j].str, O_RDWR | O_CREAT | O_TRUNC, S_IWUSR | S_IRUSR);
 			dup2(outfile_fd[i], STDOUT_FILENO);
 			close(outfile_fd[i]);
 			i++;
@@ -331,7 +406,6 @@ void	open_pipes(int *pipefd, int pipe_nb)
 void	dup_pipes(t_exec **cmds, int *pipefd, int cur_cmd, int cur_pipe)
 {
 	int	temp_file_fd;
-	//char buffer[1000];
 
 	if (cmds[cur_cmd + 1])
 		dup2(pipefd[cur_pipe + 1], STDOUT_FILENO);
@@ -428,8 +502,8 @@ void	exec_process(t_fork *f, t_list **env, char **envp)
 	}
 	else if (f->pid[f->cur_cmd] == 0)
 	{
-		manage_files(f->cmds[f->cur_cmd]);
 		dup_pipes(f->cmds, f->pipefd, f->cur_cmd, f->cur_pipe);
+		manage_files(f->cmds[f->cur_cmd]);
 		close_pipes(f->pipefd, f->pipe_nb);
 		exec_cmd(f->cmd, env, envp);
 	}
@@ -492,18 +566,3 @@ void	exec(t_exec **cmds, t_list **env, char **envp)
 	// (void)env;
 	exec_cmds(cmds, envp, env, pipe_nb, pid);
 }
-
-// int	main(int ac, char **av, char **envp)
-// {
-// 	t_exec	*tcmds[3];
-
-// 	(void)ac;
-// 	(void)av;
-// 	tcmds[0] = init_struct();
-// 	tcmds[1] = init_struct2();
-// 	// tcmds[2] = init_struct3();
-// 	// tcmds[3] = init_struct4();
-// 	// tcmds[4] = init_struct5();
-// 	tcmds[2] = NULL;
-// 	exec_cmds(tcmds, envp);
-// }

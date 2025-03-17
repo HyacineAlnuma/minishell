@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:01:37 by secros            #+#    #+#             */
-/*   Updated: 2025/02/26 12:53:29 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/03/17 14:57:30 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,5 @@ void	sig_handler(int signum)
 		if (!g_sigint_flag)
 			rl_redisplay();
 	}
-	else
-		return ;
+	return ;
 }

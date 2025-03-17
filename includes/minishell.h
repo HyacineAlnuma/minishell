@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
+/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:02:33 by secros            #+#    #+#             */
-/*   Updated: 2025/03/16 05:53:00 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/17 15:54:51 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MINISHELL_H
 
 # include "libft.h"
+# include "color.h"
 
 # include <readline/readline.h>
 # include <readline/history.h>
@@ -139,8 +140,28 @@ char	*find_node(t_list **env, char *var_env);
 char	*remove_quote(char *str);
 char	*synthax_quote(char *str);
 int		merge_tokens(t_list *tokens);
+char	*find_user_in_pwd(void);
 
 //exec
 void	exec(t_exec **cmds, t_list **env, char **envp);
+void	exit_program(t_exec **cmds, t_list **env, int *pid);
+void	echo(t_exec *cmd);
+void	cd(t_exec *cmd, t_list **env);
+void	pwd(void);
+void	unset(t_exec *cmd, t_list **env);
+void	export(t_exec *cmd, t_list **env);
+void	init_fork(t_fork *fork_info, t_exec **cmds, int pipe_nb, int cur_pipe);
+void	init_fork_bis(t_fork *f, int *pfd, t_exec *cmd, int cur_cmd, int *pid);
+void	manage_files(t_exec *cmd);
+void	close_pipes(int *pipefd, int pipe_nb);
+void	open_pipes(int *pipefd, int pipe_nb);
+void	dup_pipes(t_exec **cmds, int *pipefd, int cur_cmd, int cur_pipe);
+char	*get_previous_pwd(t_list **env);
+void	print_exp_env(t_list **env);
+void	free_all(t_list **env, t_exec **cmds, int *pid);
+int		check_cmd(char *cmd);
+int		check_builtins(char *cmd);
+int		exec_builtins(t_exec *cmd, t_list **env);
+void	wait_all_pid(pid_t *pid, int pipe_nb);
 
 #endif
