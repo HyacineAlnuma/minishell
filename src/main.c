@@ -3,21 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
+/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 11:45:00 by secros            #+#    #+#             */
-/*   Updated: 2025/03/17 09:40:21 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/17 14:57:26 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "color.h"
+
+sig_atomic_t	g_sigint_flag;
 
 void	print_prompt(t_list **env)
 {
 	char	*prompt;
 
 	prompt = find_node(env, "$USER");
+	if (!prompt)
+		prompt = find_user_in_pwd();
 	ft_printf("%s%s%s ", BG_RED, prompt, RESET);
 	prompt = find_node(env, "$PWD");
 	ft_printf("%s%s%s%s\n", BOLD, FG_BRIGHT_BLUE, prompt, RESET);
@@ -42,12 +45,17 @@ int	main(int ac, char **av, char **envp)
 	print_ascii();
 	command = NULL;
 	env = lst_env(envp);
+	signal(SIGINT, sig_handler);
+	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
+		g_sigint_flag = 0;
 		print_prompt(env);
-		input = readline("hell % ");
+		input = readline("minishell % ");
+		g_sigint_flag = 1;
 		if (!input)
 			break ;
+		add_history(input);
 		// input = synthax_quote(input);
 		command = parsing(input, env, &bin);
 		if (command)

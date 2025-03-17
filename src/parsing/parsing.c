@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
+/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/03/17 09:16:18 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/17 14:29:38 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "color.h"
 
 /* 
 	create the struct
@@ -234,9 +233,13 @@ t_exec	**parsing(char *str, t_list **env, t_list **bin)
 	int		i;
 	int		j;
 	char	**tab;
-	
+
+	if (!str)
+		return (NULL);
 	i = 0;
 	tokens = create_token_list(str);
+	if (!tokens)
+		return (NULL);
 	env_handling(tokens, env);
 	count = lst_count_char(tokens, '|');
 	piped = cut_instruction(tokens, count);

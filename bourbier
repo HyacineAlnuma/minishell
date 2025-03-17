@@ -1,19 +1,20 @@
-export need to print env by alpha order
-env -i ./minishell create basic env
-{
-	PWD=/home/secros/Documents/Cursus/MIL3/Minishell
-	SHLVL=1
-	_=/usr/bin/env
-}
+# export need to print env by alpha order
+# env -i ./minishell create basic env
+# {
+# 	PWD=/home/secros/Documents/Cursus/MIL3/Minishell
+# 	SHLVL=1
+# 	_=/usr/bin/env
+# }
 garbage collector
 HEREDOC
-SHLVL
+# SHLVL
 PIPE
 Multiple redirection
-echo must handle multiple -n (ex : echo -n -n -n -n a -n print a -n)
+# echo must handle multiple -n (ex : echo -n -n -n -n a -n print a -n)
 Check syntax error
 return status of function
-SIGQUIT fais de la merde
+# SIGQUIT fais de la merde
+ajouter message bash: cd: OLDPWD not set pour cd -
 
 /*
 	Here_doc:

@@ -1,6 +1,6 @@
 .PHONY: all clean fclean re libft
 
-# ------ COLORS ------
+# ------ COLORS ------ #
 
 _END			= \033[0m
 _GREY			= \033[0;30m
@@ -12,52 +12,86 @@ _PURPLE			= \033[0;35m
 _CYAN			= \033[0;36m
 _BOLD			= \e[1m
 
-# ------ VARIABLES ------
+# ------ VARIABLES ------ #
 
 NAME			= minishell
 CC				= cc
-AR				= ar -rcs
-CFLAGS			= -Wall -Wextra -Werror -lreadline -g3
+CFLAGS			= -Wall -Wextra -Werror -g3
 
 # ------ PATHS ------
 
 P_SRC 			= src/
 P_PARSING		= $(P_SRC)parsing/
 P_EXEC			= $(P_SRC)exec/
+P_UTILS			= $(P_SRC)utils/
 P_INC			= includes/
 P_LIB			= libft/
+P_OBJ			= obj/
 
-# ------ FILES ------
+# ------ FILES ------ #
 
-MAIN			= main exec print_ascii garbage_collector
+MAIN			= main
 
-PARSING			= parsing parse_env parsing_utils tokenization unclosed
+PARSING			= parsing 				parse_env 			\
+				parsing_utils 			tokenization 		\
+				unclosed
 
-EXEC			= 
+EXEC			= builtins				builtins_bis		\
+				builtins_utils			exec				\
+				exec_utils				pipes
 
-HDR_SRC			= libft				minishell
+UTILS			= garbage_collector		handle_signal		\
+				print_ascii
+
+HDR_SRC			= libft					minishell			
 
 SRC_MAIN		= $(addprefix $(P_SRC), $(addsuffix .c, $(MAIN)))
 SRC_PARSING		= $(addprefix $(P_PARSING), $(addsuffix .c, $(PARSING)))
 SRC_EXEC		= $(addprefix $(P_EXEC), $(addsuffix .c, $(EXEC)))
-SRC_ALL			= $(SRC_MAIN) $(SRC_UTILS) $(SRC_PARSING)
+SRC_UTILS		= $(addprefix $(P_UTILS), $(addsuffix .c, $(UTILS)))
+SRC_ALL			= $(SRC_MAIN) $(SRC_EXEC) $(SRC_PARSING) $(SRC_UTILS)
+
+OBJ_MAIN		= $(addprefix $(P_OBJ), $(addsuffix .o, $(MAIN)))
+OBJ_PARSING		= $(addprefix $(P_OBJ), $(addsuffix .o, $(PARSING)))
+OBJ_EXEC		= $(addprefix $(P_OBJ), $(addsuffix .o, $(EXEC)))
+OBJ_UTILS		= $(addprefix $(P_OBJ), $(addsuffix .o, $(UTILS)))
+OBJ_ALL			= $(OBJ_MAIN) $(OBJ_PARSING) $(OBJ_EXEC) $(OBJ_UTILS)
+
 
 HEADERS			= $(addprefix $(P_INC), $(addsuffix .h, $(HDR_SRC)))
 LIBFT			= $(P_LIB)libft.a
 
-# ------ RULES ------
+# ------ RULES ------ #
 
 all: 			libft $(NAME)
 
-$(NAME): 		$(SRC_ALL) Makefile $(HEADERS) $(LIBFT)
-				@$(CC) $(CFLAGS) -I $(P_INC) $(SRC_ALL) $(LIBFT) -lreadline -o $@
-				@echo "$(_YELLOW)Compiling $(SRC_ALL)$(_END)"
-				@echo "$(_GREEN)$(_BOLD)$(NAME) compiled!$(_END)"
+$(NAME): 		$(OBJ_ALL) Makefile $(HEADERS) $(LIBFT)
+				@$(CC) $(CFLAGS) -I $(P_INC) $(OBJ_ALL) $(LIBFT) -lreadline -o $@
+				@echo "$(_GREEN)$(_BOLD)=> $(NAME) compiled!$(_END)"
+
+$(P_OBJ):
+				@mkdir -p $(P_OBJ)
+
+$(P_OBJ)%.o:	$(P_SRC)%.c Makefile $(HEADERS) | $(P_OBJ)
+				@echo "$(_YELLOW)Compiling $<...$(_END)"
+				@$(CC) $(CFLAGS) -I $(P_INC) -c $< -o $@
+
+$(P_OBJ)%.o:	$(P_PARSING)%.c Makefile $(HEADERS) | $(P_OBJ)
+				@echo "$(_YELLOW)Compiling $<...$(_END)"
+				@$(CC) $(CFLAGS) -I $(P_INC) -c $< -o $@
+
+$(P_OBJ)%.o:	$(P_EXEC)%.c Makefile $(HEADERS) | $(P_OBJ)
+				@echo "$(_YELLOW)Compiling $<...$(_END)"
+				@$(CC) $(CFLAGS) -I $(P_INC) -c $< -o $@
+
+$(P_OBJ)%.o:	$(P_UTILS)%.c Makefile $(HEADERS) | $(P_OBJ)
+				@echo "$(_YELLOW)Compiling $<...$(_END)"
+				@$(CC) $(CFLAGS) -I $(P_INC) -c $< -o $@
 
 libft:		
 				@$(MAKE) -C $(P_LIB) --no-print-directory
 
-# ------ BASIC RULES ------
+# ------ BASIC RULES ------ #
 
 clean: 
 				@rm -rf $(P_OBJ)
