@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 11:45:00 by secros            #+#    #+#             */
-/*   Updated: 2025/03/17 16:13:49 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/17 18:19:07 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	main(int ac, char **av, char **envp)
 	char	*input;
 	t_list	**env;
 	t_exec	**command;
-	t_list	*bin;
+	t_garb	*bin;
 
 	(void) av;
 	bin = NULL;
@@ -56,7 +56,7 @@ int	main(int ac, char **av, char **envp)
 			break ;
 		add_history(input);
 		// input = synthax_quote(input);
-		command = parsing(input, env, &bin);
+		command = parsing(input, env, bin);
 		add_garbage(command, free_the_mallocs, &bin);
 		free(input);
 		if (command)

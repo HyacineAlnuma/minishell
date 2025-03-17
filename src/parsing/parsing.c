@@ -6,12 +6,11 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/03/17 16:14:59 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/17 18:12:31 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 /* 
 	create the struct
 		handle redirection (and heredoc) OK
@@ -238,8 +237,9 @@ void	destroy_doc(void *pt)
 	free_the_mallocs(pt);
 }
 
-t_exec	**parsing(char *str, t_list **env, t_list **bin)
+t_exec	**parsing(char *str, t_list **env, t_garb *bin)
 {
+
 	t_list	**piped;
 	t_list	*tokens;
 	t_list	*tmp;
@@ -267,7 +267,7 @@ t_exec	**parsing(char *str, t_list **env, t_list **bin)
 	{
 		exec[i] = ft_calloc(sizeof(t_exec), 1);
 		exec[i]->docs = create_docs(piped[i]);
-		add_garbage(exec[i]->docs, destroy_doc, bin);
+		add_garbage(exec[i]->docs, destroy_doc, &bin);
 		merge_all(piped[i]);
 		ft_lst_remove_if(&piped[i], NULL, compare);
 		tab = ft_calloc(sizeof(char *), lst_len(piped[i]) + 1);
@@ -279,7 +279,7 @@ t_exec	**parsing(char *str, t_list **env, t_list **bin)
 			tmp = tmp->next;
 		}
 		ft_lstclear(&piped[i], NULL);
-		add_garbage(tab, free_the_mallocs, bin);
+		add_garbage(tab, free_the_mallocs, &bin);
 		exec[i]->cmd = tab[0];
 		exec[i]->opt = tab;
 		i++;

@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 11:38:20 by secros            #+#    #+#             */
-/*   Updated: 2025/03/17 12:36:40 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/17 18:10:26 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	merge_tokens(t_list *tokens)
 	return (1);
 }
 
-char	*split_token(char *str, size_t *i)
+char	*split_token(char *str, size_t *i, t_garb *bin)
 {
 	unsigned int	count;
 	char			*token;
@@ -67,12 +67,12 @@ char	*split_token(char *str, size_t *i)
 			break ;
 		count++;
 	}
-	token = ft_substr(str, *i, count);
+	token = add_garbage(ft_substr(str, *i, count), free, &bin);
 	*i += count;
 	return (token);
 }
 
-t_list	*create_token_list(char *str)
+t_list	*create_token_list(char *str, t_garb *bin)
 {
 	size_t	i;
 	t_list	*tokens;
@@ -83,7 +83,7 @@ t_list	*create_token_list(char *str)
 	tokens = NULL;
 	while (str[i])
 	{
-		token = split_token(str, &i);
+		token = split_token(str, &i, bin);
 		while(str[i] && is_redir(str[i]) && is_redir(str[i - 1]))
 			token = ft_strappend(token, split_token(str, &i));
 		if (token[0] == '\0')

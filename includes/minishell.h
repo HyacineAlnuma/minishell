@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:02:33 by secros            #+#    #+#             */
-/*   Updated: 2025/03/17 15:54:51 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/03/17 18:18:50 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "libft.h"
 # include "color.h"
+# include "better_mallocs.h"
 
 # include <readline/readline.h>
 # include <readline/history.h>
@@ -83,13 +84,6 @@ enum e_doc
 	APPEND,
 };
 
-typedef struct s_garb
-{
-	void	*obj;
-	void	(*f)(void *);
-} t_garb;
-
-
 typedef struct s_doc
 {
 	char		*str;
@@ -118,10 +112,6 @@ typedef struct s_fork
 
 extern sig_atomic_t g_sigint_flag;
 
-//garbage collector
-void 	clear_garbage(t_list **head);
-void	*add_garbage(void *pt, void (*free_pt)(void *), t_list **head);
-
 //utils
 void	free_the_mallocs(void *pt);
 void	print_ascii(void);
@@ -132,7 +122,7 @@ int		is_redir(char c);
 void	sig_handler(int signum);
 
 //parsing
-t_exec	**parsing(char *str, t_list **env, t_list **bin);
+t_exec	**parsing(char *str, t_list **env, t_garb *bin);
 char	*handle_env(char *str, t_list **env);
 t_list	*create_token_list(char *str);
 t_list	**lst_env(char **envp);
