@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:05:15 by secros            #+#    #+#             */
-/*   Updated: 2025/03/17 09:32:36 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/17 11:43:51 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,12 @@ char	*find_node(t_list **env, char *var_env)
 		{
 			while (((char *)lst->content)[i] != '=')
 				i++;
+			free(var_env);
 			return (&((char *)lst->content)[i + 1]);
 		}
 		lst = lst->next;
 	}
+	free(var_env);
 	return (NULL);
 }
 
@@ -89,7 +91,7 @@ t_list	**lst_env(char **envp)
 	{
 		// if (!strncmp(envp[i], "SHLVL=", 6));
 		// Increment value and itoa
-		new_line = ft_lstnew(envp[i]);
+		new_line = ft_lstnew(ft_strdup(envp[i]));
 		if (!new_line)
 			return (NULL);
 		ft_lstadd_back(lst_env, new_line);
