@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:05:15 by secros            #+#    #+#             */
-/*   Updated: 2025/03/08 18:27:50 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/17 09:32:36 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,8 @@ t_list	**lst_env(char **envp)
 		return (NULL);
 	while (envp[i])
 	{
+		// if (!strncmp(envp[i], "SHLVL=", 6));
+		// Increment value and itoa
 		new_line = ft_lstnew(envp[i]);
 		if (!new_line)
 			return (NULL);

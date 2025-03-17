@@ -1,5 +1,10 @@
 export need to print env by alpha order
 env -i ./minishell create basic env
+{
+	PWD=/home/secros/Documents/Cursus/MIL3/Minishell
+	SHLVL=1
+	_=/usr/bin/env
+}
 garbage collector
 HEREDOC
 SHLVL

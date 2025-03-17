@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 11:45:00 by secros            #+#    #+#             */
-/*   Updated: 2025/03/16 05:51:18 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/17 09:40:21 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,10 @@ int	main(int ac, char **av, char **envp)
 		input = readline("hell % ");
 		if (!input)
 			break ;
-		input = synthax_quote(input);
+		// input = synthax_quote(input);
 		command = parsing(input, env, &bin);
 		if (command)
 			exec(command, env, envp);
-		clear_garbage(&bin);
+		// clear_garbage(&bin);
 	}
 }
