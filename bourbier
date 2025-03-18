@@ -5,7 +5,7 @@
 # 	SHLVL=1
 # 	_=/usr/bin/env
 # }
-garbage collector
+# garbage collector
 HEREDOC
 # SHLVL
 PIPE

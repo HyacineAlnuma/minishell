@@ -6,23 +6,11 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/03/18 13:32:18 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/18 13:44:58 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-/* 
-	create the struct
-		handle redirection (and heredoc) OK
-			set token to infile / outfile OK
-		if token = pipe OK
-			new_struct and repeat with the other lst 
-	when lst = null
-		parsing end
-		destroy the lst but keep content; lst_clear with NULL
-		send strut to exec
-
-*/
 
 int	lst_len(t_list *lst)
 {

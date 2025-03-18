@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 11:45:00 by secros            #+#    #+#             */
-/*   Updated: 2025/03/18 13:25:01 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/18 13:38:44 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	main(int ac, char **av, char **envp)
 	{
 		g_sigint_flag = 0;
 		print_prompt(env);
-		input = add_garbage(readline("minishell % "), free, &bin);
+		input = add_garbage(readline("hell % "), free, &bin);
 		g_sigint_flag = 1;
 		if (!input)
 			break ;
