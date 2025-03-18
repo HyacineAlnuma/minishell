@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:34:14 by halnuma           #+#    #+#             */
-/*   Updated: 2025/03/17 15:34:48 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/03/18 12:36:25 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,10 @@
 
 void	exit_program(t_exec **cmds, t_list **env, int *pid)
 {
-	// pid_t	ppid;
-
-	// ppid = getppid();
-	// kill(ppid, SIGUSR1);
 	free_all(env, cmds, pid);
+	// (void)cmds;
+	// (void)env;
+	// (void)pid;
 	rl_clear_history();
 	exit(EXIT_SUCCESS);
 }
@@ -35,7 +34,6 @@ void	print_env(t_list **env)
 	}
 	exit(EXIT_SUCCESS);
 }
-
 
 int	exec_builtins(t_exec *cmd, t_list **env)
 {

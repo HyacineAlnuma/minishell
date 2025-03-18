@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:35:19 by halnuma           #+#    #+#             */
-/*   Updated: 2025/03/17 15:45:59 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/03/18 10:52:23 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,19 +31,14 @@ int	check_builtins(char *cmd)
 	return (0);
 }
 
-t_list	**get_alpha_env(t_list **env)
+t_list	**alphasort_env(t_list **alpha_env)
 {
-	t_list	**alpha_env;
 	t_list	*ptr;
 	t_list	*ptr_bis;
 	void	*temp;
 	char	*str_next;
 	char	*str_content;
 
-
-	alpha_env = ft_lstdup(env, NULL);
-	if (!alpha_env)
-		return (NULL);
 	ptr = *alpha_env;
 	while (ptr)
 	{
@@ -62,6 +57,17 @@ t_list	**get_alpha_env(t_list **env)
 		}
 		ptr = ptr->next;
 	}
+	return (alpha_env);
+}
+
+t_list	**get_alpha_env(t_list **env)
+{
+	t_list	**alpha_env;
+
+	alpha_env = ft_lstdup(env, NULL);
+	if (!alpha_env)
+		return (NULL);
+	alpha_env = alphasort_env(alpha_env);
 	return (alpha_env);
 }
 
@@ -110,21 +116,19 @@ char	*get_previous_pwd(t_list **env)
 	t_list	*ptr;
 
 	ptr = *env;
+	previouspwd = NULL;
 	while (ptr)
 	{
-		if (!ft_strncmp(ptr->content, "OLDPWD=", 4))
+		if (!ft_strncmp(ptr->content, "OLDPWD=", 7))
 		{
 			i = -1;
 			str = ptr->content;
 			while (str[++i])
 			{
 				if (str[i] == '=')
-				{
-					i++;
 					break ;
-				}
 			}
-			previouspwd = &str[i];
+			previouspwd = &str[++i];
 		}
 		ptr = ptr->next;
 	}

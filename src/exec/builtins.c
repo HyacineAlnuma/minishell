@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:32:53 by halnuma           #+#    #+#             */
-/*   Updated: 2025/03/17 15:33:46 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/03/18 10:53:01 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,21 +31,10 @@ void	echo(t_exec *cmd)
 	exit(EXIT_SUCCESS);
 }
 
-void	cd(t_exec *cmd, t_list **env)
+void	change_dir(t_exec *cmd, t_list *ptr, char *oldpwd)
 {
-	t_list	*ptr;
 	char	pwd[PATH_MAX];
-	char	oldpwd[PATH_MAX];
-	char	*previouspwd;
 
-	if (!cmd->opt[1])
-		return ;
-	if (!getcwd(oldpwd, sizeof(oldpwd)))
-		perror("getcwd() error");
-	ptr = *env;
-	previouspwd = get_previous_pwd(env);
-	if (!ft_strncmp(cmd->opt[1], "-", 2))
-		cmd->opt[1] = previouspwd;
 	if (!chdir(cmd->opt[1]))
 	{
 		if (!getcwd(pwd, sizeof(pwd)))
@@ -59,6 +48,27 @@ void	cd(t_exec *cmd, t_list **env)
 			ptr = ptr->next;
 		}
 	}
+}
+
+void	cd(t_exec *cmd, t_list **env)
+{
+	t_list	*ptr;
+	char	oldpwd[PATH_MAX];
+	char	*previouspwd;
+
+	if (!cmd->opt[1])
+		return ;
+	if (!getcwd(oldpwd, sizeof(oldpwd)))
+		perror("getcwd() error");
+	ptr = *env;
+	previouspwd = get_previous_pwd(env);
+	if (!ft_strncmp(cmd->opt[1], "-", 2))
+	{
+		if (!previouspwd)
+			printf("minishell: cd: OLDPWD not set\n");
+		cmd->opt[1] = previouspwd;
+	}
+	change_dir(cmd, ptr, oldpwd);
 }
 
 void	pwd(void)
@@ -79,7 +89,7 @@ void	unset(t_exec *cmd, t_list **env)
 	int		var_size;
 
 	var_size = 0;
-	while(cmd->opt[1][var_size] && cmd->opt[1][var_size] != '=')
+	while (cmd->opt[1][var_size] && cmd->opt[1][var_size] != '=')
 		var_size++;
 	ptr = *env;
 	data_ref = NULL;

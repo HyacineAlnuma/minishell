@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:29:37 by halnuma           #+#    #+#             */
-/*   Updated: 2025/03/17 15:46:30 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/03/18 11:34:52 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ void	wait_all_pid(pid_t *pid, int pipe_nb)
 {
 	int		i;
 	int		status;
-	// int		t;
 
 	i = 0;
 	status = 0;
@@ -52,8 +51,6 @@ void	wait_all_pid(pid_t *pid, int pipe_nb)
 		last_status_code(status, 0);
 		i++;
 	}
-	// t = last_status_code(0, 1);
-	// printf("status:%d\n", t);
 }
 
 void	free_all(t_list **env, t_exec **cmds, int *pid)
@@ -67,7 +64,6 @@ void	free_all(t_list **env, t_exec **cmds, int *pid)
 	i = 0;
 	while (cmds[i])
 	{
-		//free(cmds[i]->cmd);
 		j = 0;
 		while (cmds[i]->opt[j])
 		{
@@ -80,21 +76,54 @@ void	free_all(t_list **env, t_exec **cmds, int *pid)
 	free(cmds);
 }
 
-int	check_cmd(char *cmd)
+int	check_if_cmd_exists(char **paths, char *cmd)
 {
-	char	*paths;
 	char	*path;
 	int		i;
-	struct stat fs;
+	int		j;
 
-	if (check_builtins(cmd))
-		return (1);
-	if (stat(cmd, &fs) == 0 && (fs.st_mode & S_IXUSR) && S_ISREG(fs.st_mode))
-		return (1);
 	i = 0;
-	paths = getenv("PATH");
+	j = 0;
+	while (paths[i])
+	{
+		path = paths[i];
+		path = ft_strjoin(path, "/");
+		path = ft_strjoin(path, cmd);
+		if (!access(path, F_OK))
+			return (1);
+		path = &paths[i][j + 1];
+		i++;
+	}
+	return (0);
+}
+
+int	check_cmd_no_env(char *cmd)
+{
+	char	*paths[12];
+
+	paths[0] = "/home/halnuma/bin";
+	paths[1] = "/usr/local/sbin";
+	paths[2] = "/usr/local/bin";
+	paths[3] = "/usr/sbin";
+	paths[4] = "/bin";
+	paths[5] = "/usr/games";
+	paths[6] = "/usr/local/games";
+	paths[7] = "/snap/bin";
+	paths[8] = "/home/halnuma/.dotnet/tools";
+	paths[9] = "/usr/bin";
+	paths[10] = "/sbin";
+	paths[11] = NULL;
+	return (check_if_cmd_exists(paths, cmd));
+}
+
+int	check_cmd_with_env(char *cmd, char *paths)
+{
+	char	*path;
+	int		i;
+
 	paths = ft_strjoin(paths, ":");
 	path = paths;
+	i = 0;
 	while (paths[i])
 	{
 		if (paths[i] == ':')
@@ -109,4 +138,20 @@ int	check_cmd(char *cmd)
 		i++;
 	}
 	return (0);
+}
+
+int	check_cmd(char *cmd)
+{
+	char		*paths;
+	struct stat	fs;
+
+	if (check_builtins(cmd))
+		return (1);
+	if (stat(cmd, &fs) == 0 && (fs.st_mode & S_IXUSR) && S_ISREG(fs.st_mode))
+		return (1);
+	paths = getenv("PATH");
+	if (!paths)
+		return (check_cmd_no_env(cmd));
+	else
+		return (check_cmd_with_env(cmd, paths));
 }
