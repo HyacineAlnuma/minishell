@@ -1,3 +1,15 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2025/03/18 09:48:16 by halnuma           #+#    #+#              #
+#    Updated: 2025/03/18 09:49:06 by halnuma          ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 .PHONY: all clean fclean re libft
 
 # ------ COLORS ------ #
@@ -18,7 +30,7 @@ NAME			= minishell
 CC				= cc
 CFLAGS			= -Wall -Wextra -Werror -g3
 
-# ------ PATHS ------
+# ------ PATHS ------ #
 
 P_SRC 			= src/
 P_PARSING		= $(P_SRC)parsing/
@@ -43,7 +55,8 @@ EXEC			= builtins				builtins_bis		\
 UTILS			= garbage_collector		handle_signal		\
 				print_ascii
 
-HDR_SRC			= libft					minishell			
+HDR_SRC			= libft					minishell			\
+				color		
 
 SRC_MAIN		= $(addprefix $(P_SRC), $(addsuffix .c, $(MAIN)))
 SRC_PARSING		= $(addprefix $(P_PARSING), $(addsuffix .c, $(PARSING)))
