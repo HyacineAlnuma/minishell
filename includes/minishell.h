@@ -5,16 +5,18 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/05 10:02:33 by secros            #+#    #+#             */
-/*   Updated: 2025/03/18 13:12:46 by secros           ###   ########.fr       */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2025/03/18 13:23:42 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
 # include "libft.h"
 # include "color.h"
+# include "better_mallocs.h"
 # include "better_mallocs.h"
 
 # include <readline/readline.h>

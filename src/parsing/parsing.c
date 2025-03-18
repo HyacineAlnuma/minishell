@@ -6,12 +6,11 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/03/18 13:08:21 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/18 13:27:07 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 /* 
 	create the struct
 		handle redirection (and heredoc) OK
@@ -58,6 +57,7 @@ void	print_lsts(t_list **lst)
 
 t_exec	**parsing(char *str, t_list **env, t_garb *bin)
 {
+
 	t_list	**piped;
 	t_list	*tokens;
 	t_list	*tmp;
@@ -97,6 +97,7 @@ t_exec	**parsing(char *str, t_list **env, t_garb *bin)
 		exec[i]->opt = tab;
 		i++;
 	}
+	free (piped);
 	return (exec);
 }
 
