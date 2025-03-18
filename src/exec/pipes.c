@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:31:48 by halnuma           #+#    #+#             */
-/*   Updated: 2025/03/17 15:32:24 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/03/18 12:21:42 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,32 +23,32 @@ void	manage_files(t_exec *cmd)
 	i = 0;
 	j = 0;
 	k = 0;
-	while (cmd->docs[j].str)
+	while (cmd->docs[j])
 	{
-		if (cmd->docs[j].type == OUTFILE)
+		if (cmd->docs[j]->type == OUTFILE)
 		{
-			outfile_fd[i] = open(cmd->docs[j].str, O_RDWR | O_CREAT | O_TRUNC, S_IWUSR | S_IRUSR);
+			outfile_fd[i] = open(cmd->docs[j]->str, O_RDWR | O_CREAT | O_TRUNC, S_IWUSR | S_IRUSR);
 			dup2(outfile_fd[i], STDOUT_FILENO);
 			close(outfile_fd[i]);
 			i++;
 		}
-		else if (cmd->docs[j].type == INFILE)
+		else if (cmd->docs[j]->type == INFILE)
 		{
-			infile_fd[k] = open(cmd->docs[j].str, O_RDWR | O_CREAT, S_IWUSR | S_IRUSR);
+			infile_fd[k] = open(cmd->docs[j]->str, O_RDWR | O_CREAT, S_IWUSR | S_IRUSR);
 			dup2(infile_fd[k], STDIN_FILENO);
 			close(infile_fd[k]);
 			k++;
 		}
-		else if (cmd->docs[j].type == HEREDOC)
+		else if (cmd->docs[j]->type == HEREDOC)
 		{
-			infile_fd[k] = open(cmd->docs[j].str, O_RDWR | S_IWUSR | S_IRUSR);
+			infile_fd[k] = open(cmd->docs[j]->str, O_RDWR | S_IWUSR | S_IRUSR);
 			dup2(infile_fd[k], STDIN_FILENO);
 			close(infile_fd[k]);
 			k++;
 		}
-		else if (cmd->docs[j].type == APPEND)
+		else if (cmd->docs[j]->type == APPEND)
 		{
-			outfile_fd[i] = open(cmd->docs[j].str, O_RDWR | O_CREAT, S_IWUSR | S_IRUSR | O_APPEND);
+			outfile_fd[i] = open(cmd->docs[j]->str, O_RDWR | O_CREAT, S_IWUSR | S_IRUSR | O_APPEND);
 			dup2(outfile_fd[i], STDOUT_FILENO);
 			close(outfile_fd[i]);
 			i++;

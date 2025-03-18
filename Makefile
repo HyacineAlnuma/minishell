@@ -40,7 +40,7 @@ EXEC			= builtins				builtins_bis		\
 				builtins_utils			exec				\
 				exec_utils				pipes
 
-UTILS			= garbage_collector		handle_signal		\
+UTILS			= handle_signal		\
 				print_ascii
 
 HDR_SRC			= libft					minishell			

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_env.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:05:15 by secros            #+#    #+#             */
-/*   Updated: 2025/03/17 13:10:58 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/03/18 11:18:36 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,28 +54,29 @@ char	*find_node(t_list **env, char *var_env)
 		{
 			while (((char *)lst->content)[i] != '=')
 				i++;
+			free (var_env);
 			return (&((char *)lst->content)[i + 1]);
 		}
 		lst = lst->next;
 	}
+	free (var_env);
 	res = find_user_in_pwd();
 	return (res);
 }
 
-char	*replace_env(char *str, t_list **env, size_t index, size_t len)
+char	*replace_env(char *str, t_list **env, t_vect pos, t_garb *bin)
 {
 	char	*var_env;
 	char	*new_str;
 
-	var_env = ft_substr(str, index, len); //Ca va etre fun a securiser !
-	new_str = ft_substr(str, 0, index);
-	new_str = ft_strappend(new_str, find_node(env, var_env));
-	new_str = ft_strappend(new_str, (str + index + len));
-	free(str);
+	var_env = add_garbage(ft_substr(str, pos.x, pos.y), free, &bin); //Ca va etre fun a securiser !
+	new_str = add_garbage(ft_substr(str, 0, pos.x), free, &bin);
+	new_str = add_garbage(ft_strjoin(new_str, find_node(env, var_env)), free, &bin);
+	new_str = add_garbage(ft_strjoin(new_str, (str + pos.x + pos.y)), free, &bin);
 	return (new_str);
 }
 
-char	*handle_env(char *str, t_list **env)
+char	*handle_env(char *str, t_list **env, t_garb *bin)
 {
 	size_t	i;
 	size_t	len;
@@ -91,11 +92,11 @@ char	*handle_env(char *str, t_list **env)
 			{
 				while (ft_isdigit(str[i + len]))
 					len++;
-				return (handle_env(replace_env(str, env, i, len), env));
+				return (handle_env(replace_env(str, env,(t_vect){i, len}, bin), env, bin));
 			}
 			while (str[i + len] && ft_isalpha(str[i + len]))
 				len++;
-			return (handle_env(replace_env(str, env, i, len), env));
+			return (handle_env(replace_env(str, env, (t_vect){i, len}, bin), env, bin));
 		}
 		i++;
 	}

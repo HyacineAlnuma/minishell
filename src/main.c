@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 11:45:00 by secros            #+#    #+#             */
-/*   Updated: 2025/03/17 14:57:26 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/03/18 11:19:08 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	main(int ac, char **av, char **envp)
 	char	*input;
 	t_list	**env;
 	t_exec	**command;
-	t_list	*bin;
+	t_garb	*bin;
 
 	(void) av;
 	bin = NULL;
@@ -51,15 +51,15 @@ int	main(int ac, char **av, char **envp)
 	{
 		g_sigint_flag = 0;
 		print_prompt(env);
-		input = readline("minishell % ");
+		input = add_garbage(readline("minishell % "), free, &bin);
 		g_sigint_flag = 1;
 		if (!input)
 			break ;
 		add_history(input);
 		// input = synthax_quote(input);
-		command = parsing(input, env, &bin);
+		command = parsing(input, env, bin);
 		if (command)
 			exec(command, env, envp);
-		// clear_garbage(&bin);
+		clear_garbage(&bin);
 	}
 }

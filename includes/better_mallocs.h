@@ -1,49 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   better_mallocs.h                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/04 15:59:21 by halnuma           #+#    #+#             */
-/*   Updated: 2025/03/18 12:23:40 by secros           ###   ########.fr       */
+/*   Created: 2025/03/17 16:18:31 by secros            #+#    #+#             */
+/*   Updated: 2025/03/17 16:21:37 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#ifndef BETTER_MALLOCS_H
+# define BETTER_MALLOCS_H
 
-size_t	ft_strlen(const char *s)
+typedef struct s_garb
 {
-	size_t	i;
+	void			*content;
+	void			(*f)(void *);
+	struct s_garb	*next;
+}	t_garb;
 
-	i = 0;
-	while (s && s[i])
-		i++;
-	return (i);
-}
+//create
+void	*add_garbage(void *pt, void (*free_pt)(void *), t_garb **head);
+void	*ft_malloc(size_t size, t_garb **bin);
 
-size_t	ft_tablen(char **s)
-{
-	size_t	i;
+//destroy
+void	ft_free(void *pt, t_garb **head);
+void 	clear_garbage(t_garb **head);
 
-	i = 0;
-	while (s[i])
-		i++;
-	return (i);
-}
-
-size_t	count_char(char *s, char c)
-{
-	size_t	i;
-	size_t	count;
-
-	i = 0;
-	count = 0;
-	while (s[i])
-	{
-		if (s[i] == c)
-			count++;
-		i++;
-	}
-	return (count);
-}
+#endif

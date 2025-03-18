@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:10:47 by secros            #+#    #+#             */
-/*   Updated: 2025/03/16 05:52:16 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/18 12:19:12 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	clear_to(t_list	*start, t_list *end)
 	while (tmp && tmp != end)
 	{
 		next = tmp->next;
-		ft_lstdelone(tmp, free);
+		// ft_lstdelone(tmp, free);
 		tmp = next;
 	}
 	start->next = end;
