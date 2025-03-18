@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:27:50 by halnuma           #+#    #+#             */
-/*   Updated: 2025/03/18 12:35:32 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/03/18 12:55:49 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,16 +53,16 @@ void	exec_parent_builtins(t_exec **cmds, t_exec *cmd, t_list **env, pid_t *pid)
 
 void	exec_process(t_fork *f, t_list **env, char **envp)
 {
-	// f->cmds[f->cur_cmd]->pid = fork();
-	f->pid[f->cur_cmd] = fork();
-	// if (f->cmds[f->cur_cmd]->pid == -1)
-	if (f->pid[f->cur_cmd] == -1)
+	// f->pid[f->cur_cmd] = fork();
+	f->cmds[f->cur_cmd]->pid = fork();
+	// if (f->pid[f->cur_cmd] == -1)
+	if (f->cmds[f->cur_cmd]->pid == -1)
 	{
 		perror("fork");
 		exit(EXIT_FAILURE);
 	}
-	// else if (f->cmds[f->cur_cmd]->pid == 0)
-	else if (f->pid[f->cur_cmd] == 0)
+	// else if (f->pid[f->cur_cmd] == 0)
+	else if (f->cmds[f->cur_cmd]->pid == 0)
 	{
 		dup_pipes(f->cmds, f->pipefd, f->cur_cmd, f->cur_pipe);
 		manage_files(f->cmds[f->cur_cmd]);
@@ -71,27 +71,27 @@ void	exec_process(t_fork *f, t_list **env, char **envp)
 	}
 }
 
-int	init_processes(t_exec **cmds, char **envp, t_list **env, int pipe_nb, pid_t *pid, int *pipefd)
-{
-	int		cur_cmd;
-	int		cur_pipe;
-	t_fork	*fork_info;
+// int	init_processes(t_exec **cmds, char **envp, t_list **env, int pipe_nb, pid_t *pid, int *pipefd)
+// {
+// 	int		cur_cmd;
+// 	int		cur_pipe;
+// 	t_fork	*fork_info;
 
-	cur_cmd = 0;
-	cur_pipe = 0;
-	while (cmds[cur_cmd])
-	{
-		fork_info = ft_calloc(sizeof(t_fork), 1);
-		if (!fork_info)
-			return (0);
-		init_fork(fork_info, cmds, pipe_nb, cur_pipe);
-		init_fork_bis(fork_info, pipefd, cmds[cur_cmd], cur_cmd, pid);
-		exec_process(fork_info, env, envp);
-		cur_cmd++;
-		cur_pipe += 2;
-	}
-	return (cur_cmd);
-}
+// 	cur_cmd = 0;
+// 	cur_pipe = 0;
+// 	while (cmds[cur_cmd])
+// 	{
+// 		fork_info = ft_calloc(sizeof(t_fork), 1);
+// 		if (!fork_info)
+// 			return (0);
+// 		init_fork(fork_info, cmds, pipe_nb, cur_pipe);
+// 		init_fork_bis(fork_info, pipefd, cmds[cur_cmd], cur_cmd, pid);
+// 		exec_process(fork_info, env, envp);
+// 		cur_cmd++;
+// 		cur_pipe += 2;
+// 	}
+// 	return (cur_cmd);
+// }
 
 int	exec_cmds(t_exec **cmds, char **envp, t_list **env, int pipe_nb, pid_t *pid)
 {
@@ -119,7 +119,7 @@ int	exec_cmds(t_exec **cmds, char **envp, t_list **env, int pipe_nb, pid_t *pid)
 	close_pipes(pipefd, pipe_nb);
 	wait_all_pid(pid, pipe_nb);
 	unlink(HD_TEMP_FILE);
-	free_all(env, cmds, pid);
+	// free_all(env, cmds, pid);
 	return (1);
 }
 
