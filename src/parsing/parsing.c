@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/03/18 13:27:07 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/18 13:32:18 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,6 @@ t_exec	**parsing(char *str, t_list **env, t_garb *bin)
 		exec[i]->opt = tab;
 		i++;
 	}
-	free (piped);
 	return (exec);
 }
 
