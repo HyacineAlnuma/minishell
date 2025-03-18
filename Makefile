@@ -30,19 +30,18 @@ P_OBJ			= obj/
 
 # ------ FILES ------ #
 
-MAIN			= main
+MAIN			=	 main
 
-PARSING			= parsing 				parse_env 			\
-				parsing_utils 			tokenization 		\
-				unclosed				create_exec			\
-				parsing_utils2			docs
+PARSING			= 	parsing 				parse_env 			\
+					tokenization			docs				\
+					unclosed				create_exec			\
 
-EXEC			= builtins				builtins_bis		\
-				builtins_utils			exec				\
-				exec_utils				pipes
+EXEC			=	builtins				builtins_bis		\
+					builtins_utils			exec				\
+					exec_utils				pipes
 
-UTILS			= handle_signal		\
-				print_ascii
+UTILS			=	handle_signal			parsing_utils2		\
+					print_ascii				parsing_utils 		\
 
 HDR_SRC			= libft					minishell			
 

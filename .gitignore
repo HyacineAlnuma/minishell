@@ -2,3 +2,5 @@
 minishell
 *.txt
 README.md
+obj/
+*.o
