@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:05:15 by secros            #+#    #+#             */
-/*   Updated: 2025/03/18 11:18:36 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/18 13:18:13 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ char	*find_node(t_list **env, char *var_env)
 {
 	size_t	i;
 	t_list	*lst;
-	char	*res;
 
 	i = 0;
 	lst = *env;
@@ -60,19 +59,21 @@ char	*find_node(t_list **env, char *var_env)
 		lst = lst->next;
 	}
 	free (var_env);
-	res = find_user_in_pwd();
-	return (res);
+	return (NULL);
 }
 
+//Ca va etre fun a securiser !
 char	*replace_env(char *str, t_list **env, t_vect pos, t_garb *bin)
 {
 	char	*var_env;
 	char	*new_str;
 
-	var_env = add_garbage(ft_substr(str, pos.x, pos.y), free, &bin); //Ca va etre fun a securiser !
+	var_env = add_garbage(ft_substr(str, pos.x, pos.y), free, &bin);
 	new_str = add_garbage(ft_substr(str, 0, pos.x), free, &bin);
-	new_str = add_garbage(ft_strjoin(new_str, find_node(env, var_env)), free, &bin);
-	new_str = add_garbage(ft_strjoin(new_str, (str + pos.x + pos.y)), free, &bin);
+	new_str = add_garbage(ft_strjoin(new_str, find_node(env, var_env)), \
+	free, &bin);
+	new_str = add_garbage(ft_strjoin(new_str, (str + pos.x + pos.y)), \
+	free, &bin);
 	return (new_str);
 }
 
@@ -92,11 +93,13 @@ char	*handle_env(char *str, t_list **env, t_garb *bin)
 			{
 				while (ft_isdigit(str[i + len]))
 					len++;
-				return (handle_env(replace_env(str, env,(t_vect){i, len}, bin), env, bin));
+				return (handle_env(replace_env(str, env, \
+				(t_vect){i, len}, bin), env, bin));
 			}
-			while (str[i + len] && ft_isalpha(str[i + len]))
+			while (str[i + len] && ft_isalnum(str[i + len]))
 				len++;
-			return (handle_env(replace_env(str, env, (t_vect){i, len}, bin), env, bin));
+			return (handle_env(replace_env(str, env, \
+			(t_vect){i, len}, bin), env, bin));
 		}
 		i++;
 	}

@@ -6,12 +6,14 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 16:18:31 by secros            #+#    #+#             */
-/*   Updated: 2025/03/18 12:33:54 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/18 13:10:31 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BETTER_MALLOCS_H
 # define BETTER_MALLOCS_H
+
+#include <stdlib.h>
 
 typedef struct s_garb
 {

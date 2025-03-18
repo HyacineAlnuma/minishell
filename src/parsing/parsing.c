@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/03/18 12:30:38 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/18 13:08:21 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,79 +25,17 @@
 
 */
 
-char	*remove_quote(char *str, t_garb *bin)
+int	lst_len(t_list *lst)
 {
-	char	*tmp;
-
-	if (!str)
-		return (NULL);
-	tmp = str;
-	if (str[0] == '\'' || str[0] == '"')
-	{
-		tmp = add_garbage(ft_substr(str, 1, ft_strlen(str) - 2), free, &bin);
-		if (tmp[0] == '\0')
-		{
-			ft_free(tmp, &bin);
-			return (NULL);
-		}
-	}
-	return (tmp);
-}
-
-int	env_handling(t_list *tokens, t_list **env, t_garb *bin)
-{
-	char	*token;
-
-	while (tokens)
-	{
-		token = (char *)tokens->content;
-		if (token && token[0] != '\'')
-			tokens->content = handle_env(token, env, bin);
-		tokens = tokens->next;
-	}
-	return (1);
-}
-
-
-void	cut_pipe(t_list **tokens)
-{
-	t_list	*tmp;
-	t_list	*prev;
-
-	tmp = NULL;
-	while (*tokens)
-	{
-		if ((*tokens)->content && !strcmp((char *)(*tokens)->content, "|"))
-		{
-			tmp = *tokens;
-			break ;
-		}
-		prev = *tokens;
-		*tokens = (*tokens)->next;
-	}
-	if (*tokens)
-	{
-		(*tokens) = (*tokens)->next;
-		prev->next = NULL;
-	}
-}
-
-t_list	**cut_instruction(t_list *tokens, int count)
-{
-	t_list	**pipe;
-	int		i;
+	int	i;
 
 	i = 0;
-	
-	pipe = ft_calloc(sizeof(t_list *), (count + 2));
-	if (!pipe)
-		return (NULL);
-	while (i <= count)
+	while (lst)
 	{
-		pipe[i++] = tokens;
-		cut_pipe(&tokens);
+		i++;
+		lst = lst->next;
 	}
-	return (pipe);
+	return (i);
 }
 
 void	print_lsts(t_list **lst)
@@ -116,115 +54,7 @@ void	print_lsts(t_list **lst)
 	}
 }
 
-enum e_doc	find_type(char *str)
-{
-	// add an error check if invalid redirection like strlen > 2 or bad redirection
-	if (!strncmp(str, "<\0", 2))
-		return (INFILE);
-	if (!strcmp(str, "<<\0"))
-		return (HEREDOC);
-	if (!strncmp(str, ">\0", 2))
-		return (OUTFILE);
-	if (!strcmp(str, ">>\0"))
-		return (APPEND);
-	return (0);
-}
 
-t_doc	polish_doc(t_list **lst, t_list *tmp, t_garb *bin)
-{
-	t_doc	current;
-	t_list	*to_free;
-
-	current.type = find_type((char *)(*lst)->content);
-	(*lst) = (*lst)->next->next;
-	merge_tokens(*lst, bin);
-	current.str = (*lst)->content;
-	to_free = *lst;
-	*lst = (*lst)->next;
-	tmp->next = *lst;
-	// free(to_free);
-	return (current);
-}
-
-t_doc **create_docs(t_list *lst, t_garb *bin)
-{
-	t_doc	**docs;
-	t_list	*tmp;
-	int		i;
-
-	i = lst_count_char(lst, '<') + lst_count_char(lst, '>');
-	docs = ft_malloc(sizeof(t_doc *) * (i + 1), &bin);
-	ft_bzero(docs, sizeof(t_doc *) * (i + 1));
-	if (!docs)
-		return (NULL);
-	tmp = lst;
-	i = 0;
-	while (lst)
-	{
-		if (lst->content && (!ft_strcmp(lst->content, "<") \
-		|| !ft_strcmp(lst->content, ">")))
-		{
-			docs[i] = ft_malloc(sizeof(t_doc), &bin);
-			*docs[i++] = polish_doc(&lst, tmp, bin);
-		}
-		if (!lst)
-			break ;
-		tmp = lst;
-		lst = lst->next;
-	}
-	return (docs);
-}
-
-int compare(char *str, char *str_ref)
-{
-	if (!str || !str_ref)
-	{
-		if (!str && !str_ref)
-			return (0);
-		else
-			return (1);
-	}
-	return (ft_strcmp(str, str_ref));
-}
-
-void	merge_all(t_list *lst, t_garb *bin)
-{
-	while (lst)
-	{
-		merge_tokens(lst, bin);
-		lst = lst->next;
-	}
-}
-
-int	lst_len(t_list *lst)
-{
-	int	i;
-
-	i = 0;
-	while (lst)
-	{
-		i++;
-		lst = lst->next;
-	}
-	return (i);
-}
-
-void	ft_lst_ft_free_if(t_list **begin_list, void *data_ref, int (*cmp)(), t_garb *bin)
-{
-	t_list	*tmp;
-
-	if ((*begin_list == NULL) || (begin_list == NULL))
-		return ;
-	if (cmp((*begin_list)->content, data_ref) == 0)
-	{
-		tmp = *begin_list;
-		*begin_list = (*begin_list)->next;
-		ft_free(tmp, &bin);
-		ft_lst_ft_free_if(begin_list, data_ref, cmp, bin);
-	}
-	else
-		ft_lst_ft_free_if(&((*begin_list)->next), data_ref, cmp, bin);
-}
 
 t_exec	**parsing(char *str, t_list **env, t_garb *bin)
 {
@@ -239,7 +69,6 @@ t_exec	**parsing(char *str, t_list **env, t_garb *bin)
 
 	if (!str)
 		return (NULL);
-	i = 0;
 	tokens = create_token_list(str, bin);
 	if (!tokens)
 		return (NULL);
@@ -248,6 +77,7 @@ t_exec	**parsing(char *str, t_list **env, t_garb *bin)
 	piped = add_garbage(cut_instruction(tokens, count), free, &bin);
 	exec = ft_malloc((sizeof(t_exec *) * (count + 2)), &bin);
 	ft_bzero(exec, (sizeof(t_exec *) * (count + 2)));
+	i = 0;
 	while (i <= count)
 	{
 		exec[i] = add_garbage(ft_calloc(sizeof(t_exec), 1), free, &bin);

@@ -34,7 +34,8 @@ MAIN			= main
 
 PARSING			= parsing 				parse_env 			\
 				parsing_utils 			tokenization 		\
-				unclosed
+				unclosed				create_exec			\
+				parsing_utils2			docs
 
 EXEC			= builtins				builtins_bis		\
 				builtins_utils			exec				\

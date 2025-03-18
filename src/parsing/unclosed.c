@@ -6,13 +6,13 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 11:48:13 by secros            #+#    #+#             */
-/*   Updated: 2025/03/13 11:57:39 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/18 13:15:30 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	pipe_error()
+int	pipe_error(void)
 {
 	write (2, "zsh: parse count near `|'\n", 27);
 	return (FALSE);
@@ -33,7 +33,7 @@ void	finish_sentence(char **str, char c)
 		if (c == '"')
 			next = readline("dquote>");
 		if (c == '|')
-			next = readline("pipe>");		
+			next = readline("pipe>");
 		if (c == '"' || c == '\'')
 			quote = ft_strappend(quote, "\n");
 		quote = ft_strappend(quote, next);

@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 11:38:20 by secros            #+#    #+#             */
-/*   Updated: 2025/03/18 12:27:11 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/18 13:16:29 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ int	merge_tokens(t_list *tokens, t_garb *bin)
 	while (tmp && tmp->content)
 	{
 		tmp->content = remove_quote((char *)tmp->content, bin);
-		new_token = add_garbage(ft_strjoin(new_token, (char *)tmp->content), free, &bin);
+		new_token = add_garbage(ft_strjoin(new_token, \
+		(char *)tmp->content), free, &bin);
 		tmp = tmp->next;
 	}
 	tokens->content = new_token;
@@ -55,7 +56,7 @@ char	*split_token(char *str, size_t *i, t_garb *bin)
 		*i += 1;
 	if (str[*i] == '"' || str[*i] == '\'')
 		quote = str[*i + count++];
-	while(str[*i + count] && (!is_space(str[*i + count]) || quote))
+	while (str[*i + count] && (!is_space(str[*i + count]) || quote))
 	{
 		if (str[*i + count] == quote || (!quote && is_redir(str[*i])))
 		{
@@ -84,8 +85,9 @@ t_list	*create_token_list(char *str, t_garb *bin)
 	while (str[i])
 	{
 		token = split_token(str, &i, bin);
-		while(str[i] && is_redir(str[i]) && is_redir(str[i - 1]))
-			token = add_garbage(ft_strjoin(token, split_token(str, &i, bin)), free, &bin);
+		while (str[i] && is_redir(str[i]) && is_redir(str[i - 1]))
+			token = add_garbage(ft_strjoin(token, \
+			split_token(str, &i, bin)), free, &bin);
 		if (token[0] == '\0')
 			return (free(token), tokens);
 		new = add_garbage(ft_lstnew(token), free, &bin);
