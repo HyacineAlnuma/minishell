@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:56:31 by secros            #+#    #+#             */
-/*   Updated: 2025/03/18 13:14:50 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/18 14:24:24 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,14 @@ enum e_doc	find_type(char *str)
 {
 	if (!strncmp(str, "<\0", 2))
 		return (INFILE);
-	if (!strcmp(str, "<<\0"))
+	else if (!strcmp(str, "<<\0"))
 		return (HEREDOC);
-	if (!strncmp(str, ">\0", 2))
+	else if (!strncmp(str, ">\0", 2))
 		return (OUTFILE);
-	if (!strcmp(str, ">>\0"))
+	else if (!strcmp(str, ">>\0"))
 		return (APPEND);
-	return (0);
+	else
+		return (-1);
 }
 
 t_doc	polish_doc(t_list **lst, t_list *tmp, t_garb *bin)

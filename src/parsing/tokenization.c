@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 11:38:20 by secros            #+#    #+#             */
-/*   Updated: 2025/03/18 13:28:18 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/18 14:14:12 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ t_list	*create_token_list(char *str, t_garb *bin)
 			token = add_garbage(ft_strjoin(token, \
 			split_token(str, &i, bin)), free, &bin);
 		if (token[0] == '\0')
-			return (free(token), tokens);
+			return (tokens);
 		new = add_garbage(ft_lstnew(token), free, &bin);
 		if (!token || !new)
 			return (ft_lstclear(&tokens, free), NULL);
