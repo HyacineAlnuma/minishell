@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:56:31 by secros            #+#    #+#             */
-/*   Updated: 2025/03/18 14:24:24 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/19 14:08:38 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,16 +27,46 @@ enum e_doc	find_type(char *str)
 		return (-1);
 }
 
+char	*get_heredoc(t_garb *bin, char *eof)
+{
+	char	*str;
+	char	*f_str;
+
+	f_str = NULL;
+	str = NULL;
+	while (1)
+	{
+		str = add_garbage(readline("heredoc>"), free, &bin);
+		if (str && !ft_strncmp(str, eof, ft_strlen(eof) - 1))
+			break ;
+		f_str = add_garbage(ft_strjoin(f_str, str), free, &bin);
+	}
+	return (f_str);
+}
+
+void	do_heredoc(t_doc *docs, t_garb *bin)
+{
+	char	*str;
+	char	*heredoc;
+	size_t	i;
+
+	str = docs->str;
+	i = 0;
+	heredoc = get_heredoc(bin, str);
+	docs->str = heredoc;
+	ft_printf("%s", heredoc);
+}
+
 t_doc	polish_doc(t_list **lst, t_list *tmp, t_garb *bin)
 {
 	t_doc	current;
-	t_list	*to_free;
 
 	current.type = find_type((char *)(*lst)->content);
 	(*lst) = (*lst)->next->next;
 	merge_tokens(*lst, bin);
 	current.str = (*lst)->content;
-	to_free = *lst;
+	if (current.type == HEREDOC)
+		do_heredoc(&current, bin);
 	*lst = (*lst)->next;
 	tmp->next = *lst;
 	return (current);

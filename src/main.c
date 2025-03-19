@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 11:45:00 by secros            #+#    #+#             */
-/*   Updated: 2025/03/18 13:25:01 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/19 14:36:24 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	main(int ac, char **av, char **envp)
 		if (!input)
 			break ;
 		add_history(input);
-		// input = synthax_quote(input);
+		input = synthax_quote(input);
 		command = parsing(input, env, bin);
 		if (command)
 			exec(command, env, envp);
