@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/03/19 14:46:52 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/19 14:49:51 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ t_exec	**parsing(char *str, t_list **env, t_garb *bin)
 	int		j;
 	char	**tab;
 
-	(void)bin;
 	if (!str)
 		return (NULL);
 	tokens = create_token_list(str, bin);
@@ -61,18 +60,18 @@ t_exec	**parsing(char *str, t_list **env, t_garb *bin)
 		return (NULL);
 	env_handling(tokens, env, bin);
 	count = lst_count_char(tokens, '|');
-	piped = cut_instruction(tokens, count);
-	exec = ft_calloc(sizeof(t_exec *), count + 2);
-	add_garbage(exec, free_the_mallocs, &bin);
+	piped = add_garbage(cut_instruction(tokens, count), free, &bin);
+	exec = ft_malloc((sizeof(t_exec *) * (count + 2)), &bin);
+	ft_bzero(exec, (sizeof(t_exec *) * (count + 2)));
 	i = 0;
 	while (i <= count)
 	{
-		exec[i] = ft_calloc(sizeof(t_exec), 1);
+		exec[i] = add_garbage(ft_calloc(sizeof(t_exec), 1), free, &bin);
 		exec[i]->docs = create_docs(piped[i], bin);
-		add_garbage(exec[i]->docs, free_the_mallocs, &bin);
+		exec[i]->bin = bin;
 		merge_all(piped[i], bin);
-		ft_lst_remove_if(&piped[i], NULL, compare);
-		tab = ft_calloc(sizeof(char *), lst_len(piped[i]) + 1);
+		ft_lst_ft_free_if(&piped[i], NULL, compare, bin);
+		tab = add_garbage(ft_calloc(sizeof(char *), lst_len(piped[i]) + 1), free, &bin);
 		tmp = piped[i];
 		j = 0;
 		while (tmp)

@@ -1,1 +1,11 @@
-7
+a
+bourbier
+ignore_readline.supp
+includes
+libft
+Makefile
+minishell
+obj
+old_src
+src
+tester.sh
