@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/03/19 14:44:14 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/19 14:46:52 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,13 +63,14 @@ t_exec	**parsing(char *str, t_list **env, t_garb *bin)
 	count = lst_count_char(tokens, '|');
 	piped = cut_instruction(tokens, count);
 	exec = ft_calloc(sizeof(t_exec *), count + 2);
-	add_garbage(exec, free_the_mallocs, bin);
+	add_garbage(exec, free_the_mallocs, &bin);
+	i = 0;
 	while (i <= count)
 	{
 		exec[i] = ft_calloc(sizeof(t_exec), 1);
-		exec[i]->docs = create_docs(piped[i]);
-		add_garbage(exec[i]->docs, free_the_mallocs, bin);
-		merge_all(piped[i]);
+		exec[i]->docs = create_docs(piped[i], bin);
+		add_garbage(exec[i]->docs, free_the_mallocs, &bin);
+		merge_all(piped[i], bin);
 		ft_lst_remove_if(&piped[i], NULL, compare);
 		tab = ft_calloc(sizeof(char *), lst_len(piped[i]) + 1);
 		tmp = piped[i];
