@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:27:50 by halnuma           #+#    #+#             */
-/*   Updated: 2025/03/17 15:30:09 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/03/19 13:59:09 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,12 @@ void	exec_cmd(t_exec *cmd, t_list **env, char **envp)
 	}
 }
 
-void	exec_parent_builtins(t_exec **cmds, t_exec *cmd, t_list **env, pid_t *pid)
+void	exec_parent_builtins(t_exec **cmds, t_exec *cmd, t_list **env)
 {
 	if (!ft_strncmp(cmd->cmd, "cd", 3))
 		cd(cmd, env);
 	if (!ft_strncmp(cmd->cmd, "exit", 5))
-		exit_program(cmds, env, pid);
+		exit_program(cmds, env);
 	if (!ft_strncmp(cmd->cmd, "export", 7))
 		export(cmd, env);
 	if (!ft_strncmp(cmd->cmd, "unset", 6))
@@ -53,13 +53,13 @@ void	exec_parent_builtins(t_exec **cmds, t_exec *cmd, t_list **env, pid_t *pid)
 
 void	exec_process(t_fork *f, t_list **env, char **envp)
 {
-	f->pid[f->cur_cmd] = fork();
-	if (f->pid[f->cur_cmd] == -1)
+	f->cmds[f->cur_cmd]->pid = fork();
+	if (f->cmds[f->cur_cmd]->pid == -1)
 	{
 		perror("fork");
 		exit(EXIT_FAILURE);
 	}
-	else if (f->pid[f->cur_cmd] == 0)
+	else if (f->cmds[f->cur_cmd]->pid == 0)
 	{
 		dup_pipes(f->cmds, f->pipefd, f->cur_cmd, f->cur_pipe);
 		manage_files(f->cmds[f->cur_cmd]);
@@ -68,7 +68,7 @@ void	exec_process(t_fork *f, t_list **env, char **envp)
 	}
 }
 
-int	exec_cmds(t_exec **cmds, char **envp, t_list **env, int pipe_nb, pid_t *pid)
+int	exec_cmds(t_exec **cmds, char **envp, t_list **env, int pipe_nb)
 {
 	int		cur_cmd;
 	int		cur_pipe;
@@ -84,29 +84,22 @@ int	exec_cmds(t_exec **cmds, char **envp, t_list **env, int pipe_nb, pid_t *pid)
 		if (!fork_info)
 			return (0);
 		init_fork(fork_info, cmds, pipe_nb, cur_pipe);
-		init_fork_bis(fork_info, pipefd, cmds[cur_cmd], cur_cmd, pid);
+		init_fork_bis(fork_info, pipefd, cmds[cur_cmd], cur_cmd);
 		exec_process(fork_info, env, envp);
 		cur_cmd++;
 		cur_pipe += 2;
 	}
-	exec_parent_builtins(cmds, cmds[--cur_cmd], env, pid);
+	exec_parent_builtins(cmds, cmds[--cur_cmd], env);
 	close_pipes(pipefd, pipe_nb);
-	wait_all_pid(pid, pipe_nb);
+	wait_all_pid(cmds, pipe_nb);
 	unlink(HD_TEMP_FILE);
-	//free_all(env, cmds, pid);
 	return (1);
 }
-
 
 void	exec(t_exec **cmds, t_list **env, char **envp)
 {
 	int		pipe_nb;
-	pid_t	*pid;
 
 	pipe_nb = ft_tablen((char **)cmds) - 1;
-	pid = malloc(sizeof(int) * (pipe_nb + 1));
-	// printf("pipenb:%d\n", pipe_nb);
-	// (void)envp;
-	// (void)env;
-	exec_cmds(cmds, envp, env, pipe_nb, pid);
+	exec_cmds(cmds, envp, env, pipe_nb);
 }

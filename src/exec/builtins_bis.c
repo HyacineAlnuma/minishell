@@ -6,19 +6,16 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:34:14 by halnuma           #+#    #+#             */
-/*   Updated: 2025/03/17 15:34:48 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/03/19 09:31:02 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	exit_program(t_exec **cmds, t_list **env, int *pid)
+void	exit_program(t_exec **cmds, t_list **env)
 {
-	// pid_t	ppid;
-
-	// ppid = getppid();
-	// kill(ppid, SIGUSR1);
-	free_all(env, cmds, pid);
+	(void)cmds;
+	(void)env;
 	rl_clear_history();
 	exit(EXIT_SUCCESS);
 }
@@ -36,6 +33,43 @@ void	print_env(t_list **env)
 	exit(EXIT_SUCCESS);
 }
 
+char	*get_previous_pwd(t_list **env)
+{
+	char	*previouspwd;
+	char	*str;
+	int		i;
+	t_list	*ptr;
+
+	ptr = *env;
+	previouspwd = NULL;
+	while (ptr)
+	{
+		if (!ft_strncmp(ptr->content, "OLDPWD=", 7))
+		{
+			i = -1;
+			str = ptr->content;
+			while (str[++i])
+			{
+				if (str[i] == '=')
+					break ;
+			}
+			previouspwd = &str[++i];
+		}
+		ptr = ptr->next;
+	}
+	return (previouspwd);
+}
+
+void	pwd(void)
+{
+	char	pwd[PATH_MAX];
+
+	if (getcwd(pwd, sizeof(pwd)) != NULL)
+		ft_printf("%s\n", pwd);
+	else
+		perror("getcwd() error");
+	exit(EXIT_SUCCESS);
+}
 
 int	exec_builtins(t_exec *cmd, t_list **env)
 {

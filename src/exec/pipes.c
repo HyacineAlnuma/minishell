@@ -6,56 +6,11 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:31:48 by halnuma           #+#    #+#             */
-/*   Updated: 2025/03/18 12:21:42 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/19 14:41:44 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	manage_files(t_exec *cmd)
-{
-	int		outfile_fd[1024];
-	int		infile_fd[1024];
-	int		i;
-	int		j;
-	int		k;
-
-	i = 0;
-	j = 0;
-	k = 0;
-	while (cmd->docs[j])
-	{
-		if (cmd->docs[j]->type == OUTFILE)
-		{
-			outfile_fd[i] = open(cmd->docs[j]->str, O_RDWR | O_CREAT | O_TRUNC, S_IWUSR | S_IRUSR);
-			dup2(outfile_fd[i], STDOUT_FILENO);
-			close(outfile_fd[i]);
-			i++;
-		}
-		else if (cmd->docs[j]->type == INFILE)
-		{
-			infile_fd[k] = open(cmd->docs[j]->str, O_RDWR | O_CREAT, S_IWUSR | S_IRUSR);
-			dup2(infile_fd[k], STDIN_FILENO);
-			close(infile_fd[k]);
-			k++;
-		}
-		else if (cmd->docs[j]->type == HEREDOC)
-		{
-			infile_fd[k] = open(cmd->docs[j]->str, O_RDWR | S_IWUSR | S_IRUSR);
-			dup2(infile_fd[k], STDIN_FILENO);
-			close(infile_fd[k]);
-			k++;
-		}
-		else if (cmd->docs[j]->type == APPEND)
-		{
-			outfile_fd[i] = open(cmd->docs[j]->str, O_RDWR | O_CREAT, S_IWUSR | S_IRUSR | O_APPEND);
-			dup2(outfile_fd[i], STDOUT_FILENO);
-			close(outfile_fd[i]);
-			i++;
-		}
-		j++;
-	}
-}
 
 void	close_pipes(int *pipefd, int pipe_nb)
 {
@@ -95,7 +50,7 @@ void	dup_pipes(t_exec **cmds, int *pipefd, int cur_cmd, int cur_pipe)
 		dup2(pipefd[cur_pipe - 2], STDIN_FILENO);
 	if (!cmds[cur_cmd + 1] && cmds[cur_cmd]->here_doc)
 	{
-		temp_file_fd = open(HD_TEMP_FILE, O_RDWR | O_CREAT, S_IWUSR | S_IRUSR);
+		temp_file_fd = open(EXEC_TMP_FILE, O_RDWR | O_CREAT, S_IWUSR | S_IRUSR);
 		dup2(temp_file_fd, STDOUT_FILENO);
 		close(temp_file_fd);
 	}

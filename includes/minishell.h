@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/03/18 13:23:42 by secros           ###   ########.fr       */
+/*   Created: 2025/02/05 10:02:33 by secros            #+#    #+#             */
+/*   Updated: 2025/03/19 14:41:12 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@
 
 # define CHARSET " \t\n\v\f\r"
 # define HD_TEMP_FILE "tmp/here_doc_temp.txt"
+# define EXEC_TMP_FILE "tmp/exec_temp.txt"
 # define CMD_NOT_FOUND 127
 
 # define ASCII1 " /$$      /$$           /$$                                   "
@@ -101,6 +102,7 @@ typedef struct s_doc
 
 typedef struct s_exec
 {
+	pid_t	pid;
 	char	*cmd;
 	char	**opt;
 	int		here_doc;
@@ -150,24 +152,23 @@ void	ft_lst_ft_free_if(t_list **begin_list, void *data_ref, int (*cmp)(), t_garb
 
 //exec
 void	exec(t_exec **cmds, t_list **env, char **envp);
-void	exit_program(t_exec **cmds, t_list **env, int *pid);
+void	exit_program(t_exec **cmds, t_list **env);
 void	echo(t_exec *cmd);
 void	cd(t_exec *cmd, t_list **env);
 void	pwd(void);
 void	unset(t_exec *cmd, t_list **env);
 void	export(t_exec *cmd, t_list **env);
 void	init_fork(t_fork *fork_info, t_exec **cmds, int pipe_nb, int cur_pipe);
-void	init_fork_bis(t_fork *f, int *pfd, t_exec *cmd, int cur_cmd, int *pid);
+void	init_fork_bis(t_fork *f, int *pfd, t_exec *cmd, int cur_cmd);
 void	manage_files(t_exec *cmd);
 void	close_pipes(int *pipefd, int pipe_nb);
 void	open_pipes(int *pipefd, int pipe_nb);
 void	dup_pipes(t_exec **cmds, int *pipefd, int cur_cmd, int cur_pipe);
 char	*get_previous_pwd(t_list **env);
 void	print_exp_env(t_list **env);
-void	free_all(t_list **env, t_exec **cmds, int *pid);
 int		check_cmd(char *cmd);
 int		check_builtins(char *cmd);
 int		exec_builtins(t_exec *cmd, t_list **env);
-void	wait_all_pid(pid_t *pid, int pipe_nb);
+void	wait_all_pid(t_exec **cmds, int pipe_nb);
 
 #endif

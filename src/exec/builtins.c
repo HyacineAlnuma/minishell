@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:32:53 by halnuma           #+#    #+#             */
-/*   Updated: 2025/03/17 15:33:46 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/03/19 09:31:10 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,21 +31,10 @@ void	echo(t_exec *cmd)
 	exit(EXIT_SUCCESS);
 }
 
-void	cd(t_exec *cmd, t_list **env)
+void	change_dir(t_exec *cmd, t_list *ptr, char *oldpwd)
 {
-	t_list	*ptr;
 	char	pwd[PATH_MAX];
-	char	oldpwd[PATH_MAX];
-	char	*previouspwd;
 
-	if (!cmd->opt[1])
-		return ;
-	if (!getcwd(oldpwd, sizeof(oldpwd)))
-		perror("getcwd() error");
-	ptr = *env;
-	previouspwd = get_previous_pwd(env);
-	if (!ft_strncmp(cmd->opt[1], "-", 2))
-		cmd->opt[1] = previouspwd;
 	if (!chdir(cmd->opt[1]))
 	{
 		if (!getcwd(pwd, sizeof(pwd)))
@@ -61,39 +50,25 @@ void	cd(t_exec *cmd, t_list **env)
 	}
 }
 
-void	pwd(void)
+void	cd(t_exec *cmd, t_list **env)
 {
-	char	pwd[PATH_MAX];
-
-	if (getcwd(pwd, sizeof(pwd)) != NULL)
-		ft_printf("%s\n", pwd);
-	else
-		perror("getcwd() error");
-	exit(EXIT_SUCCESS);
-}
-
-void	unset(t_exec *cmd, t_list **env)
-{
-	char	*data_ref;
 	t_list	*ptr;
-	int		var_size;
+	char	oldpwd[PATH_MAX];
+	char	*previouspwd;
 
-	var_size = 0;
-	while(cmd->opt[1][var_size] && cmd->opt[1][var_size] != '=')
-		var_size++;
+	if (!cmd->opt[1])
+		return ;
+	if (!getcwd(oldpwd, sizeof(oldpwd)))
+		perror("getcwd() error");
 	ptr = *env;
-	data_ref = NULL;
-	while (ptr)
+	previouspwd = get_previous_pwd(env);
+	if (!ft_strncmp(cmd->opt[1], "-", 2))
 	{
-		if (!ft_strncmp(ptr->content, cmd->opt[1], var_size))
-		{
-			data_ref = ptr->content;
-			break ;
-		}
-		ptr = ptr->next;
+		if (!previouspwd)
+			printf("minishell: cd: OLDPWD not set\n");
+		cmd->opt[1] = previouspwd;
 	}
-	if (data_ref)
-		ft_lst_remove_if(env, data_ref, ft_strcmp);
+	change_dir(cmd, ptr, oldpwd);
 }
 
 void	export(t_exec *cmd, t_list **env)
@@ -110,4 +85,28 @@ void	export(t_exec *cmd, t_list **env)
 	if (!new_line)
 		return ;
 	ft_lstadd_back(env, new_line);
+}
+
+void	unset(t_exec *cmd, t_list **env)
+{
+	char	*data_ref;
+	t_list	*ptr;
+	int		var_size;
+
+	var_size = 0;
+	while (cmd->opt[1][var_size] && cmd->opt[1][var_size] != '=')
+		var_size++;
+	ptr = *env;
+	data_ref = NULL;
+	while (ptr)
+	{
+		if (!ft_strncmp(ptr->content, cmd->opt[1], var_size))
+		{
+			data_ref = ptr->content;
+			break ;
+		}
+		ptr = ptr->next;
+	}
+	if (data_ref)
+		ft_lst_remove_if(env, data_ref, ft_strcmp);
 }

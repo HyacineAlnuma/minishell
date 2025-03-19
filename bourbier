@@ -9,12 +9,15 @@ garbage collector
 HEREDOC
 # SHLVL
 PIPE
-Multiple redirection
+# Multiple redirection
 # echo must handle multiple -n (ex : echo -n -n -n -n a -n print a -n)
 Check syntax error
 return status of function
 # SIGQUIT fais de la merde
-ajouter message bash: cd: OLDPWD not set pour cd -
+# ajouter message bash: cd: OLDPWD not set pour cd -
+# faire fonctionner les commandes en env -i
+
+list to tab pour minishell dans minishell garde les variables ajoutees precedemment
 
 /*
 	Here_doc:
@@ -25,7 +28,7 @@ ajouter message bash: cd: OLDPWD not set pour cd -
 */
 
 
-redirection :
-	- gere append
-	- gere redirection puis pipe
-	- gere double ou plus redirections
+# redirection :
+# 	- gere append
+# 	- gere redirection puis pipe
+# 	- gere double ou plus redirections

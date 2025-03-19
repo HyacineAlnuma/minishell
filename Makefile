@@ -1,3 +1,15 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: secros <secros@student.42.fr>              +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2025/03/18 09:48:16 by halnuma           #+#    #+#              #
+#    Updated: 2025/03/19 14:40:55 by secros           ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 .PHONY: all clean fclean re libft
 
 # ------ COLORS ------ #
@@ -18,7 +30,7 @@ NAME			= minishell
 CC				= cc
 CFLAGS			= -Wall -Wextra -Werror -g3
 
-# ------ PATHS ------
+# ------ PATHS ------ #
 
 P_SRC 			= src/
 P_PARSING		= $(P_SRC)parsing/
@@ -36,14 +48,16 @@ PARSING			= 	parsing 				parse_env 			\
 					tokenization			docs				\
 					unclosed				create_exec			\
 
-EXEC			=	builtins				builtins_bis		\
-					builtins_utils			exec				\
-					exec_utils				pipes
+EXEC			= builtins				builtins_bis		\
+				builtins_utils			exec				\
+				exec_utils				pipes				\
+				files					check_cmd
 
 UTILS			=	handle_signal			parsing_utils2		\
 					print_ascii				parsing_utils 		\
 
-HDR_SRC			= libft					minishell			
+HDR_SRC			= libft					minishell			\
+				color		
 
 SRC_MAIN		= $(addprefix $(P_SRC), $(addsuffix .c, $(MAIN)))
 SRC_PARSING		= $(addprefix $(P_PARSING), $(addsuffix .c, $(PARSING)))
