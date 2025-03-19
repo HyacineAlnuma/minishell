@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:31:48 by halnuma           #+#    #+#             */
-/*   Updated: 2025/03/18 11:37:24 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/03/19 13:59:01 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	dup_pipes(t_exec **cmds, int *pipefd, int cur_cmd, int cur_pipe)
 		dup2(pipefd[cur_pipe - 2], STDIN_FILENO);
 	if (!cmds[cur_cmd + 1] && cmds[cur_cmd]->here_doc)
 	{
-		temp_file_fd = open(HD_TEMP_FILE, O_RDWR | O_CREAT, S_IWUSR | S_IRUSR);
+		temp_file_fd = open(EXEC_TMP_FILE, O_RDWR | O_CREAT, S_IWUSR | S_IRUSR);
 		dup2(temp_file_fd, STDOUT_FILENO);
 		close(temp_file_fd);
 	}

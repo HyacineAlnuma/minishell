@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:32:53 by halnuma           #+#    #+#             */
-/*   Updated: 2025/03/18 12:54:38 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/03/19 09:31:10 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,15 +71,20 @@ void	cd(t_exec *cmd, t_list **env)
 	change_dir(cmd, ptr, oldpwd);
 }
 
-void	pwd(void)
+void	export(t_exec *cmd, t_list **env)
 {
-	char	pwd[PATH_MAX];
+	t_list	*new_line;
 
-	if (getcwd(pwd, sizeof(pwd)) != NULL)
-		ft_printf("%s\n", pwd);
-	else
-		perror("getcwd() error");
-	exit(EXIT_SUCCESS);
+	if (!cmd->opt[1])
+	{
+		print_exp_env(env);
+		return ;
+	}
+	unset(cmd, env);
+	new_line = ft_lstnew(cmd->opt[1]);
+	if (!new_line)
+		return ;
+	ft_lstadd_back(env, new_line);
 }
 
 void	unset(t_exec *cmd, t_list **env)
@@ -104,20 +109,4 @@ void	unset(t_exec *cmd, t_list **env)
 	}
 	if (data_ref)
 		ft_lst_remove_if(env, data_ref, ft_strcmp);
-}
-
-void	export(t_exec *cmd, t_list **env)
-{
-	t_list	*new_line;
-
-	if (!cmd->opt[1])
-	{
-		print_exp_env(env);
-		return ;
-	}
-	unset(cmd, env);
-	new_line = ft_lstnew(cmd->opt[1]);
-	if (!new_line)
-		return ;
-	ft_lstadd_back(env, new_line);
 }

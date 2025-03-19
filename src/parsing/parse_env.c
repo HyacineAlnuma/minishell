@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:05:15 by secros            #+#    #+#             */
-/*   Updated: 2025/03/17 13:10:58 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/03/19 09:36:17 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ char	*find_node(t_list **env, char *var_env)
 {
 	size_t	i;
 	t_list	*lst;
-	char	*res;
 
 	i = 0;
 	lst = *env;
@@ -58,8 +57,7 @@ char	*find_node(t_list **env, char *var_env)
 		}
 		lst = lst->next;
 	}
-	res = find_user_in_pwd();
-	return (res);
+	return (NULL);
 }
 
 char	*replace_env(char *str, t_list **env, size_t index, size_t len)

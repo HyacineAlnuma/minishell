@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 10:21:35 by halnuma           #+#    #+#             */
-/*   Updated: 2025/03/18 11:37:28 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/03/19 14:02:58 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,8 @@ void	manage_infile(t_exec *cmd, int *infile_fd, int k, int j)
 	}
 	else if (cmd->docs[j].type == HEREDOC)
 	{
-		infile_fd[k] = open(cmd->docs[j].str, O_RDWR | S_IWUSR | S_IRUSR);
-		dup2(infile_fd[k], STDIN_FILENO);
-		close(infile_fd[k]);
-		k++;
+		dup2(cmd->docs[j].type, STDIN_FILENO);
+		close(cmd->docs[j].type);
 	}
 }
 
