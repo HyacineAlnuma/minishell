@@ -6,7 +6,7 @@
 #    By: secros <secros@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/18 09:48:16 by halnuma           #+#    #+#              #
-#    Updated: 2025/03/19 14:40:55 by secros           ###   ########.fr        #
+#    Updated: 2025/03/21 14:42:57 by secros           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,17 +44,17 @@ P_OBJ			= obj/
 
 MAIN			=	 main
 
-PARSING			= 	parsing 				parse_env 			\
-					tokenization			docs				\
-					unclosed				create_exec			\
+PARSING			= parsing 				parse_env 			\
+				parsing_utils 			tokenization 		\
+				unclosed				here_doc
 
 EXEC			= builtins				builtins_bis		\
 				builtins_utils			exec				\
 				exec_utils				pipes				\
 				files					check_cmd
 
-UTILS			=	handle_signal			parsing_utils2		\
-					print_ascii				parsing_utils 		\
+UTILS			= garbage_collector		handle_signal		\
+				print_ascii				env_utils
 
 HDR_SRC			= libft					minishell			\
 				color		

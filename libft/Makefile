@@ -6,13 +6,13 @@
 #    By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/18 08:45:55 by halnuma           #+#    #+#              #
-#    Updated: 2025/02/10 15:16:27 by halnuma          ###   ########.fr        #
+#    Updated: 2025/03/21 10:40:34 by halnuma          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 .PHONY: all clean fclean re libft
 
-# ------ COLORS ------
+# ------ COLORS ------ #
 
 _END			= \033[0m
 _GREY			= \033[0;30m
@@ -24,14 +24,14 @@ _PURPLE			= \033[0;35m
 _CYAN			= \033[0;36m
 _BOLD			= \e[1m
 
-# ------ VARIABLES ------
+# ------ VARIABLES ------ #
 
 NAME			= libft.a
 CC				= cc
 AR				= ar -rcs
 CFLAGS			= -Wall -Wextra -Werror
 
-# ------ PATHS ------
+# ------ PATHS ------ #
 
 P_OBJ 			= obj/
 P_PRINTF 		= ft_printf/
@@ -40,7 +40,7 @@ P_INC			= includes/
 P_LIB			= libc/
 P_GNL			= gnl/
 
-# ------ FILES ------
+# ------ FILES ------ #
 
 MAIN			= ft_printf	
 
@@ -63,7 +63,7 @@ LIBFT			= $(P_LIB)libft.a
 HEADERS			= $(P_INC)libft.h 			$(P_INC)ft_printf.h \
 				$(P_INC)get_next_line.h
 
-# ------ RULES ------
+# ------ RULES ------ #
 
 all: 			libft $(NAME)
 
@@ -92,7 +92,7 @@ libft:
 				@echo -n "$(_CYAN)$(_BOLD)[$(_END)"
 				@$(MAKE) -C $(P_LIB) --no-print-directory
 
-# ------ BASIC RULES ------
+# ------ BASIC RULES ------ #
 
 clean: 
 				@rm -rf $(P_OBJ)
@@ -100,7 +100,6 @@ clean:
 				@echo "$(_CYAN)Libft cleaned!$(_END)"
 
 fclean:
-#				@$(MAKE) clean --no-print-directory
 				@$(MAKE) -C $(P_LIB) fclean --no-print-directory
 				@rm -rf $(NAME)
 				@echo "$(_CYAN)Libft full cleaned!$(_END)"

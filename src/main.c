@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 11:45:00 by secros            #+#    #+#             */
-/*   Updated: 2025/03/21 13:56:48 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/21 14:43:18 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	main(int ac, char **av, char **envp)
 	bin = NULL;
 	if (ac != 1)
 	{
-		write (2, "Error\nBad arguments\n", 20);
+		write (2, "Error: Bad arguments\n", 21);
 		fflush(stderr);
 		return (1);
 	}

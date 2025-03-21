@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:02:33 by secros            #+#    #+#             */
-/*   Updated: 2025/03/21 13:57:59 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/21 14:42:20 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,7 @@ void	clear_to(t_list	*start, t_list *end);
 int		is_space(char c);
 int		is_redir(char c);
 void	sig_handler(int signum);
+char	**lst_to_tab(t_list **lst);
 
 //parsing
 t_exec	**parsing(char *str, t_list **env, t_sink *bin);
@@ -148,6 +149,7 @@ int		env_handling(t_list *tokens, t_list **env, t_sink *bin);
 int		compare(char *str, char *str_ref);
 void	merge_all(t_list *lst, t_sink *bin);
 void	ft_lst_hand_wash_if(t_list **begin_list, void *data_ref, int (*cmp)(), t_sink *bin);
+int		format_here_doc(char *str, t_list **env, char **envp);
 
 //exec
 void	exec(t_exec **cmds, t_list **env, char **envp);

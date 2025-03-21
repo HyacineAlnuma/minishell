@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:10:47 by secros            #+#    #+#             */
-/*   Updated: 2025/03/18 13:19:13 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/21 14:40:39 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ int	lst_count_char(t_list *tokens, char c)
 	}
 	return (count);
 }
-
 void	clear_to(t_list	*start, t_list *end)
 {
 	t_list	*tmp;
