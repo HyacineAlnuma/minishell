@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:32:53 by halnuma           #+#    #+#             */
-/*   Updated: 2025/03/19 09:31:10 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/03/21 09:59:57 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,10 @@ void	cd(t_exec *cmd, t_list **env)
 	if (!cmd->opt[1])
 		return ;
 	if (!getcwd(oldpwd, sizeof(oldpwd)))
+	{
 		perror("getcwd() error");
+		return ;
+	}
 	ptr = *env;
 	previouspwd = get_previous_pwd(env);
 	if (!ft_strncmp(cmd->opt[1], "-", 2))

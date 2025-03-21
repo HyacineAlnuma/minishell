@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:27:50 by halnuma           #+#    #+#             */
-/*   Updated: 2025/03/19 13:59:09 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/03/21 09:47:24 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void	exec_cmd(t_exec *cmd, t_list **env, char **envp)
 		else
 			path = "/bin/";
 		exe = ft_strjoin(path, cmd->cmd);
+		envp = lst_to_tab(env);
 		execve(exe, cmd->opt, envp);
 	}
 }

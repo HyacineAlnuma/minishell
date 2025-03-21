@@ -6,7 +6,7 @@
 #    By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/18 09:48:16 by halnuma           #+#    #+#              #
-#    Updated: 2025/03/19 09:32:41 by halnuma          ###   ########.fr        #
+#    Updated: 2025/03/21 10:37:57 by halnuma          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,7 +46,7 @@ MAIN			= main
 
 PARSING			= parsing 				parse_env 			\
 				parsing_utils 			tokenization 		\
-				unclosed
+				unclosed				here_doc
 
 EXEC			= builtins				builtins_bis		\
 				builtins_utils			exec				\
@@ -54,7 +54,7 @@ EXEC			= builtins				builtins_bis		\
 				files					check_cmd
 
 UTILS			= garbage_collector		handle_signal		\
-				print_ascii
+				print_ascii				env_utils
 
 HDR_SRC			= libft					minishell			\
 				color		

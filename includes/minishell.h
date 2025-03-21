@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:02:33 by secros            #+#    #+#             */
-/*   Updated: 2025/03/19 13:53:10 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/03/21 10:28:57 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,7 @@ void	clear_to(t_list	*start, t_list *end);
 int		is_space(char c);
 int		is_redir(char c);
 void	sig_handler(int signum);
+char	**lst_to_tab(t_list **lst);
 
 //parsing
 t_exec	**parsing(char *str, t_list **env, t_list **bin);
@@ -143,6 +144,7 @@ char	*remove_quote(char *str);
 char	*synthax_quote(char *str);
 int		merge_tokens(t_list *tokens);
 char	*find_user_in_pwd(void);
+int		format_here_doc(char *str, t_list **env, char **envp);
 
 //exec
 void	exec(t_exec **cmds, t_list **env, char **envp);

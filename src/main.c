@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 11:45:00 by secros            #+#    #+#             */
-/*   Updated: 2025/03/19 14:09:07 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/03/21 09:48:38 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	main(int ac, char **av, char **envp)
 	bin = NULL;
 	if (ac != 1)
 	{
-		write (2, "Error\nBad arguments\n", 20);
+		write (2, "Error: Bad arguments\n", 21);
 		fflush(stderr);
 		return (1);
 	}

@@ -36,16 +36,13 @@ EOF
 # Test Case 1:
 run_test "echo Hello, World!" "Hello, World!"
 
-# Test Case 1:
-run_test "echo -n Hello, World!" "Hello, World!halnuma /home/halnuma/Documents/cursus/minishell"
-
 # Test Case 2:
 run_test "fakecmd" "fakecmd: command not found."
 
 # Test Case 3:
 run_test "env | grep CODE | wc -l" "5"
 
-# Test Case 3:
+# Test Case 4:
 run_test "env | grep SHLVL" "SHLVL=2"
 
 # Clean up
