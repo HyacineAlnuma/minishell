@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 11:38:20 by secros            #+#    #+#             */
-/*   Updated: 2025/03/18 14:14:12 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/21 13:54:39 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	*add_empty(t_list **lst)
 	return (new);
 }
 
-int	merge_tokens(t_list *tokens, t_garb *bin)
+int	merge_tokens(t_list *tokens, t_sink *bin)
 {
 	t_list	*tmp;
 	char	*new_token;
@@ -35,7 +35,7 @@ int	merge_tokens(t_list *tokens, t_garb *bin)
 	while (tmp && tmp->content)
 	{
 		tmp->content = remove_quote((char *)tmp->content, bin);
-		new_token = add_garbage(ft_strjoin(new_token, \
+		new_token = fill_dishwasher(ft_strjoin(new_token, \
 		(char *)tmp->content), free, &bin);
 		tmp = tmp->next;
 	}
@@ -44,7 +44,7 @@ int	merge_tokens(t_list *tokens, t_garb *bin)
 	return (1);
 }
 
-char	*split_token(char *str, size_t *i, t_garb *bin)
+char	*split_token(char *str, size_t *i, t_sink *bin)
 {
 	unsigned int	count;
 	char			*token;
@@ -68,12 +68,12 @@ char	*split_token(char *str, size_t *i, t_garb *bin)
 			break ;
 		count++;
 	}
-	token = add_garbage(ft_substr(str, *i, count), free, &bin);
+	token = fill_dishwasher(ft_substr(str, *i, count), free, &bin);
 	*i += count;
 	return (token);
 }
 
-t_list	*create_token_list(char *str, t_garb *bin)
+t_list	*create_token_list(char *str, t_sink *bin)
 {
 	size_t	i;
 	t_list	*tokens;
@@ -86,17 +86,17 @@ t_list	*create_token_list(char *str, t_garb *bin)
 	{
 		token = split_token(str, &i, bin);
 		while (str[i] && is_redir(str[i]) && is_redir(str[i - 1]))
-			token = add_garbage(ft_strjoin(token, \
+			token = fill_dishwasher(ft_strjoin(token, \
 			split_token(str, &i, bin)), free, &bin);
 		if (token[0] == '\0')
 			return (tokens);
-		new = add_garbage(ft_lstnew(token), free, &bin);
+		new = fill_dishwasher(ft_lstnew(token), free, &bin);
 		if (!token || !new)
 			return (ft_lstclear(&tokens, free), NULL);
 		ft_lstadd_back(&tokens, new);
 		if (str[i] && (is_space(str[i]) || (is_redir(str[i]) && \
 		!is_redir(str[i - 1])) || (is_redir(str[i - 1]) && !is_redir(str[i]))))
-			add_garbage(add_empty(&tokens), free, &bin);
+			fill_dishwasher(add_empty(&tokens), free, &bin);
 	}
 	return (tokens);
 }

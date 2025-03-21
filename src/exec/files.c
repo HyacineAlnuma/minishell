@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 10:21:35 by halnuma           #+#    #+#             */
-/*   Updated: 2025/03/19 14:48:42 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/19 17:58:39 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	manage_outfile(t_exec *cmd, int *outfile_fd, int i, int j)
 	else if (cmd->docs[j]->type == APPEND)
 	{
 		outfile_fd[i] = open(
-				cmd->docs[j]->str, O_RDWR | O_CREAT, S_IWUSR | S_IRUSR | O_APPEND
+				cmd->docs[j]->str, O_RDWR | O_APPEND | O_CREAT, S_IWUSR | S_IRUSR 
 				);
 		dup2(outfile_fd[i], STDOUT_FILENO);
 		close(outfile_fd[i]);

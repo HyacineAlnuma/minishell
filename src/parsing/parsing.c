@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/03/19 14:49:51 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/21 13:55:45 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	print_lsts(t_list **lst)
 	}
 }
 
-t_exec	**parsing(char *str, t_list **env, t_garb *bin)
+t_exec	**parsing(char *str, t_list **env, t_sink *bin)
 {
 
 	t_list	**piped;
@@ -60,18 +60,18 @@ t_exec	**parsing(char *str, t_list **env, t_garb *bin)
 		return (NULL);
 	env_handling(tokens, env, bin);
 	count = lst_count_char(tokens, '|');
-	piped = add_garbage(cut_instruction(tokens, count), free, &bin);
-	exec = ft_malloc((sizeof(t_exec *) * (count + 2)), &bin);
+	piped = fill_dishwasher(cut_instruction(tokens, count), free, &bin);
+	exec = new_plate((sizeof(t_exec *) * (count + 2)), &bin);
 	ft_bzero(exec, (sizeof(t_exec *) * (count + 2)));
 	i = 0;
 	while (i <= count)
 	{
-		exec[i] = add_garbage(ft_calloc(sizeof(t_exec), 1), free, &bin);
+		exec[i] = fill_dishwasher(ft_calloc(sizeof(t_exec), 1), free, &bin);
 		exec[i]->docs = create_docs(piped[i], bin);
 		exec[i]->bin = bin;
 		merge_all(piped[i], bin);
-		ft_lst_ft_free_if(&piped[i], NULL, compare, bin);
-		tab = add_garbage(ft_calloc(sizeof(char *), lst_len(piped[i]) + 1), free, &bin);
+		ft_lst_hand_wash_if(&piped[i], NULL, compare, bin);
+		tab = fill_dishwasher(ft_calloc(sizeof(char *), lst_len(piped[i]) + 1), free, &bin);
 		tmp = piped[i];
 		j = 0;
 		while (tmp)

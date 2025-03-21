@@ -6,13 +6,13 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:59:00 by secros            #+#    #+#             */
-/*   Updated: 2025/03/18 13:13:59 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/21 13:59:27 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*remove_quote(char *str, t_garb *bin)
+char	*remove_quote(char *str, t_sink *bin)
 {
 	char	*tmp;
 
@@ -21,17 +21,17 @@ char	*remove_quote(char *str, t_garb *bin)
 	tmp = str;
 	if (str[0] == '\'' || str[0] == '"')
 	{
-		tmp = add_garbage(ft_substr(str, 1, ft_strlen(str) - 2), free, &bin);
+		tmp = fill_dishwasher(ft_substr(str, 1, ft_strlen(str) - 2), free, &bin);
 		if (tmp[0] == '\0')
 		{
-			ft_free(tmp, &bin);
+			hand_wash(tmp, &bin);
 			return (NULL);
 		}
 	}
 	return (tmp);
 }
 
-int	env_handling(t_list *tokens, t_list **env, t_garb *bin)
+int	env_handling(t_list *tokens, t_list **env, t_sink *bin)
 {
 	char	*token;
 
@@ -57,7 +57,7 @@ int	compare(char *str, char *str_ref)
 	return (ft_strcmp(str, str_ref));
 }
 
-void	merge_all(t_list *lst, t_garb *bin)
+void	merge_all(t_list *lst, t_sink *bin)
 {
 	while (lst)
 	{
@@ -66,8 +66,8 @@ void	merge_all(t_list *lst, t_garb *bin)
 	}
 }
 
-void	ft_lst_ft_free_if(t_list **begin_list, void *data_ref, \
-int (*cmp)(), t_garb *bin)
+void	ft_lst_hand_wash_if(t_list **begin_list, void *data_ref, \
+int (*cmp)(), t_sink *bin)
 {
 	t_list	*tmp;
 
@@ -77,9 +77,9 @@ int (*cmp)(), t_garb *bin)
 	{
 		tmp = *begin_list;
 		*begin_list = (*begin_list)->next;
-		ft_free(tmp, &bin);
-		ft_lst_ft_free_if(begin_list, data_ref, cmp, bin);
+		hand_wash(tmp, &bin);
+		ft_lst_hand_wash_if(begin_list, data_ref, cmp, bin);
 	}
 	else
-		ft_lst_ft_free_if(&((*begin_list)->next), data_ref, cmp, bin);
+		ft_lst_hand_wash_if(&((*begin_list)->next), data_ref, cmp, bin);
 }

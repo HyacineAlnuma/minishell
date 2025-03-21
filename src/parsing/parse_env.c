@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:05:15 by secros            #+#    #+#             */
-/*   Updated: 2025/03/19 14:42:06 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/21 13:54:44 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,21 +63,21 @@ char	*find_node(t_list **env, char *var_env)
 }
 
 //Ca va etre fun a securiser !
-char	*replace_env(char *str, t_list **env, t_vect pos, t_garb *bin)
+char	*replace_env(char *str, t_list **env, t_vect pos, t_sink *bin)
 {
 	char	*var_env;
 	char	*new_str;
 
-	var_env = add_garbage(ft_substr(str, pos.x, pos.y), free, &bin);
-	new_str = add_garbage(ft_substr(str, 0, pos.x), free, &bin);
-	new_str = add_garbage(ft_strjoin(new_str, find_node(env, var_env)), \
+	var_env = fill_dishwasher(ft_substr(str, pos.x, pos.y), free, &bin);
+	new_str = fill_dishwasher(ft_substr(str, 0, pos.x), free, &bin);
+	new_str = fill_dishwasher(ft_strjoin(new_str, find_node(env, var_env)), \
 	free, &bin);
-	new_str = add_garbage(ft_strjoin(new_str, (str + pos.x + pos.y)), \
+	new_str = fill_dishwasher(ft_strjoin(new_str, (str + pos.x + pos.y)), \
 	free, &bin);
 	return (new_str);
 }
 
-char	*handle_env(char *str, t_list **env, t_garb *bin)
+char	*handle_env(char *str, t_list **env, t_sink *bin)
 {
 	size_t	i;
 	size_t	len;

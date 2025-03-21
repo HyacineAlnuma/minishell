@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 11:45:00 by secros            #+#    #+#             */
-/*   Updated: 2025/03/19 14:44:34 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/21 13:56:48 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	main(int ac, char **av, char **envp)
 	char	*input;
 	t_list	**env;
 	t_exec	**command;
-	t_garb	*bin;
+	t_sink	*bin;
 
 	(void) av;
 	bin = NULL;
@@ -50,7 +50,7 @@ int	main(int ac, char **av, char **envp)
 	{
 		g_sigint_flag = 0;
 		print_prompt(env);
-		input = add_garbage(readline("hell % "), free, &bin);
+		input = fill_dishwasher(readline("hell % "), free, &bin);
 		g_sigint_flag = 1;
 		if (!input)
 			break ;
@@ -59,8 +59,8 @@ int	main(int ac, char **av, char **envp)
 		command = parsing(input, env, bin);
 		if (command)
 			exec(command, env, envp);
-		clear_garbage(&bin);
-		clear_garbage(&bin);
+		do_dishes(&bin);
+		do_dishes(&bin);
 	}
 	
 }

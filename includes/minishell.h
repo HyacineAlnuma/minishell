@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:02:33 by secros            #+#    #+#             */
-/*   Updated: 2025/03/19 14:43:47 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/21 13:57:59 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,7 @@
 
 # include "libft.h"
 # include "color.h"
-# include "better_mallocs.h"
-# include "better_mallocs.h"
+# include "bt_malloc.h"
 
 # include <readline/readline.h>
 # include <readline/history.h>
@@ -107,7 +106,7 @@ typedef struct s_exec
 	char	**opt;
 	int		here_doc;
 	t_doc	**docs;
-	t_garb	*bin;
+	t_sink	*bin;
 }	t_exec;
 
 typedef struct s_fork
@@ -133,22 +132,22 @@ int		is_redir(char c);
 void	sig_handler(int signum);
 
 //parsing
-t_exec	**parsing(char *str, t_list **env, t_garb *bin);
-char	*handle_env(char *str, t_list **env, t_garb *bin);
-t_list	*create_token_list(char *str, t_garb *bin);
+t_exec	**parsing(char *str, t_list **env, t_sink *bin);
+char	*handle_env(char *str, t_list **env, t_sink *bin);
+t_list	*create_token_list(char *str, t_sink *bin);
 t_list	**lst_env(char **envp);
 char	*find_node(t_list **env, char *var_env);
-char	*remove_quote(char *str, t_garb *bin);
+char	*remove_quote(char *str, t_sink *bin);
 char	*synthax_quote(char *str);
-int		merge_tokens(t_list *tokens, t_garb *bin);
+int		merge_tokens(t_list *tokens, t_sink *bin);
 char	*find_user_in_pwd(void);
 
 t_list	**cut_instruction(t_list *tokens, int count);
-t_doc 	**create_docs(t_list *lst, t_garb *bin);
-int		env_handling(t_list *tokens, t_list **env, t_garb *bin);
+t_doc 	**create_docs(t_list *lst, t_sink *bin);
+int		env_handling(t_list *tokens, t_list **env, t_sink *bin);
 int		compare(char *str, char *str_ref);
-void	merge_all(t_list *lst, t_garb *bin);
-void	ft_lst_ft_free_if(t_list **begin_list, void *data_ref, int (*cmp)(), t_garb *bin);
+void	merge_all(t_list *lst, t_sink *bin);
+void	ft_lst_hand_wash_if(t_list **begin_list, void *data_ref, int (*cmp)(), t_sink *bin);
 
 //exec
 void	exec(t_exec **cmds, t_list **env, char **envp);

@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:56:31 by secros            #+#    #+#             */
-/*   Updated: 2025/03/19 14:08:38 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/21 13:55:05 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ enum e_doc	find_type(char *str)
 		return (-1);
 }
 
-char	*get_heredoc(t_garb *bin, char *eof)
+char	*get_heredoc(t_sink *bin, char *eof)
 {
 	char	*str;
 	char	*f_str;
@@ -36,15 +36,15 @@ char	*get_heredoc(t_garb *bin, char *eof)
 	str = NULL;
 	while (1)
 	{
-		str = add_garbage(readline("heredoc>"), free, &bin);
+		str = fill_dishwasher(readline("heredoc>"), free, &bin);
 		if (str && !ft_strncmp(str, eof, ft_strlen(eof) - 1))
 			break ;
-		f_str = add_garbage(ft_strjoin(f_str, str), free, &bin);
+		f_str = fill_dishwasher(ft_strjoin(f_str, str), free, &bin);
 	}
 	return (f_str);
 }
 
-void	do_heredoc(t_doc *docs, t_garb *bin)
+void	do_heredoc(t_doc *docs, t_sink *bin)
 {
 	char	*str;
 	char	*heredoc;
@@ -57,7 +57,7 @@ void	do_heredoc(t_doc *docs, t_garb *bin)
 	ft_printf("%s", heredoc);
 }
 
-t_doc	polish_doc(t_list **lst, t_list *tmp, t_garb *bin)
+t_doc	polish_doc(t_list **lst, t_list *tmp, t_sink *bin)
 {
 	t_doc	current;
 
@@ -72,14 +72,14 @@ t_doc	polish_doc(t_list **lst, t_list *tmp, t_garb *bin)
 	return (current);
 }
 
-t_doc	**create_docs(t_list *lst, t_garb *bin)
+t_doc	**create_docs(t_list *lst, t_sink *bin)
 {
 	t_doc	**docs;
 	t_list	*tmp;
 	int		i;
 
 	i = lst_count_char(lst, '<') + lst_count_char(lst, '>');
-	docs = ft_malloc(sizeof(t_doc *) * (i + 1), &bin);
+	docs = new_plate(sizeof(t_doc *) * (i + 1), &bin);
 	ft_bzero(docs, sizeof(t_doc *) * (i + 1));
 	if (!docs)
 		return (NULL);
@@ -90,7 +90,7 @@ t_doc	**create_docs(t_list *lst, t_garb *bin)
 		if (lst->content && (!ft_strncmp(lst->content, "<", 1) \
 		|| !ft_strncmp(lst->content, ">", 1)))
 		{
-			docs[i] = ft_malloc(sizeof(t_doc), &bin);
+			docs[i] = new_plate(sizeof(t_doc), &bin);
 			*docs[i++] = polish_doc(&lst, tmp, bin);
 		}
 		if (!lst)
