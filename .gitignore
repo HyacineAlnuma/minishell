@@ -1,5 +1,5 @@
 .vscode/
 minishell
 *.txt
-obj
+obj/
 old_src/
