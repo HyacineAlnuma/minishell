@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 10:28:35 by halnuma           #+#    #+#             */
-/*   Updated: 2025/03/21 10:30:04 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/03/26 14:37:44 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,8 @@ int	format_here_doc(char *str, t_list **env, char **envp)
 	write(hd_fd, formatted, f_len);
 	close(hd_fd);
 	hd_fd = open(HD_TEMP_FILE, O_RDONLY);
-	free(buffer);
+	if (*buffer)
+		free(buffer);
 	free(char_buf);
 	free(formatted);
 	return (hd_fd);
@@ -113,18 +114,20 @@ int	format_here_doc(char *str, t_list **env, char **envp)
 
 // int	main(int ac, char **av, char **envp)
 //  {
-//  	char *s = "$(ls) nb: $(env | grep CODE | wc -l)";
+//  	char *s = "yo $(ls)    ";
 //  	int	hd_fd;
 // 	char	formatted[500];
 //  	char *dup;
 //  	t_list	**env;
+// 	int		i;
  
 //  	env = lst_env(envp);
 //  	dup = ft_strdup(s);
 //  	hd_fd = format_here_doc(dup, env, envp);
 // 	// hd_fd = open(HD_TEMP_FILE, O_RDONLY);
-// 	read(hd_fd, formatted, 500);
-//  	printf("%s\n", formatted);
+// 	i = read(hd_fd, formatted, 500);
+// 	formatted[i] = '\0';
+// 	printf("%s\n", formatted);
 //  	// printf("%s\n", s);
 //  	(void)ac;
 //  	(void)av;
