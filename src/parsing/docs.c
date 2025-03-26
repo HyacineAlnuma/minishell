@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:56:31 by secros            #+#    #+#             */
-/*   Updated: 2025/03/21 13:55:05 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/26 11:16:26 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	do_heredoc(t_doc *docs, t_sink *bin)
 	i = 0;
 	heredoc = get_heredoc(bin, str);
 	docs->str = heredoc;
-	ft_printf("%s", heredoc);
+	format_here_doc()
 }
 
 t_doc	polish_doc(t_list **lst, t_list *tmp, t_sink *bin)

@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 11:48:13 by secros            #+#    #+#             */
-/*   Updated: 2025/03/18 13:37:51 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/26 11:12:13 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ char	*synthax_quote(char *str)
 		if (quote == '|' && !pipe_check(str, i))
 			return (NULL);
 		while (str[i] && ((quote == '|' && (!ft_isalnum(str[i])))
-			|| (is_charset(quote, "'\"") && str[i] != quote)))
+				|| (is_charset(quote, "'\"") && str[i] != quote)))
 			i++;
 		if ((str[i] == quote && is_charset(quote, "'\"")) || (quote == '|' && ft_isalnum(str[i])))
 			quote = 0;

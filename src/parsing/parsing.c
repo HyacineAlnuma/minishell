@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/03/21 16:17:45 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/26 11:11:43 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,17 +42,53 @@ void	print_lsts(t_list **lst)
 	}
 }
 
+char	**convert_lst_in_tab(t_list *lst, t_sink *bin)
+{
+	char	**tab;
+	size_t	nb_tok;
+
+	nb_tok = lst_len(lst);
+	tab = new_plate(sizeof(char *) * (nb_tok + 1), &bin);
+	if (!tab)
+		return (NULL);
+	tab[nb_tok] = NULL;
+	nb_tok = 0;
+	while (lst)
+	{
+		tab[nb_tok++] = lst->content;
+		lst = lst->next;
+	}
+	return (tab);
+}
+
+t_exec	*setup_exec(t_list *piped, t_sink *bin)
+{
+	t_exec	*new;
+	char	**tab;
+
+	new = new_plate(sizeof(t_exec), &bin);
+	if (!new)
+		return (NULL);
+	ft_bzero(new, sizeof(t_exec));
+	new->docs = create_docs(piped, bin);
+	new->bin = bin;
+	merge_all(piped, bin);
+	ft_lst_hand_wash_if(&piped, NULL, compare, bin);
+	tab = convert_lst_in_tab(piped, bin);
+	if (!tab)
+		return (NULL);
+	new->cmd = tab[0];
+	new->opt = tab;
+	return (new);
+}
+
 t_exec	**parsing(char *str, t_list **env, t_sink *bin)
 {
-
 	t_list	**piped;
 	t_list	*tokens;
-	t_list	*tmp;
 	t_exec	**exec;
-	int		count;
-	int		i;
-	int		j;
-	char	**tab;
+	size_t	count;
+	size_t	i;
 
 	if (!str)
 		return (NULL);
@@ -65,23 +101,9 @@ t_exec	**parsing(char *str, t_list **env, t_sink *bin)
 	exec = new_plate((sizeof(t_exec *) * (count + 2)), &bin);
 	ft_bzero(exec, (sizeof(t_exec *) * (count + 2)));
 	i = 0;
-	while (i <= count)
+	while (piped[i])
 	{
-		exec[i] = fill_dishwasher(ft_calloc(sizeof(t_exec), 1), free, &bin);
-		exec[i]->docs = create_docs(piped[i], bin);
-		exec[i]->bin = bin;
-		merge_all(piped[i], bin);
-		ft_lst_hand_wash_if(&piped[i], NULL, compare, bin);
-		tab = fill_dishwasher(ft_calloc(sizeof(char *), lst_len(piped[i]) + 1), free, &bin);
-		tmp = piped[i];
-		j = 0;
-		while (tmp)
-		{
-			tab[j++] = tmp->content;
-			tmp = tmp->next;
-		}
-		exec[i]->cmd = tab[0];
-		exec[i]->opt = tab;
+		exec[i] = setup_exec(piped[i], bin);
 		i++;
 	}
 	return (exec);
