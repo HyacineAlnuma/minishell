@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:02:33 by secros            #+#    #+#             */
-/*   Updated: 2025/03/21 14:42:20 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/24 19:37:52 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ typedef struct s_vect
 typedef struct s_doc
 {
 	char		*str;
-	char		*str_type;
+	// char		*str_type;
 	enum e_doc	type;
 }	t_doc;
 
