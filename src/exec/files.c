@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 10:21:35 by halnuma           #+#    #+#             */
-/*   Updated: 2025/03/26 13:15:55 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/26 13:41:12 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	manage_infile(t_exec *cmd, int *infile_fd, int k, int j)
 		close(infile_fd[k]);
 		k++;
 	}
-	else if (cmd->docs[j]->type == HEREDOC)
+	else if (cmd->docs[j]->type >= HEREDOC)
 	{
 		dup2(cmd->docs[j]->type, STDIN_FILENO);
 		close(cmd->docs[j]->type);

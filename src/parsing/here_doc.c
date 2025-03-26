@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 10:28:35 by halnuma           #+#    #+#             */
-/*   Updated: 2025/03/21 10:30:04 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/03/26 14:02:44 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	format_here_doc(char *str, t_list **env, char **envp)
 	buffer = "\0";
 	formatted = NULL;
 	char_buf = ft_calloc(sizeof(char), 2);
-	while (str[i])
+	while (str && str[i])
 	{
 		if (str[i] == '$' && str[i + 1] == '(')
 		{
@@ -105,7 +105,8 @@ int	format_here_doc(char *str, t_list **env, char **envp)
 	write(hd_fd, formatted, f_len);
 	close(hd_fd);
 	hd_fd = open(HD_TEMP_FILE, O_RDONLY);
-	free(buffer);
+	if (*buffer)
+		free(buffer);
 	free(char_buf);
 	free(formatted);
 	return (hd_fd);

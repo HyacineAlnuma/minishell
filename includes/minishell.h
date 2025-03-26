@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:02:33 by secros            #+#    #+#             */
-/*   Updated: 2025/03/26 11:25:06 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/26 13:42:33 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,9 +81,9 @@ enum e_here_bool
 enum e_doc
 {
 	INFILE,
-	HEREDOC,
 	OUTFILE,
 	APPEND,
+	HEREDOC,
 };
 
 typedef struct s_vect
@@ -96,7 +96,7 @@ typedef struct s_doc
 {
 	char		*str;
 	// char		*str_type;
-	enum e_doc	type;
+	int			type;
 }	t_doc;
 
 typedef struct s_exec

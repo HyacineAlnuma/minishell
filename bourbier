@@ -12,12 +12,12 @@ PIPE
 # Multiple redirection
 # echo must handle multiple -n (ex : echo -n -n -n -n a -n print a -n)
 Check syntax error
-return status of function
+return status of function (parsing)
 # SIGQUIT fais de la merde
 # ajouter message bash: cd: OLDPWD not set pour cd -
 # faire fonctionner les commandes en env -i
 
-list to tab pour minishell dans minishell garde les variables ajoutees precedemment
+# list to tab pour minishell dans minishell garde les variables ajoutees precedemment
 
 /*
 	Here_doc:

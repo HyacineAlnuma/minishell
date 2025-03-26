@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:56:31 by secros            #+#    #+#             */
-/*   Updated: 2025/03/26 12:55:36 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/26 14:03:17 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ char	*get_heredoc(t_sink *bin, char *eof)
 		if (str && !ft_strncmp(str, eof, ft_strlen(eof) - 1))
 			break ;
 		f_str = fill_dishwasher(ft_strjoin(f_str, str), free, &bin);
+		f_str = fill_dishwasher(ft_strjoin(f_str, "\n"), free, &bin);
+
 	}
 	return (f_str);
 }
@@ -49,14 +51,21 @@ void	do_heredoc(t_doc *docs, t_sink *bin, t_list **env)
 	char	*str;
 	char	*heredoc;
 	size_t	i;
-
+	
 	str = docs->str;
 	i = 0;
 	heredoc = get_heredoc(bin, str);
 	docs->str = heredoc;
-	ft_printf("%s\n", docs->str);
-	format_here_doc(docs->str, env, lst_to_tab(env));
+	// ft_printf("%s\n", docs->str);
+	docs->type = format_here_doc(docs->str, env, lst_to_tab(env));
+
 }
+/* 
+char	buff[1024];
+ft_printf("%d\n", hd_fd);
+i = read(hd_fd, buff, 1024);
+buff[i] = '\0';
+ft_printf("%s\n", buff); */
 
 t_doc	polish_doc(t_list **lst, t_list *tmp, t_sink *bin, t_list **env)
 {
