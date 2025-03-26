@@ -3,18 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:02:33 by secros            #+#    #+#             */
-/*   Updated: 2025/03/21 10:28:57 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/03/26 13:42:33 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
 # include "libft.h"
 # include "color.h"
+# include "bt_malloc.h"
 
 # include <readline/readline.h>
 # include <readline/history.h>
@@ -79,23 +81,22 @@ enum e_here_bool
 enum e_doc
 {
 	INFILE,
-	HEREDOC,
 	OUTFILE,
 	APPEND,
+	HEREDOC,
 };
 
-typedef struct s_garb
+typedef struct s_vect
 {
-	void	*obj;
-	void	(*f)(void *);
-} t_garb;
-
+	size_t	x;
+	size_t	y;
+}	t_vect;
 
 typedef struct s_doc
 {
 	char		*str;
-	char		*str_type;
-	enum e_doc	type;
+	// char		*str_type;
+	int			type;
 }	t_doc;
 
 typedef struct s_exec
@@ -104,7 +105,8 @@ typedef struct s_exec
 	char	*cmd;
 	char	**opt;
 	int		here_doc;
-	t_doc	*docs;
+	t_doc	**docs;
+	t_sink	*bin;
 }	t_exec;
 
 typedef struct s_fork
@@ -120,10 +122,6 @@ typedef struct s_fork
 
 extern sig_atomic_t g_sigint_flag;
 
-//garbage collector
-void 	clear_garbage(t_list **head);
-void	*add_garbage(void *pt, void (*free_pt)(void *), t_list **head);
-
 //utils
 void	free_the_mallocs(void *pt);
 void	print_ascii(void);
@@ -135,15 +133,22 @@ void	sig_handler(int signum);
 char	**lst_to_tab(t_list **lst);
 
 //parsing
-t_exec	**parsing(char *str, t_list **env, t_list **bin);
-char	*handle_env(char *str, t_list **env);
-t_list	*create_token_list(char *str);
+t_exec	**parsing(char *str, t_list **env, t_sink *bin);
+char	*handle_env(char *str, t_list **env, t_sink *bin);
+t_list	*create_token_list(char *str, t_sink *bin);
 t_list	**lst_env(char **envp);
 char	*find_node(t_list **env, char *var_env);
-char	*remove_quote(char *str);
+char	*remove_quote(char *str, t_sink *bin);
 char	*synthax_quote(char *str);
-int		merge_tokens(t_list *tokens);
+int		merge_tokens(t_list *tokens, t_sink *bin);
 char	*find_user_in_pwd(void);
+
+t_list	**cut_instruction(t_list *tokens, int count);
+t_doc 	**create_docs(t_list *lst, t_sink *bin, t_list **env);
+int		env_handling(t_list *tokens, t_list **env, t_sink *bin);
+int		compare(char *str, char *str_ref);
+void	merge_all(t_list *lst, t_sink *bin);
+void	ft_lst_hand_wash_if(t_list **begin_list, void *data_ref, int (*cmp)(), t_sink *bin);
 int		format_here_doc(char *str, t_list **env, char **envp);
 
 //exec

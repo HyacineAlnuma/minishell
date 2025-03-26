@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 10:28:35 by halnuma           #+#    #+#             */
-/*   Updated: 2025/03/26 14:37:44 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/03/26 14:44:16 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	format_here_doc(char *str, t_list **env, char **envp)
 	buffer = "\0";
 	formatted = NULL;
 	char_buf = ft_calloc(sizeof(char), 2);
-	while (str[i])
+	while (str && str[i])
 	{
 		if (str[i] == '$' && str[i + 1] == '(')
 		{

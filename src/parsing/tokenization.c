@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 11:38:20 by secros            #+#    #+#             */
-/*   Updated: 2025/03/14 13:52:57 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/21 13:54:39 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	*add_empty(t_list **lst)
 	return (new);
 }
 
-int	merge_tokens(t_list *tokens)
+int	merge_tokens(t_list *tokens, t_sink *bin)
 {
 	t_list	*tmp;
 	char	*new_token;
@@ -34,8 +34,9 @@ int	merge_tokens(t_list *tokens)
 		return (0);
 	while (tmp && tmp->content)
 	{
-		tmp->content = remove_quote((char *)tmp->content);
-		new_token = ft_strappend(new_token, (char *)tmp->content);
+		tmp->content = remove_quote((char *)tmp->content, bin);
+		new_token = fill_dishwasher(ft_strjoin(new_token, \
+		(char *)tmp->content), free, &bin);
 		tmp = tmp->next;
 	}
 	tokens->content = new_token;
@@ -43,7 +44,7 @@ int	merge_tokens(t_list *tokens)
 	return (1);
 }
 
-char	*split_token(char *str, size_t *i)
+char	*split_token(char *str, size_t *i, t_sink *bin)
 {
 	unsigned int	count;
 	char			*token;
@@ -55,7 +56,7 @@ char	*split_token(char *str, size_t *i)
 		*i += 1;
 	if (str[*i] == '"' || str[*i] == '\'')
 		quote = str[*i + count++];
-	while(str[*i + count] && (!is_space(str[*i + count]) || quote))
+	while (str[*i + count] && (!is_space(str[*i + count]) || quote))
 	{
 		if (str[*i + count] == quote || (!quote && is_redir(str[*i])))
 		{
@@ -67,12 +68,12 @@ char	*split_token(char *str, size_t *i)
 			break ;
 		count++;
 	}
-	token = ft_substr(str, *i, count);
+	token = fill_dishwasher(ft_substr(str, *i, count), free, &bin);
 	*i += count;
 	return (token);
 }
 
-t_list	*create_token_list(char *str)
+t_list	*create_token_list(char *str, t_sink *bin)
 {
 	size_t	i;
 	t_list	*tokens;
@@ -83,18 +84,19 @@ t_list	*create_token_list(char *str)
 	tokens = NULL;
 	while (str[i])
 	{
-		token = split_token(str, &i);
-		while(str[i] && is_redir(str[i]) && is_redir(str[i - 1]))
-			token = ft_strappend(token, split_token(str, &i));
+		token = split_token(str, &i, bin);
+		while (str[i] && is_redir(str[i]) && is_redir(str[i - 1]))
+			token = fill_dishwasher(ft_strjoin(token, \
+			split_token(str, &i, bin)), free, &bin);
 		if (token[0] == '\0')
-			return (free(token), tokens);
-		new = ft_lstnew(token);
+			return (tokens);
+		new = fill_dishwasher(ft_lstnew(token), free, &bin);
 		if (!token || !new)
 			return (ft_lstclear(&tokens, free), NULL);
 		ft_lstadd_back(&tokens, new);
 		if (str[i] && (is_space(str[i]) || (is_redir(str[i]) && \
 		!is_redir(str[i - 1])) || (is_redir(str[i - 1]) && !is_redir(str[i]))))
-			add_empty(&tokens);
+			fill_dishwasher(add_empty(&tokens), free, &bin);
 	}
 	return (tokens);
 }

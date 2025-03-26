@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 11:45:00 by secros            #+#    #+#             */
-/*   Updated: 2025/03/26 14:37:54 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/03/26 14:43:58 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,12 @@ void	print_prompt(t_list **env)
 	ft_printf("%s%s%s%s\n", BOLD, FG_BRIGHT_BLUE, prompt, RESET);
 }
 
-
 int	main(int ac, char **av, char **envp)
 {
 	char	*input;
 	t_list	**env;
 	t_exec	**command;
-	t_list	*bin;
+	t_sink	*bin;
 
 	(void) av;
 	bin = NULL;
@@ -51,15 +50,16 @@ int	main(int ac, char **av, char **envp)
 	{
 		g_sigint_flag = 0;
 		print_prompt(env);
-		input = readline("minishell % ");
+		input = fill_dishwasher(readline("hell % "), free, &bin);
 		g_sigint_flag = 1;
 		if (!input)
 			break ;
 		add_history(input);
-		// input = synthax_quote(input);
-		command = parsing(input, env, &bin);
+		input = synthax_quote(input);
+		command = parsing(input, env, bin);
 		if (command)
 			exec(command, env, envp);
-		// clear_garbage(&bin);
+		// do_dishes(&bin);
 	}
+	
 }
