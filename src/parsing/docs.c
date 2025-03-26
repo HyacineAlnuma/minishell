@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:56:31 by secros            #+#    #+#             */
-/*   Updated: 2025/03/26 11:16:26 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/26 12:55:36 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ char	*get_heredoc(t_sink *bin, char *eof)
 	return (f_str);
 }
 
-void	do_heredoc(t_doc *docs, t_sink *bin)
+void	do_heredoc(t_doc *docs, t_sink *bin, t_list **env)
 {
 	char	*str;
 	char	*heredoc;
@@ -54,10 +54,11 @@ void	do_heredoc(t_doc *docs, t_sink *bin)
 	i = 0;
 	heredoc = get_heredoc(bin, str);
 	docs->str = heredoc;
-	format_here_doc()
+	ft_printf("%s\n", docs->str);
+	format_here_doc(docs->str, env, lst_to_tab(env));
 }
 
-t_doc	polish_doc(t_list **lst, t_list *tmp, t_sink *bin)
+t_doc	polish_doc(t_list **lst, t_list *tmp, t_sink *bin, t_list **env)
 {
 	t_doc	current;
 
@@ -66,13 +67,13 @@ t_doc	polish_doc(t_list **lst, t_list *tmp, t_sink *bin)
 	merge_tokens(*lst, bin);
 	current.str = (*lst)->content;
 	if (current.type == HEREDOC)
-		do_heredoc(&current, bin);
+		do_heredoc(&current, bin, env);
 	*lst = (*lst)->next;
 	tmp->next = *lst;
 	return (current);
 }
 
-t_doc	**create_docs(t_list *lst, t_sink *bin)
+t_doc	**create_docs(t_list *lst, t_sink *bin, t_list **env)
 {
 	t_doc	**docs;
 	t_list	*tmp;
@@ -91,7 +92,7 @@ t_doc	**create_docs(t_list *lst, t_sink *bin)
 		|| !ft_strncmp(lst->content, ">", 1)))
 		{
 			docs[i] = new_plate(sizeof(t_doc), &bin);
-			*docs[i++] = polish_doc(&lst, tmp, bin);
+			*docs[i++] = polish_doc(&lst, tmp, bin, env);
 		}
 		if (!lst)
 			break ;

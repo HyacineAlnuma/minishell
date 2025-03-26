@@ -32,3 +32,6 @@ list to tab pour minishell dans minishell garde les variables ajoutees precedemm
 # 	- gere append
 # 	- gere redirection puis pipe
 # 	- gere double ou plus redirections
+
+/usr/bin/cat src/parsing/parsing.c 
+/usr/bin/cat cmd : cat and argv[0] = cmd
