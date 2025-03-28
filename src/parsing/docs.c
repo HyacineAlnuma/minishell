@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   docs.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:56:31 by secros            #+#    #+#             */
-/*   Updated: 2025/03/28 14:36:45 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/03/28 17:47:15 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ void	do_heredoc(t_doc *docs, t_sink *bin, t_list **env)
 	i = 0;
 	heredoc = get_heredoc(bin, str);
 	docs->str = heredoc;
-	// ft_printf("%s\n", docs->str);
 	docs->type = format_here_doc(docs->str, env, lst_to_tab(env), &bin);
 }
 /* 

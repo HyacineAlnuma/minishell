@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 10:28:35 by halnuma           #+#    #+#             */
-/*   Updated: 2025/03/28 17:09:57 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/28 17:48:37 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,9 +85,10 @@ int	format_here_doc(char *str, t_list **env, char **envp, t_sink **bin)
 			ft_bzero(buffer, buf_size);
 			while (read(temp_file_fd, char_buf, 1))
 				buffer = ft_strappend(buffer, char_buf);
-			buffer = remove_file_name(buffer);
+			if (buffer)
+				buffer = remove_file_name(buffer);
 			g = 0;
-			while (buffer[g])
+			while (buffer && buffer[g])
 			{
 				if (buffer[g] == '\n' && !buffer[g + 1])
 					buffer[g] = '\0';
