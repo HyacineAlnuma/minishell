@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 09:18:38 by halnuma           #+#    #+#             */
-/*   Updated: 2025/03/21 10:27:44 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/03/28 10:47:23 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ char	**lst_to_tab(t_list **lst)
 	ptr = *lst;
 	while (ptr)
 	{
-		tab[i] = (char *)ptr->content;
+		tab[i] = (char *)ptr->content;	
 		ptr = ptr->next;
 		i++;
 	}
@@ -84,7 +84,8 @@ char	*increment_shlvl(char *str)
 	s_nb = &str[i + 1];
 	i_nb = ft_atoi(s_nb);
 	i_nb++;
-	s_nb = ft_itoa(i_nb);
+	// s_nb = ft_itoa(i_nb);
+	s_nb = fill_dishwasher(ft_itoa(i_nb), free, get_sink(NULL));
 	if (!s_nb)
 		return (NULL);
 	res = ft_strjoin("SHLVL=", s_nb);

@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 09:32:09 by halnuma           #+#    #+#             */
-/*   Updated: 2025/03/19 09:32:32 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/03/28 11:00:33 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,14 @@ int	check_if_cmd_exists(char **paths, char *cmd)
 	int		i;
 	int		j;
 
+	path = NULL;
 	i = 0;
 	j = 0;
 	while (paths[i])
 	{
 		path = paths[i];
-		path = ft_strjoin(path, "/");
-		path = ft_strjoin(path, cmd);
+		path = fill_dishwasher(ft_strjoin(path, "/"), free, get_sink(NULL));
+		path = fill_dishwasher(ft_strjoin(path, cmd), free, get_sink(NULL));
 		if (!access(path, F_OK))
 			return (1);
 		path = &paths[i][j + 1];
@@ -57,7 +58,8 @@ int	check_cmd_with_env(char *cmd, char *paths)
 	char	*path;
 	int		i;
 
-	paths = ft_strjoin(paths, ":");
+	path = NULL;
+	path = fill_dishwasher(ft_strjoin(path, ":"), free, get_sink(NULL));
 	path = paths;
 	i = 0;
 	while (paths[i])
@@ -65,8 +67,8 @@ int	check_cmd_with_env(char *cmd, char *paths)
 		if (paths[i] == ':')
 		{
 			paths[i] = '\0';
-			path = ft_strjoin(path, "/");
-			path = ft_strjoin(path, cmd);
+			path = fill_dishwasher(ft_strjoin(path, "/"), free, get_sink(NULL));
+			path = fill_dishwasher(ft_strjoin(path, cmd), free, get_sink(NULL));
 			if (!access(path, F_OK))
 				return (1);
 			path = &paths[i + 1];

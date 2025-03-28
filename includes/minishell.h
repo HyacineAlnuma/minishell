@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
+/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:02:33 by secros            #+#    #+#             */
-/*   Updated: 2025/03/26 13:42:33 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/28 11:37:37 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,7 +153,7 @@ int		format_here_doc(char *str, t_list **env, char **envp);
 
 //exec
 void	exec(t_exec **cmds, t_list **env, char **envp);
-void	exit_program(t_exec **cmds, t_list **env);
+void	exit_program(void);
 void	echo(t_exec *cmd);
 void	cd(t_exec *cmd, t_list **env);
 void	pwd(void);
@@ -171,5 +171,7 @@ int		check_cmd(char *cmd);
 int		check_builtins(char *cmd);
 int		exec_builtins(t_exec *cmd, t_list **env);
 void	wait_all_pid(t_exec **cmds, int pipe_nb);
+void	exec_parent_builtins(t_exec *cmd, t_list **env, int cur_cmd);
+void	dup_fd(int fd1, int fd2);
 
 #endif

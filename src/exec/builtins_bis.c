@@ -6,16 +6,14 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:34:14 by halnuma           #+#    #+#             */
-/*   Updated: 2025/03/19 09:31:02 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/03/28 10:43:26 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	exit_program(t_exec **cmds, t_list **env)
+void	exit_program(void)
 {
-	(void)cmds;
-	(void)env;
 	rl_clear_history();
 	exit(EXIT_SUCCESS);
 }

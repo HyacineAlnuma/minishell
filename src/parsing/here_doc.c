@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 10:28:35 by halnuma           #+#    #+#             */
-/*   Updated: 2025/03/26 14:44:16 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/03/28 12:39:26 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int	format_here_doc(char *str, t_list **env, char **envp)
 			k = -1;
 			while (cmds[++k])
 				cmds[k]->here_doc = 1;
-			// list to tab
+			envp = lst_to_tab(env);
 			exec(cmds, env, envp);
 			temp_file_fd = open(EXEC_TMP_FILE, O_RDONLY);
 			if (!temp_file_fd || temp_file_fd == -1)
@@ -93,6 +93,7 @@ int	format_here_doc(char *str, t_list **env, char **envp)
 					buffer[g] = '\0';
 				g++;
 			}
+			close(temp_file_fd);
 			unlink(EXEC_TMP_FILE);
 			formatted = ft_strappend(formatted, buffer);
 		}

@@ -18,7 +18,7 @@ return status of function (parsing)
 # faire fonctionner les commandes en env -i
 
 # list to tab pour minishell dans minishell garde les variables ajoutees precedemment
-gerer les chemins absolus et relatifs
+# gerer les chemins absolus et relatifs
 securiser les mallocs et compagnie
 gerer les leaks dans l'exec
 

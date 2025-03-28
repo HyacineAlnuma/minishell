@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 11:45:00 by secros            #+#    #+#             */
-/*   Updated: 2025/03/26 14:43:58 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/03/28 11:22:58 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	main(int ac, char **av, char **envp)
 	{
 		g_sigint_flag = 0;
 		print_prompt(env);
-		input = fill_dishwasher(readline("hell % "), free, &bin);
+		input = fill_dishwasher(readline("minishell % "), free, &bin);
 		g_sigint_flag = 1;
 		if (!input)
 			break ;
@@ -59,6 +59,7 @@ int	main(int ac, char **av, char **envp)
 		command = parsing(input, env, bin);
 		if (command)
 			exec(command, env, envp);
+		do_dishes(get_sink(NULL));
 		// do_dishes(&bin);
 	}
 	

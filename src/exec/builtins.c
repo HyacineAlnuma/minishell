@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:32:53 by halnuma           #+#    #+#             */
-/*   Updated: 2025/03/26 13:07:49 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/03/28 10:35:10 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	echo(t_exec *cmd)
 	}
 	if (ft_strncmp(cmd->opt[1], "-n", 3))
 		ft_printf("\n");
+	// do_dishes(get_sink(NULL));
 	exit(EXIT_SUCCESS);
 }
 
