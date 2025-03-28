@@ -30,6 +30,11 @@ gerer les leaks dans l'exec
 			-Recupere la string du formattage, la mettre dans une struct -> here_doc = 1, str dans les opt, si !cmd -> cmd = NULL
 */
 
+built-in must be done in a fork if there is a pipe
+ "cd include | ls" -> cd do nothing;
+ "ls | cd include -> idem;
+
+valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --track-fds=yes  --suppressions=ignore_readline.supp -s ./minishell 
 
 # redirection :
 # 	- gere append

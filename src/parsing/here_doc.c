@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 10:28:35 by halnuma           #+#    #+#             */
-/*   Updated: 2025/03/28 14:37:08 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/03/28 17:09:57 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ int	format_here_doc(char *str, t_list **env, char **envp, t_sink **bin)
 	write(hd_fd, formatted, f_len);
 	close(hd_fd);
 	hd_fd = open(HD_TEMP_FILE, O_RDONLY);
-	if (*buffer)
+	if (buffer && *buffer)
 		free(buffer);
 	free(char_buf);
 	free(formatted);
