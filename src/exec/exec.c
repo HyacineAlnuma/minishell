@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:27:50 by halnuma           #+#    #+#             */
-/*   Updated: 2025/03/28 13:29:10 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/03/28 13:41:00 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,6 @@ int	exec_cmds(t_exec **cmds, char **envp, t_list **env, int pipe_nb)
 	close_pipes(pipefd, pipe_nb);
 	wait_all_pid(cmds, pipe_nb);
 	close_temp_file(cmds);
-	// do_dishes(&cmds[cur_cmd]->bin);
 	return (1);
 }
 

@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 10:28:35 by halnuma           #+#    #+#             */
-/*   Updated: 2025/03/28 12:39:26 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/03/28 13:33:14 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int	format_here_doc(char *str, t_list **env, char **envp)
 				return (0);
 			}
 			str[i] = '\0';
-			formatted = ft_strappend(formatted, &str[begin_part]);
+			formatted = ft_strjoin(formatted, &str[begin_part]);
 			cmd = ft_strndup(&str[i + 2], (j - (i + 2)));
 			i = j + 1;
 			begin_part = i;
@@ -95,11 +95,11 @@ int	format_here_doc(char *str, t_list **env, char **envp)
 			}
 			close(temp_file_fd);
 			unlink(EXEC_TMP_FILE);
-			formatted = ft_strappend(formatted, buffer);
+			formatted = ft_strjoin(formatted, buffer);
 		}
 		i++;
 	}
-	formatted = ft_strappend(formatted, &str[begin_part]);
+	formatted = ft_strjoin(formatted, &str[begin_part]);
 	// printf("%s\n", formatted);
 	hd_fd = open(HD_TEMP_FILE, O_RDWR | O_CREAT, S_IWUSR | S_IRUSR);
 	f_len = ft_strlen(formatted);
