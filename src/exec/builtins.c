@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:32:53 by halnuma           #+#    #+#             */
-/*   Updated: 2025/03/28 10:35:10 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/03/28 14:21:12 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ void	cd(t_exec *cmd, t_list **env)
 void	export(t_exec *cmd, t_list **env)
 {
 	t_list	*new_line;
+	char	*env_line;
 
 	if (!cmd->opt[1])
 	{
@@ -82,7 +83,8 @@ void	export(t_exec *cmd, t_list **env)
 		return ;
 	}
 	unset(cmd, env);
-	new_line = ft_lstnew(cmd->opt[1]);
+	env_line = fill_dishwasher(ft_strdup(cmd->opt[1]), free, get_sink(NULL));
+	new_line = fill_dishwasher(ft_lstnew(env_line), free, get_sink(NULL));
 	if (!new_line)
 		return ;
 	ft_lstadd_back(env, new_line);

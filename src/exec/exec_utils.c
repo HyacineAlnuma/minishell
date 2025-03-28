@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:29:37 by halnuma           #+#    #+#             */
-/*   Updated: 2025/03/28 11:38:39 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/03/28 14:48:06 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	exec_parent_builtins(t_exec *cmd, t_list **env, int cur_cmd)
 	if (!ft_strncmp(cmd->cmd, "cd", 3))
 		cd(cmd, env);
 	if (!ft_strncmp(cmd->cmd, "exit", 5) && !cur_cmd)
-		exit_program();
+		exit_program(cmd);
 	if (!ft_strncmp(cmd->cmd, "export", 7))
 		export(cmd, env);
 	if (!ft_strncmp(cmd->cmd, "unset", 6))

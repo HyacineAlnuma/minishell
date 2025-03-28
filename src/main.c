@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 11:45:00 by secros            #+#    #+#             */
-/*   Updated: 2025/03/28 13:47:33 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/03/28 14:54:44 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,11 +56,11 @@ int	main(int ac, char **av, char **envp)
 			break ;
 		add_history(input);
 		input = synthax_quote(input);
-		command = parsing(input, env, bin);
+		printf("%p\n", get_sink(NULL));
+		command = parsing(input, env, &bin);
 		if (command)
 			exec(command, env, envp);
-		// do_dishes(get_sink(NULL));
 		do_dishes(&bin);
 	}
-	
+	do_dishes(get_sink(NULL));
 }

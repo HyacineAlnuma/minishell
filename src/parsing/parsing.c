@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
+/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/03/26 15:00:30 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/28 14:37:43 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ t_exec	*setup_exec(t_list *piped, t_sink *bin, t_list **env)
 	return (new);
 }
 
-t_exec	**parsing(char *str, t_list **env, t_sink *bin)
+t_exec	**parsing(char *str, t_list **env, t_sink **bin)
 {
 	t_list	**piped;
 	t_list	*tokens;
@@ -93,18 +93,18 @@ t_exec	**parsing(char *str, t_list **env, t_sink *bin)
 
 	if (!str)
 		return (NULL);
-	tokens = create_token_list(str, bin);
+	tokens = create_token_list(str, *bin);
 	if (!tokens)
 		return (NULL);
-	env_handling(tokens, env, bin);
+	env_handling(tokens, env, *bin);
 	count = lst_count_char(tokens, '|');
-	piped = fill_dishwasher(cut_instruction(tokens, count), free, &bin);
-	exec = new_plate((sizeof(t_exec *) * (count + 2)), &bin);
+	piped = fill_dishwasher(cut_instruction(tokens, count), free, bin);
+	exec = new_plate((sizeof(t_exec *) * (count + 2)), bin);
 	ft_bzero(exec, (sizeof(t_exec *) * (count + 2)));
 	i = 0;
 	while (piped[i])
 	{
-		exec[i] = setup_exec(piped[i], bin, env);
+		exec[i] = setup_exec(piped[i], *bin, env);
 		i++;
 	}
 	return (exec);

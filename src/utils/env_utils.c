@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 09:18:38 by halnuma           #+#    #+#             */
-/*   Updated: 2025/03/28 10:47:23 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/03/28 14:49:28 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,11 +84,10 @@ char	*increment_shlvl(char *str)
 	s_nb = &str[i + 1];
 	i_nb = ft_atoi(s_nb);
 	i_nb++;
-	// s_nb = ft_itoa(i_nb);
 	s_nb = fill_dishwasher(ft_itoa(i_nb), free, get_sink(NULL));
 	if (!s_nb)
 		return (NULL);
-	res = ft_strjoin("SHLVL=", s_nb);
+	res = fill_dishwasher(ft_strjoin("SHLVL=", s_nb), free, get_sink(NULL));
 	if (!res)
 		return (NULL);
 	return (res);
@@ -101,7 +100,8 @@ t_list	**lst_env(char **envp)
 	t_list	*new_line;
 
 	i = -1;
-	lst_env = (t_list **)ft_calloc(sizeof(t_list **), 1);
+	lst_env = (t_list **)new_plate(sizeof(t_list **), get_sink(NULL));
+	ft_bzero(lst_env, sizeof(t_list **));
 	if (!lst_env)
 		return (NULL);
 	if (!envp[0])
@@ -115,7 +115,7 @@ t_list	**lst_env(char **envp)
 	{
 		if (!strncmp(envp[i], "SHLVL=", 6))
 			envp[i] = increment_shlvl(envp[i]);
-		new_line = ft_lstnew(envp[i]);
+		new_line = fill_dishwasher(ft_lstnew(envp[i]), free, get_sink(NULL));
 		if (!new_line)
 			return (NULL);
 		ft_lstadd_back(lst_env, new_line);

@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 10:28:35 by halnuma           #+#    #+#             */
-/*   Updated: 2025/03/28 13:33:14 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/03/28 14:37:08 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	*remove_file_name(char *str)
 	return (&str[i + 1]);
 }
 
-int	format_here_doc(char *str, t_list **env, char **envp)
+int	format_here_doc(char *str, t_list **env, char **envp, t_sink **bin)
 {
 	int		i;
 	size_t	j;
@@ -46,7 +46,7 @@ int	format_here_doc(char *str, t_list **env, char **envp)
 	i = 0;
 	j = 0;
 	begin_part = 0;
-	buffer = "\0";
+	buffer = NULL;
 	formatted = NULL;
 	char_buf = ft_calloc(sizeof(char), 2);
 	while (str && str[i])
@@ -65,15 +65,15 @@ int	format_here_doc(char *str, t_list **env, char **envp)
 				return (0);
 			}
 			str[i] = '\0';
-			formatted = ft_strjoin(formatted, &str[begin_part]);
+			formatted = ft_strappend(formatted, &str[begin_part]);
 			cmd = ft_strndup(&str[i + 2], (j - (i + 2)));
 			i = j + 1;
 			begin_part = i;
-			cmds = parsing(cmd, env, NULL);
+			cmds = parsing(cmd, env, bin);
+			free(cmd);
 			k = -1;
 			while (cmds[++k])
 				cmds[k]->here_doc = 1;
-			envp = lst_to_tab(env);
 			exec(cmds, env, envp);
 			temp_file_fd = open(EXEC_TMP_FILE, O_RDONLY);
 			if (!temp_file_fd || temp_file_fd == -1)
@@ -84,7 +84,7 @@ int	format_here_doc(char *str, t_list **env, char **envp)
 			buf_size = ft_strlen(buffer);
 			ft_bzero(buffer, buf_size);
 			while (read(temp_file_fd, char_buf, 1))
-				buffer = ft_strjoin(buffer, char_buf);
+				buffer = ft_strappend(buffer, char_buf);
 			buffer = remove_file_name(buffer);
 			g = 0;
 			while (buffer[g])
@@ -95,11 +95,11 @@ int	format_here_doc(char *str, t_list **env, char **envp)
 			}
 			close(temp_file_fd);
 			unlink(EXEC_TMP_FILE);
-			formatted = ft_strjoin(formatted, buffer);
+			formatted = ft_strappend(formatted, buffer);
 		}
 		i++;
 	}
-	formatted = ft_strjoin(formatted, &str[begin_part]);
+	formatted = ft_strappend(formatted, &str[begin_part]);
 	// printf("%s\n", formatted);
 	hd_fd = open(HD_TEMP_FILE, O_RDWR | O_CREAT, S_IWUSR | S_IRUSR);
 	f_len = ft_strlen(formatted);
@@ -110,6 +110,7 @@ int	format_here_doc(char *str, t_list **env, char **envp)
 		free(buffer);
 	free(char_buf);
 	free(formatted);
+	free(envp);
 	return (hd_fd);
 }
 

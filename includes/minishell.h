@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:02:33 by secros            #+#    #+#             */
-/*   Updated: 2025/03/28 11:37:37 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/03/28 14:48:23 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,7 @@ void	sig_handler(int signum);
 char	**lst_to_tab(t_list **lst);
 
 //parsing
-t_exec	**parsing(char *str, t_list **env, t_sink *bin);
+t_exec	**parsing(char *str, t_list **env, t_sink **bin);
 char	*handle_env(char *str, t_list **env, t_sink *bin);
 t_list	*create_token_list(char *str, t_sink *bin);
 t_list	**lst_env(char **envp);
@@ -149,11 +149,11 @@ int		env_handling(t_list *tokens, t_list **env, t_sink *bin);
 int		compare(char *str, char *str_ref);
 void	merge_all(t_list *lst, t_sink *bin);
 void	ft_lst_hand_wash_if(t_list **begin_list, void *data_ref, int (*cmp)(), t_sink *bin);
-int		format_here_doc(char *str, t_list **env, char **envp);
+int		format_here_doc(char *str, t_list **env, char **envp, t_sink **bin);
 
 //exec
 void	exec(t_exec **cmds, t_list **env, char **envp);
-void	exit_program(void);
+void	exit_program(t_exec *cmd);
 void	echo(t_exec *cmd);
 void	cd(t_exec *cmd, t_list **env);
 void	pwd(void);
