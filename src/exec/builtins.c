@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:32:53 by halnuma           #+#    #+#             */
-/*   Updated: 2025/03/28 14:21:12 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/03/28 15:43:43 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ void	echo(t_exec *cmd)
 	}
 	if (ft_strncmp(cmd->opt[1], "-n", 3))
 		ft_printf("\n");
-	// do_dishes(get_sink(NULL));
+	do_dishes(get_sink(NULL));
+	do_dishes(cmd->bin);
 	exit(EXIT_SUCCESS);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:35:19 by halnuma           #+#    #+#             */
-/*   Updated: 2025/03/19 09:28:54 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/03/28 15:34:29 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ t_list	**get_alpha_env(t_list **env)
 {
 	t_list	**alpha_env;
 
-	alpha_env = ft_lstdup(env, NULL);
+	alpha_env = fill_dishwasher(ft_lstdup(env, NULL), free, get_sink(NULL));
 	if (!alpha_env)
 		return (NULL);
 	alpha_env = alphasort_env(alpha_env);

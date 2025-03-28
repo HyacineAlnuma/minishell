@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 11:45:00 by secros            #+#    #+#             */
-/*   Updated: 2025/03/28 14:54:44 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/03/28 15:40:47 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ int	main(int ac, char **av, char **envp)
 			break ;
 		add_history(input);
 		input = synthax_quote(input);
-		printf("%p\n", get_sink(NULL));
 		command = parsing(input, env, &bin);
 		if (command)
 			exec(command, env, envp);
