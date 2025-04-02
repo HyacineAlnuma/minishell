@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:56:31 by secros            #+#    #+#             */
-/*   Updated: 2025/03/28 17:47:15 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/31 04:39:15 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ char	*get_heredoc(t_sink *bin, char *eof)
 			break ;
 		f_str = fill_dishwasher(ft_strjoin(f_str, str), free, &bin);
 		f_str = fill_dishwasher(ft_strjoin(f_str, "\n"), free, &bin);
-
 	}
 	return (f_str);
 }

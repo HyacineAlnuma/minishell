@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/03/28 15:06:56 by secros           ###   ########.fr       */
+/*   Updated: 2025/03/31 04:42:30 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,19 +28,19 @@ int	lst_len(t_list *lst)
 
 void	print_lsts(t_list **lst)
 {
-int	j;
+	int	j;
 
-j = 0;
-while (lst[j])
-{
-ft_printf("[%s]", (char *)lst[j]->content);
-lst[j] = lst[j]->next;
-if (!lst[j])
-{
-ft_printf("\n");
-j++;
-}
-}
+	j = 0;
+	while (lst[j])
+	{
+		ft_printf("[%s]", (char *)lst[j]->content);
+		lst[j] = lst[j]->next;
+		if (!lst[j])
+		{
+			ft_printf("\n");
+			j++;
+		}
+	}
 }
 
 char	**convert_lst_in_tab(t_list *lst, t_sink *bin)
