@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/03/28 15:06:56 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/02 12:32:15 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,19 +28,19 @@ int	lst_len(t_list *lst)
 
 void	print_lsts(t_list **lst)
 {
-int	j;
+	int	j;
 
-j = 0;
-while (lst[j])
-{
-ft_printf("[%s]", (char *)lst[j]->content);
-lst[j] = lst[j]->next;
-if (!lst[j])
-{
-ft_printf("\n");
-j++;
-}
-}
+	j = 0;
+	while (lst[j])
+	{
+		ft_printf("[%s]", (char *)lst[j]->content);
+		lst[j] = lst[j]->next;
+		if (!lst[j])
+		{
+			ft_printf("\n");
+			j++;
+		}
+	}
 }
 
 char	**convert_lst_in_tab(t_list *lst, t_sink *bin)
@@ -62,7 +62,7 @@ char	**convert_lst_in_tab(t_list *lst, t_sink *bin)
 	return (tab);
 }
 
-t_exec	*setup_exec(t_list *piped, t_sink **bin, t_list **env)
+t_exec	*setup_exec(t_list **piped, t_sink **bin, t_list **env)
 {
 	t_exec	*new;
 	char	**tab;
@@ -73,9 +73,9 @@ t_exec	*setup_exec(t_list *piped, t_sink **bin, t_list **env)
 	ft_bzero(new, sizeof(t_exec));
 	new->docs = create_docs(piped, *bin, env);
 	new->bin = bin;
-	merge_all(piped, *bin);
-	ft_lst_hand_wash_if(&piped, NULL, compare, *bin);
-	tab = convert_lst_in_tab(piped, *bin);
+	merge_all(*piped, *bin);
+	ft_lst_hand_wash_if(piped, NULL, compare, *bin);
+	tab = convert_lst_in_tab(*piped, *bin);
 	if (!tab)
 		return (NULL);
 	new->cmd = tab[0];
@@ -104,7 +104,7 @@ t_exec	**parsing(char *str, t_list **env, t_sink **bin)
 	i = 0;
 	while (piped[i])
 	{
-		exec[i] = setup_exec(piped[i], bin, env);
+		exec[i] = setup_exec(&piped[i], bin, env);
 		i++;
 	}
 	return (exec);

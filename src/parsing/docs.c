@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:56:31 by secros            #+#    #+#             */
-/*   Updated: 2025/03/28 17:47:15 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/02 13:05:06 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,53 +58,70 @@ void	do_heredoc(t_doc *docs, t_sink *bin, t_list **env)
 	docs->str = heredoc;
 	docs->type = format_here_doc(docs->str, env, lst_to_tab(env), &bin);
 }
-/* 
-char	buff[1024];
-ft_printf("%d\n", hd_fd);
-i = read(hd_fd, buff, 1024);
-buff[i] = '\0';
-ft_printf("%s\n", buff); */
 
-t_doc	polish_doc(t_list **lst, t_list *tmp, t_sink *bin, t_list **env)
+t_doc	polish_doc(t_list **lst, t_sink *bin, t_list **env)
 {
 	t_doc	current;
 
 	current.type = find_type((char *)(*lst)->content);
+	ft_printf("\n--%d--\n", current.type);
 	(*lst) = (*lst)->next->next;
 	merge_tokens(*lst, bin);
 	current.str = (*lst)->content;
+	ft_printf("\n--%s--\n", current.str);
 	if (current.type == HEREDOC)
 		do_heredoc(&current, bin, env);
 	*lst = (*lst)->next;
-	tmp->next = *lst;
 	return (current);
 }
 
-t_doc	**create_docs(t_list *lst, t_sink *bin, t_list **env)
+void	*alloc_docs(t_list *lst, t_sink *bin)
 {
 	t_doc	**docs;
-	t_list	*tmp;
-	int		i;
+	size_t	i;
+	size_t	j;
 
+	j = 0;
 	i = lst_count_char(lst, '<') + lst_count_char(lst, '>');
 	docs = new_plate(sizeof(t_doc *) * (i + 1), &bin);
-	ft_bzero(docs, sizeof(t_doc *) * (i + 1));
 	if (!docs)
 		return (NULL);
-	tmp = lst;
+	ft_bzero(docs, sizeof(t_doc *) * (i + 1));
+	while (j < i)
+	{
+		docs[j] = new_plate(sizeof(t_doc), &bin);
+		if (!docs)
+			return (NULL);
+		j++;
+	}
+	return (docs);
+}
+
+t_doc	**create_docs(t_list **head, t_list *lst, t_sink *bin, t_list **env)
+{
+	t_doc	**docs;
+	t_list	*prev;
+	size_t	i;
+
 	i = 0;
+	docs = alloc_docs(*head, bin);
+	if (!docs)
+		reutrn (NULL);
+	prev = NULL;
 	while (lst)
 	{
 		if (lst->content && (!ft_strncmp(lst->content, "<", 1) \
 		|| !ft_strncmp(lst->content, ">", 1)))
 		{
-			docs[i] = new_plate(sizeof(t_doc), &bin);
-			*docs[i++] = polish_doc(&lst, tmp, bin, env);
+			*docs[i++] = polish_doc(head, bin, env);
+			if (prev)
+				prev->next = lst;
+			else
+				*head = lst;
 		}
-		if (!lst)
-			break ;
-		tmp = lst;
-		lst = lst->next;
+		prev = lst;
+		if (lst)
+			tmp = tmp->next;
 	}
 	return (docs);
 }
