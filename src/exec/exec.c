@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:27:50 by halnuma           #+#    #+#             */
-/*   Updated: 2025/03/28 13:41:00 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/02 13:39:50 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ void	exec_process(t_fork *f, t_list **env, char **envp)
 	if (f->cmds[f->cur_cmd]->pid == -1)
 	{
 		perror("fork");
+		do_dishes(get_sink(&f->cmds[f->cur_cmd]->bin));
+		do_dishes(get_sink(NULL));
 		exit(EXIT_FAILURE);
 	}
 	else if (f->cmds[f->cur_cmd]->pid == 0)
@@ -90,15 +92,17 @@ void	close_temp_file(t_exec **cmds)
 	}
 }
 
-int	exec_cmds(t_exec **cmds, char **envp, t_list **env, int pipe_nb)
+void	exec(t_exec **cmds, t_list **env, char **envp)
 {
 	int		cur_cmd;
 	int		cur_pipe;
 	int		pipefd[1024];
 	t_fork	fork_info;
+	int		pipe_nb;
 
 	cur_cmd = 0;
 	cur_pipe = 0;
+	pipe_nb = ft_tablen((char **)cmds) - 1;
 	open_pipes(pipefd, pipe_nb);
 	while (cmds[cur_cmd])
 	{
@@ -109,17 +113,9 @@ int	exec_cmds(t_exec **cmds, char **envp, t_list **env, int pipe_nb)
 		cur_pipe += 2;
 	}
 	cur_cmd--;
-	exec_parent_builtins(cmds[cur_cmd], env, cur_cmd);
+	if (!cur_cmd)
+		exec_parent_builtins(cmds[cur_cmd], env);
 	close_pipes(pipefd, pipe_nb);
 	wait_all_pid(cmds, pipe_nb);
 	close_temp_file(cmds);
-	return (1);
-}
-
-void	exec(t_exec **cmds, t_list **env, char **envp)
-{
-	int		pipe_nb;
-
-	pipe_nb = ft_tablen((char **)cmds) - 1;
-	exec_cmds(cmds, envp, env, pipe_nb);
 }

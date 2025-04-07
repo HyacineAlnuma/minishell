@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:29:37 by halnuma           #+#    #+#             */
-/*   Updated: 2025/03/28 14:48:06 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/02 13:40:46 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,11 +52,11 @@ void	wait_all_pid(t_exec **cmds, int pipe_nb)
 	}
 }
 
-void	exec_parent_builtins(t_exec *cmd, t_list **env, int cur_cmd)
+void	exec_parent_builtins(t_exec *cmd, t_list **env)
 {
 	if (!ft_strncmp(cmd->cmd, "cd", 3))
 		cd(cmd, env);
-	if (!ft_strncmp(cmd->cmd, "exit", 5) && !cur_cmd)
+	if (!ft_strncmp(cmd->cmd, "exit", 5))
 		exit_program(cmd);
 	if (!ft_strncmp(cmd->cmd, "export", 7))
 		export(cmd, env);

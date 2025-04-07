@@ -38,3 +38,7 @@ gerer les leaks dans l'exec
 
 /usr/bin/cat src/parsing/parsing.c 
 /usr/bin/cat cmd : cat and argv[0] = cmd
+
+here doc :
+eof > eo est considéré comme delim
+si juste delim segfault

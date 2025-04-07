@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:34:14 by halnuma           #+#    #+#             */
-/*   Updated: 2025/03/28 15:02:36 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/07 10:31:14 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,20 @@
 
 void	exit_program(t_exec *cmd)
 {
-	t_sink **ptr;
-	int	i;
+	t_sink	**ptr;
+	int		i;
 
 	do_dishes(get_sink(NULL));
-	do_dishes(&cmd->bin);
+	if (cmd->bin)
+		do_dishes(&cmd->bin);
 	rl_clear_history();
 	ptr = get_sink(NULL);
 	i = 0;
-	while(*ptr)
+	while (*ptr)
 	{
 		i++;
 		*ptr = (*ptr)->next;
 	}
-	printf("%d\n", i);
 	exit(EXIT_SUCCESS);
 }
 
