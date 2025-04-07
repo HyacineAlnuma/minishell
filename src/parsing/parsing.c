@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/04/02 14:17:30 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/07 14:27:17 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,12 +75,32 @@ t_exec	*setup_exec(t_list **piped, t_sink **bin, t_list **env)
 	new->bin = bin;
 	merge_all(*piped, *bin);
 	ft_lst_hand_wash_if(piped, NULL, compare, *bin);
+	// if (new->docs && ! piped)
 	tab = convert_lst_in_tab(*piped, *bin);
 	if (!tab)
 		return (NULL);
 	new->cmd = tab[0];
 	new->opt = tab;
 	return (new);
+}
+
+void	print_pars_error(int error, char c)
+{
+	(void) error;
+	ft_printf("Minishell: syntax error near unexpected token `%c'", c);
+}
+
+int	check_tokens(t_list *tokens)
+{
+	int	error;
+
+	error = 1;
+	while (tokens)
+	{
+		if (tokens->content && error == 1 && ft_strncmp(tokens->content, "|", 2))
+			return (print_pars_error(error, '|'), 1);
+	}
+	return (0);
 }
 
 t_exec	**parsing(char *str, t_list **env, t_sink **bin)
@@ -94,7 +114,7 @@ t_exec	**parsing(char *str, t_list **env, t_sink **bin)
 	if (!str)
 		return (NULL);
 	tokens = create_token_list(str, *bin);
-	if (!tokens)
+	if (!tokens || check_tokens(tokens))
 		return (NULL);
 	env_handling(tokens, env, *bin);
 	count = lst_count_char(tokens, '|');

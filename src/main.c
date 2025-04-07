@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 11:45:00 by secros            #+#    #+#             */
-/*   Updated: 2025/03/28 15:40:47 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/07 14:27:30 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,23 @@ void	print_prompt(t_list **env)
 	ft_printf("%s%s%s%s\n", BOLD, FG_BRIGHT_BLUE, prompt, RESET);
 }
 
+int	synthax_errror(char *str)
+{
+	size_t	i;
+	char	error;
+
+	i = 0;
+	error = 1;
+	while (str[i])
+	{
+		while (is_space(str[i]))
+			i++;
+		if (str[i] == '|' && error == 1)
+			return (1);
+	}
+	return (0);
+}
+
 int	main(int ac, char **av, char **envp)
 {
 	char	*input;
@@ -38,7 +55,6 @@ int	main(int ac, char **av, char **envp)
 	if (ac != 1)
 	{
 		write (2, "Error: Bad arguments\n", 21);
-		fflush(stderr);
 		return (1);
 	}
 	print_ascii();
@@ -55,7 +71,7 @@ int	main(int ac, char **av, char **envp)
 		if (!input)
 			break ;
 		add_history(input);
-		input = synthax_quote(input);
+		// input = synthax_quote(input);
 		command = parsing(input, env, &bin);
 		if (command)
 			exec(command, env, envp);
