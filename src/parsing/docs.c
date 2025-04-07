@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:56:31 by secros            #+#    #+#             */
-/*   Updated: 2025/04/02 13:05:06 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/02 14:20:03 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,14 +106,14 @@ t_doc	**create_docs(t_list **head, t_list *lst, t_sink *bin, t_list **env)
 	i = 0;
 	docs = alloc_docs(*head, bin);
 	if (!docs)
-		reutrn (NULL);
+		return (NULL);
 	prev = NULL;
 	while (lst)
 	{
 		if (lst->content && (!ft_strncmp(lst->content, "<", 1) \
 		|| !ft_strncmp(lst->content, ">", 1)))
 		{
-			*docs[i++] = polish_doc(head, bin, env);
+			*docs[i++] = polish_doc(&lst, bin, env);
 			if (prev)
 				prev->next = lst;
 			else
@@ -121,7 +121,7 @@ t_doc	**create_docs(t_list **head, t_list *lst, t_sink *bin, t_list **env)
 		}
 		prev = lst;
 		if (lst)
-			tmp = tmp->next;
+			lst = lst->next;
 	}
 	return (docs);
 }

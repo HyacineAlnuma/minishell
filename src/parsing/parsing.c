@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/04/02 12:32:15 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/02 14:17:30 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ t_exec	*setup_exec(t_list **piped, t_sink **bin, t_list **env)
 	if (!new)
 		return (NULL);
 	ft_bzero(new, sizeof(t_exec));
-	new->docs = create_docs(piped, *bin, env);
+	new->docs = create_docs(piped, *piped, *bin, env);
 	new->bin = bin;
 	merge_all(*piped, *bin);
 	ft_lst_hand_wash_if(piped, NULL, compare, *bin);

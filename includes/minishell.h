@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:02:33 by secros            #+#    #+#             */
-/*   Updated: 2025/04/02 12:30:55 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/02 14:42:34 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,6 @@ typedef struct s_vect
 typedef struct s_doc
 {
 	char		*str;
-	// char		*str_type;
 	int			type;
 }	t_doc;
 
@@ -144,7 +143,7 @@ int		merge_tokens(t_list *tokens, t_sink *bin);
 char	*find_user_in_pwd(void);
 
 t_list	**cut_instruction(t_list *tokens, int count);
-t_doc 	**create_docs(t_list **lst, t_sink *bin, t_list **env);
+t_doc	**create_docs(t_list **head, t_list *lst, t_sink *bin, t_list **env);
 int		env_handling(t_list *tokens, t_list **env, t_sink *bin);
 int		compare(char *str, char *str_ref);
 void	merge_all(t_list *lst, t_sink *bin);
