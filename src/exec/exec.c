@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:27:50 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/07 14:31:39 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/07 14:35:03 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	exec_process(t_fork *f, t_list **env, char **envp)
 	if (f->cmds[f->cur_cmd]->pid == -1)
 	{
 		perror("fork");
-		do_dishes(get_sink(&f->cmds[f->cur_cmd]->bin));
+		do_dishes(get_sink(f->cmds[f->cur_cmd]->bin));
 		do_dishes(get_sink(NULL));
 		exit(EXIT_FAILURE);
 	}
