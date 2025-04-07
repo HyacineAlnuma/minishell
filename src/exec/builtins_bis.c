@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_bis.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:34:14 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/07 14:32:38 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/07 14:38:54 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	exit_program(t_exec *cmd)
 
 	do_dishes(get_sink(NULL));
 	if (cmd->bin)
-		do_dishes(&cmd->bin);
+		do_dishes(cmd->bin);
 	rl_clear_history();
 	ptr = get_sink(NULL);
 	i = 0;
