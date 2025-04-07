@@ -22,13 +22,13 @@ return status of function (parsing)
 securiser les mallocs et compagnie
 # gerer les leaks dans l'exec
 
-/*
-	Here_doc:
-		-Check si - : enlever les tab au debut de chaque ligne
-		-Check si "" : Envoyer a l'exec
-		-Si pas de "" : Remplacer les variables d'env puis envoyer au formattage
-			-Recupere la string du formattage, la mettre dans une struct -> here_doc = 1, str dans les opt, si !cmd -> cmd = NULL
-*/
+# /*
+# 	Here_doc:
+# 		-Check si - : enlever les tab au debut de chaque ligne
+# 		-Check si "" : Envoyer a l'exec
+# 		-Si pas de "" : Remplacer les variables d'env puis envoyer au formattage
+# 			-Recupere la string du formattage, la mettre dans une struct -> here_doc = 1, str dans les opt, si !cmd -> cmd = NULL
+# */
 
 built-in must be done in a fork if there is a pipe
  "cd include | ls" -> cd do nothing;

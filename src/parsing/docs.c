@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:56:31 by secros            #+#    #+#             */
-/*   Updated: 2025/04/02 14:20:03 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/07 12:57:20 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ char	*get_heredoc(t_sink *bin, char *eof)
 	while (1)
 	{
 		str = fill_dishwasher(readline("heredoc>"), free, &bin);
-		if (str && !ft_strncmp(str, eof, ft_strlen(eof) - 1))
+		if (str && !ft_strncmp(str, eof, ft_strlen(eof)))
 			break ;
 		f_str = fill_dishwasher(ft_strjoin(f_str, str), free, &bin);
 		f_str = fill_dishwasher(ft_strjoin(f_str, "\n"), free, &bin);
@@ -46,20 +46,72 @@ char	*get_heredoc(t_sink *bin, char *eof)
 	return (f_str);
 }
 
-void	do_heredoc(t_doc *docs, t_sink *bin, t_list **env)
+void	do_heredoc(t_doc *docs, char quote, t_sink *bin, t_list **env)
 {
 	char	*str;
 	char	*heredoc;
+	int		doc_fd;
 	size_t	i;
 	
 	str = docs->str;
 	i = 0;
 	heredoc = get_heredoc(bin, str);
 	docs->str = heredoc;
-	docs->type = format_here_doc(docs->str, env, lst_to_tab(env), &bin);
+	if (quote == 0)
+	{
+		docs->type = format_here_doc(docs->str, env, lst_to_tab(env), &bin); //Can send null
+		return ;
+	}
+	doc_fd = open(HD_TEMP_FILE, O_RDWR | O_CREAT, S_IWUSR | S_IRUSR);
+	if (doc_fd == -1)
+		return ;
+	write(doc_fd, heredoc, ft_strlen(heredoc));
+	close(doc_fd);
+	doc_fd = open(HD_TEMP_FILE, O_RDONLY);
+	if (doc_fd == -1)
+		return ;
+	docs->type = doc_fd;
+}
+
+int	heredoc_quotes(t_list *lst)
+{
+	while (lst && lst->content != NULL)
+	{
+		if (ft_strchr(lst->content, '"') || ft_strchr(lst->content, '\''))
+			return (1);
+		lst = lst->next;
+	}
+	return (0);
 }
 
 t_doc	polish_doc(t_list **lst, t_sink *bin, t_list **env)
+{
+	t_doc		document;
+	char		i;
+
+	i = 0;
+	document.type = find_type((char *)(*lst)->content);
+	while (lst && i < 2)
+	{
+		(*lst) = (*lst)->next;
+		i++;
+	}
+	if (i != 2)
+	{
+		document.type = -2;
+		return (document);
+	}
+	i = heredoc_quotes(*lst);
+	merge_tokens(*lst, bin);
+	document.str = (*lst)->content;
+	if (document.type == HEREDOC)
+		do_heredoc(&document, i, bin, env);
+	*lst = (*lst)->next;
+	return (document);
+}
+
+
+/* t_doc	polish_doc(t_list **lst, t_sink *bin, t_list **env)
 {
 	t_doc	current;
 
@@ -73,7 +125,7 @@ t_doc	polish_doc(t_list **lst, t_sink *bin, t_list **env)
 		do_heredoc(&current, bin, env);
 	*lst = (*lst)->next;
 	return (current);
-}
+} */
 
 void	*alloc_docs(t_list *lst, t_sink *bin)
 {
