@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:27:50 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/02 13:39:50 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/07 14:31:39 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ void	exec_cmd(t_exec *cmd, t_list **env, char **envp)
 		ft_putstr_fd(cmd->cmd, 2);
 		ft_putstr_fd(": command not found.\n", 2);
 		do_dishes(get_sink(NULL));
+		do_dishes(cmd->bin);
 		exit(CMD_NOT_FOUND);
 	}
 	else if (!exec_builtins(cmd, env))

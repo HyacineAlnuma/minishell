@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 10:58:19 by halnuma           #+#    #+#             */
-/*   Updated: 2025/03/17 11:10:47 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/03/28 15:34:37 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ t_list	**ft_lstdup(t_list **lst, void (*del)(void *))
 
 	lst_size = ft_lstsize(*lst);
 	dup = (t_list **)malloc(sizeof(t_list **));
+	*dup = NULL;
 	ptr = *lst;
 	if (!dup)
 		return (NULL);

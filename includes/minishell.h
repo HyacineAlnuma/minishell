@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:02:33 by secros            #+#    #+#             */
-/*   Updated: 2025/04/07 14:26:44 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/07 14:30:03 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ typedef struct s_exec
 	char	**opt;
 	int		here_doc;
 	t_doc	**docs;
-	t_sink	*bin;
+	t_sink	**bin;
 }	t_exec;
 
 typedef struct s_fork
