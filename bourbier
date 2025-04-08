@@ -47,3 +47,5 @@ valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --track-fds
 here doc :
 eof > eo est considéré comme delim
 si juste delim segfault
+
+lancer here doc dans un child pour gérer les  signaux
