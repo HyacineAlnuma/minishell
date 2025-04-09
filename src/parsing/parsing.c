@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/04/09 11:17:07 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/09 15:13:54 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,8 @@ t_exec	*setup_exec(t_list **piped, t_sink **bin, t_list **env)
 		return (NULL);
 	ft_bzero(new, sizeof(t_exec));
 	new->docs = create_docs(piped, *piped, *bin, env);
+	if (!new->docs)
+		return (NULL);
 	new->bin = bin;
 	merge_all(*piped, *bin);
 	ft_lst_hand_wash_if(piped, NULL, compare, *bin);
@@ -88,7 +90,7 @@ void	print_lst(t_list *lst)
 {
 	while (lst)
 	{
-		ft_printf("%s", lst->content);
+		ft_printf("--%s--\n", lst->content);
 		lst = lst->next;
 	}
 	ft_printf("\n");

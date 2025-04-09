@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:56:31 by secros            #+#    #+#             */
-/*   Updated: 2025/04/09 11:32:38 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/09 15:16:57 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,14 @@ enum e_doc	find_type(char *str)
 {
 	if (!strncmp(str, "<\0", 2))
 		return (INFILE);
-	else if (!strcmp(str, "<<\0"))
+	else if (!strncmp(str, "<<\0", 3))
 		return (HEREDOC);
 	else if (!strncmp(str, ">\0", 2))
 		return (OUTFILE);
-	else if (!strcmp(str, ">>\0"))
+	else if (!strncmp(str, ">>\0", 3))
 		return (APPEND);
-	else
-		return (-1);
+	ft_printf("hell: syntax error near unexpected token `%c'\n", str[ft_strlen(str) - 1]);
+	return (-1);
 }
 
 void	do_heredoc(t_doc *docs, char quote, t_sink *bin, t_list **env)
@@ -65,48 +65,33 @@ int	heredoc_quotes(t_list *lst)
 	return (0);
 }
 
-t_doc	polish_doc(t_list **lst, t_sink *bin, t_list **env)
+int	polish_doc(t_list **lst, t_sink *bin, t_list **env, t_doc *document)
 {
-	t_doc		document;
 	char		i;
 
 	i = 0;
-	document.type = find_type((char *)(*lst)->content);
-	while (lst && i < 2)
+	document->type = find_type((char *)(*lst)->content);
+	if (document->type == -1)
+		return (1);
+	while (*lst && i < 2)
 	{
 		(*lst) = (*lst)->next;
 		i++;
 	}
-	if (i != 2)
+	if (i != 2 || !(*lst))
 	{
-		document.type = -2;
-		return (document);
+		ft_printf("hell: syntax error near unexpected token `\\n'\n");
+		return (1);
 	}
 	i = heredoc_quotes(*lst);
 	merge_tokens(*lst, bin);
-	document.str = (*lst)->content;
-	if (document.type == HEREDOC)
-		do_heredoc(&document, i, bin, env);
+	document->str = (*lst)->content;
+	if (document->type == HEREDOC)
+		do_heredoc(document, i, bin, env);
 	*lst = (*lst)->next;
-	return (document);
+	return (0);
 }
 
-
-/* t_doc	polish_doc(t_list **lst, t_sink *bin, t_list **env)
-{
-	t_doc	current;
-
-	current.type = find_type((char *)(*lst)->content);
-	ft_printf("\n--%d--\n", current.type);
-	(*lst) = (*lst)->next->next;
-	merge_tokens(*lst, bin);
-	current.str = (*lst)->content;
-	ft_printf("\n--%s--\n", current.str);
-	if (current.type == HEREDOC)
-		do_heredoc(&current, bin, env);
-	*lst = (*lst)->next;
-	return (current);
-} */
 
 void	*alloc_docs(t_list *lst, t_sink *bin)
 {
@@ -130,6 +115,14 @@ void	*alloc_docs(t_list *lst, t_sink *bin)
 	return (docs);
 }
 
+void	relink_lst(t_list **prev, t_list **head, t_list **lst)
+{
+	if (prev)
+		(*prev)->next = *lst;
+	else
+		*head = *lst;
+}
+
 t_doc	**create_docs(t_list **head, t_list *lst, t_sink *bin, t_list **env)
 {
 	t_doc	**docs;
@@ -146,11 +139,9 @@ t_doc	**create_docs(t_list **head, t_list *lst, t_sink *bin, t_list **env)
 		if (lst->content && (!ft_strncmp(lst->content, "<", 1) \
 		|| !ft_strncmp(lst->content, ">", 1)))
 		{
-			*docs[i++] = polish_doc(&lst, bin, env);
-			if (prev)
-				prev->next = lst;
-			else
-				*head = lst;
+			if (polish_doc(&lst, bin, env, &(*docs[i++])))
+				return (NULL);
+			relink_lst(&prev, head, &lst);
 		}
 		prev = lst;
 		if (lst)

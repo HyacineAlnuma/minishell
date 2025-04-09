@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 11:38:20 by secros            #+#    #+#             */
-/*   Updated: 2025/04/09 10:13:13 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/09 15:12:58 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,30 +44,42 @@ int	merge_tokens(t_list *tokens, t_sink *bin)
 	return (1);
 }
 
+void	skip_space(char *str, size_t *i)
+{
+	while (is_space(str[*i]))
+	*i += 1;
+}
+
+void	count_token(char *str, size_t *i, size_t *count, char *quote)
+{
+	while (str[*i + *count] && (!is_space(str[*i + *count]) || *quote))
+	{
+		if (str[*i + *count] == *quote || (!*quote && is_redir(str[*i])))
+		{
+			*count += 1;
+			break ;
+		}
+		else if (!*quote && (is_redir(str[*i + *count]) \
+		|| str[*i + *count] == '"' || str[*i + *count] == '\''))
+			break ;
+		*count += 1;
+	}
+	return ;
+}
+
 char	*split_token(char *str, size_t *i, t_sink *bin)
 {
-	unsigned int	count;
-	char			*token;
-	char			quote;
+	size_t		count;
+	char		*token;
+	char		quote;
 
 	count = 0;
 	quote = 0;
-	while (is_space(str[*i]))
-		*i += 1;
+	token = NULL;
+	skip_space(str, i);
 	if (str[*i] == '"' || str[*i] == '\'')
 		quote = str[*i + count++];
-	while (str[*i + count] && (!is_space(str[*i + count]) || quote))
-	{
-		if (str[*i + count] == quote || (!quote && is_redir(str[*i])))
-		{
-			count++;
-			break ;
-		}
-		else if (!quote && (is_redir(str[*i + count]) \
-		|| str[*i + count] == '"' || str[*i + count] == '\''))
-			break ;
-		count++;
-	}
+	count_token(str, i, &count, &quote);
 	token = fill_dishwasher(ft_substr(str, *i, count), free, &bin);
 	*i += count;
 	return (token);
@@ -77,6 +89,8 @@ char	*unify_token(char *str, char **token, t_sink **bin, size_t	*i)
 {
 	while (str[*i] && is_redir(str[*i]) && is_redir(str[*i - 1]))
 	{
+		if (str[*i] == '|')
+			break ;
 		*token = fill_dishwasher(ft_strjoin(*token, split_token(str, i, *bin)), free, bin);
 		if (!*token)
 			return (NULL);
@@ -103,7 +117,8 @@ t_list	*create_token_list(char *str, t_sink *bin)
 		new = fill_dishwasher(ft_lstnew(token), free, &bin);
 		if (!new)
 			return (NULL);
-		ft_lstadd_back(&tokens, new);
+		if (token[0] != '\0')
+			ft_lstadd_back(&tokens, new);
 		if (str[i] && (is_space(str[i]) || (is_redir(str[i]) && \
 		!is_redir(str[i - 1])) || (is_redir(str[i - 1]) && !is_redir(str[i]))))
 			if (!fill_dishwasher(add_empty(&tokens), free, &bin))
