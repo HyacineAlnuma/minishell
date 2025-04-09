@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:02:33 by secros            #+#    #+#             */
-/*   Updated: 2025/04/07 14:41:13 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/09 11:21:46 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,6 +141,7 @@ void		clear_to(t_list	*start, t_list *end);
 int			is_space(char c);
 int			is_redir(char c);
 void		sig_handler(int signum);
+void		sig_handler_hd(int signum);
 char		**lst_to_tab(t_list **lst);
 char		*remove_file_name(char *str);
 void		init_hd_utils(t_hd_utils *hd_utils, char *f, char *str, size_t *i);
@@ -159,6 +160,7 @@ int			merge_tokens(t_list *tokens, t_sink *bin);
 char		*find_user_in_pwd(void);
 char		*exec_hd(t_hd_utils *hd_utils, char *cmd);
 t_hd_utils	*parse_and_dup(t_hd_utils *hd_utils, size_t j);
+char		*get_heredoc(t_sink *bin, char *eof);
 
 t_list	**cut_instruction(t_list *tokens, int count);
 t_doc	**create_docs(t_list **head, t_list *lst, t_sink *bin, t_list **env);
@@ -173,7 +175,7 @@ void		exec(t_exec **cmds, t_list **env, char **envp);
 void		exit_program(t_exec *cmd);
 void		echo(t_exec *cmd);
 void		cd(t_exec *cmd, t_list **env);
-void		pwd(t_exec *cmd);
+void		pwd(t_exec *cmd	);
 void		unset(t_exec *cmd, t_list **env);
 void		export(t_exec *cmd, t_list **env);
 void		init_fork(t_fork *fork_info, t_exec **cmds, int pipe_nb, int cur_pipe);

@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:29:37 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/07 14:41:50 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/09 11:21:52 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,7 @@ int	last_status_code(int status, int instruction)
 
 	if (!instruction && WIFEXITED(status))
 		status_code = WEXITSTATUS(status);
-	else
-		return (status_code);
-	return (0);
+	return (status_code);
 }
 
 void	wait_all_pid(t_exec **cmds, int pipe_nb)

@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:56:31 by secros            #+#    #+#             */
-/*   Updated: 2025/04/07 14:36:34 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/09 11:22:05 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,31 +27,13 @@ enum e_doc	find_type(char *str)
 		return (-1);
 }
 
-char	*get_heredoc(t_sink *bin, char *eof)
-{
-	char	*str;
-	char	*f_str;
-
-	f_str = NULL;
-	str = NULL;
-	while (1)
-	{
-		str = fill_dishwasher(readline("heredoc>"), free, &bin);
-		if (str && !ft_strncmp(str, eof, ft_strlen(eof)))
-			break ;
-		f_str = fill_dishwasher(ft_strjoin(f_str, str), free, &bin);
-		f_str = fill_dishwasher(ft_strjoin(f_str, "\n"), free, &bin);
-	}
-	return (f_str);
-}
-
-void	do_heredoc(t_doc *docs, char quote, t_sink *bin, t_list **env)
+void	do_heredoc(t_doc *docs, t_sink *bin, t_list **env)
 {
 	char	*str;
 	char	*heredoc;
 	int		doc_fd;
 	size_t	i;
-	
+
 	str = docs->str;
 	i = 0;
 	heredoc = get_heredoc(bin, str);

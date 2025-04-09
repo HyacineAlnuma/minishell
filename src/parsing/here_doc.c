@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 10:28:35 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/07 14:32:32 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/07 15:00:55 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ int	last_concat(char **formatted, char *str)
 
 int	expand_cmd(t_hd_utils *hd_utils, char **formatted, char **cmd)
 {
-	(void)cmd;
 	*formatted = isolate_cmd(hd_utils);
 	if (!*formatted)
 		return (0);
