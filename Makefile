@@ -6,7 +6,7 @@
 #    By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/18 09:48:16 by halnuma           #+#    #+#              #
-#    Updated: 2025/04/07 15:01:00 by halnuma          ###   ########.fr        #
+#    Updated: 2025/04/09 10:53:29 by halnuma          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,7 +47,8 @@ MAIN			=	 main
 PARSING			= parsing 				parse_env 			\
 	 			tokenization 			docs				\
 				unclosed				here_doc			\
-				create_exec				here_doc_bis
+				create_exec				here_doc_bis		\
+				fork_here_doc
 
 
 EXEC			= builtins				builtins_bis		\

@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:02:33 by secros            #+#    #+#             */
-/*   Updated: 2025/04/08 10:26:24 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/09 10:53:13 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,6 +161,7 @@ int			merge_tokens(t_list *tokens, t_sink *bin);
 char		*find_user_in_pwd(void);
 char		*exec_hd(t_hd_utils *hd_utils, char *cmd);
 t_hd_utils	*parse_and_dup(t_hd_utils *hd_utils, size_t j);
+char		*get_heredoc(t_sink *bin, char *eof);
 
 t_list		**cut_instruction(t_list *tokens, int count);
 t_doc 		**create_docs(t_list *lst, t_sink *bin, t_list **env);

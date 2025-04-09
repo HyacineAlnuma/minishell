@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:29:37 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/02 13:40:46 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/09 09:25:24 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,7 @@ int	last_status_code(int status, int instruction)
 
 	if (!instruction && WIFEXITED(status))
 		status_code = WEXITSTATUS(status);
-	else
-		return (status_code);
-	return (0);
+	return (status_code);
 }
 
 void	wait_all_pid(t_exec **cmds, int pipe_nb)
