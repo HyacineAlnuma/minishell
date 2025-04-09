@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fork_here_doc.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 10:52:29 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/09 11:19:36 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/09 11:31:40 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ char	*readline_hd(char *f_str, char *eof, t_sink *bin)
 		{
 			if (!g_sigint_flag)
 				printf("minishell: warning: here-document at line %d \
-					delimited by end-of-file (wanted `%s')\n", i, eof);
+delimited by end-of-file (wanted `%s')\n", i, eof);
 			return (free(str), f_str);
 		}
 		if (str && !ft_strncmp(str, eof, ft_strlen(eof) - 1))

@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:56:31 by secros            #+#    #+#             */
-/*   Updated: 2025/04/09 11:22:05 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/09 11:32:38 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,16 +27,16 @@ enum e_doc	find_type(char *str)
 		return (-1);
 }
 
-void	do_heredoc(t_doc *docs, t_sink *bin, t_list **env)
+void	do_heredoc(t_doc *docs, char quote, t_sink *bin, t_list **env)
 {
 	char	*str;
 	char	*heredoc;
 	int		doc_fd;
 	size_t	i;
-
+	
 	str = docs->str;
 	i = 0;
-	heredoc = get_heredoc(bin, str);
+	heredoc = handle_env(get_heredoc(bin, str), env, bin);
 	docs->str = heredoc;
 	if (quote == 0)
 	{
