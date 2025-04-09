@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:57:54 by secros            #+#    #+#             */
-/*   Updated: 2025/03/18 13:14:11 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/09 11:04:32 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,45 @@
 
 void	cut_pipe(t_list **tokens)
 {
-	t_list	*tmp;
 	t_list	*prev;
 
-	tmp = NULL;
+	prev = NULL;
 	while (*tokens)
 	{
 		if ((*tokens)->content && !strcmp((char *)(*tokens)->content, "|"))
-		{
-			tmp = *tokens;
 			break ;
-		}
 		prev = *tokens;
 		*tokens = (*tokens)->next;
 	}
 	if (*tokens)
 	{
 		(*tokens) = (*tokens)->next;
-		prev->next = NULL;
+		if (prev)
+			prev->next = NULL;
 	}
+}
+
+int	check_pipe(t_list **pipe, int count)
+{
+	int	i;
+
+	i = 0;
+	while (i <= count)
+	{
+		while (1)
+		{
+			if (!pipe[i])
+			{
+				write(2, "hell: parse error near `|'\n", 28);
+				return (1);
+			}
+			if (pipe[i]->content)
+				break ;
+			pipe[i] = pipe[i]->next;
+		}
+		i++;
+	}
+	return (0);
 }
 
 t_list	**cut_instruction(t_list *tokens, int count)
@@ -49,5 +69,7 @@ t_list	**cut_instruction(t_list *tokens, int count)
 		pipe[i++] = tokens;
 		cut_pipe(&tokens);
 	}
+	if (check_pipe(pipe, count))
+		return (NULL);
 	return (pipe);
 }

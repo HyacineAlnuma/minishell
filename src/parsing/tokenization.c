@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 11:38:20 by secros            #+#    #+#             */
-/*   Updated: 2025/03/21 13:54:39 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/09 10:13:13 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,17 @@ char	*split_token(char *str, size_t *i, t_sink *bin)
 	return (token);
 }
 
+char	*unify_token(char *str, char **token, t_sink **bin, size_t	*i)
+{
+	while (str[*i] && is_redir(str[*i]) && is_redir(str[*i - 1]))
+	{
+		*token = fill_dishwasher(ft_strjoin(*token, split_token(str, i, *bin)), free, bin);
+		if (!*token)
+			return (NULL);
+	}
+	return (*token);
+}
+
 t_list	*create_token_list(char *str, t_sink *bin)
 {
 	size_t	i;
@@ -85,18 +96,18 @@ t_list	*create_token_list(char *str, t_sink *bin)
 	while (str[i])
 	{
 		token = split_token(str, &i, bin);
-		while (str[i] && is_redir(str[i]) && is_redir(str[i - 1]))
-			token = fill_dishwasher(ft_strjoin(token, \
-			split_token(str, &i, bin)), free, &bin);
-		if (token[0] == '\0')
-			return (tokens);
+		if (!token)
+			return (NULL);
+		if (!unify_token(str, &token, &bin, &i))
+			return (NULL);
 		new = fill_dishwasher(ft_lstnew(token), free, &bin);
-		if (!token || !new)
-			return (ft_lstclear(&tokens, free), NULL);
+		if (!new)
+			return (NULL);
 		ft_lstadd_back(&tokens, new);
 		if (str[i] && (is_space(str[i]) || (is_redir(str[i]) && \
 		!is_redir(str[i - 1])) || (is_redir(str[i - 1]) && !is_redir(str[i]))))
-			fill_dishwasher(add_empty(&tokens), free, &bin);
+			if (!fill_dishwasher(add_empty(&tokens), free, &bin))
+				return (NULL);
 	}
 	return (tokens);
 }

@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:27:50 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/07 14:41:28 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/09 11:15:05 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,13 @@ void	exec_bin(t_exec *cmd, t_list **env, char **envp)
 
 void	exec_cmd(t_exec *cmd, t_list **env, char **envp)
 {
-	if (!check_cmd(cmd->cmd))
+	if (!cmd->cmd || !check_cmd(cmd->cmd))
 	{
-		ft_putstr_fd(cmd->cmd, 2);
-		ft_putstr_fd(": command not found.\n", 2);
+		if (cmd->cmd)
+		{
+			ft_putstr_fd(cmd->cmd, 2);
+			ft_putstr_fd(": command not found.\n", 2);
+		}
 		do_dishes(get_sink(NULL));
 		do_dishes(cmd->bin);
 		exit(CMD_NOT_FOUND);
@@ -114,7 +117,7 @@ void	exec(t_exec **cmds, t_list **env, char **envp)
 		cur_pipe += 2;
 	}
 	cur_cmd--;
-	if (!cur_cmd)
+	if (!cur_cmd && cmds[cur_cmd]->cmd)
 		exec_parent_builtins(cmds[cur_cmd], env);
 	close_pipes(pipefd, pipe_nb);
 	wait_all_pid(cmds, pipe_nb);
