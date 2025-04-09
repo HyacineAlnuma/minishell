@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:59:00 by secros            #+#    #+#             */
-/*   Updated: 2025/03/21 13:59:27 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/09 11:07:58 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,18 @@ char	*remove_quote(char *str, t_sink *bin)
 int	env_handling(t_list *tokens, t_list **env, t_sink *bin)
 {
 	char	*token;
+	char	*new_str;
 
 	while (tokens)
 	{
 		token = (char *)tokens->content;
 		if (token && token[0] != '\'')
-			tokens->content = handle_env(token, env, bin);
+		{
+			new_str = handle_env(token, env, bin);
+			if (!new_str)
+				return (0);
+			tokens->content = new_str;
+		}
 		tokens = tokens->next;
 	}
 	return (1);

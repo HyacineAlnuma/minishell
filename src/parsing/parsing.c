@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/04/07 14:36:41 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/09 11:17:07 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,23 +84,15 @@ t_exec	*setup_exec(t_list **piped, t_sink **bin, t_list **env)
 	return (new);
 }
 
-void	print_pars_error(int error, char c)
+void	print_lst(t_list *lst)
 {
-	(void) error;
-	ft_printf("Minishell: syntax error near unexpected token `%c'", c);
-}
-
-int	check_tokens(t_list *tokens)
-{
-	int	error;
-
-	error = 1;
-	while (tokens)
+	while (lst)
 	{
-		if (tokens->content && error == 1 && ft_strncmp(tokens->content, "|", 2))
-			return (print_pars_error(error, '|'), 1);
+		ft_printf("%s", lst->content);
+		lst = lst->next;
 	}
-	return (0);
+	ft_printf("\n");
+
 }
 
 t_exec	**parsing(char *str, t_list **env, t_sink **bin)
@@ -114,17 +106,24 @@ t_exec	**parsing(char *str, t_list **env, t_sink **bin)
 	if (!str)
 		return (NULL);
 	tokens = create_token_list(str, *bin);
-	if (!tokens || check_tokens(tokens))
+	if (!tokens)
 		return (NULL);
-	env_handling(tokens, env, *bin);
+	if (!env_handling(tokens, env, *bin))
+		return (NULL);
 	count = lst_count_char(tokens, '|');
 	piped = fill_dishwasher(cut_instruction(tokens, count), free, bin);
+	if (!piped)
+		return (NULL);
 	exec = new_plate((sizeof(t_exec *) * (count + 2)), bin);
+	if (!exec)
+		return (NULL);
 	ft_bzero(exec, (sizeof(t_exec *) * (count + 2)));
 	i = 0;
 	while (piped[i])
 	{
 		exec[i] = setup_exec(&piped[i], bin, env);
+		if (!exec[i])
+			return (NULL);
 		i++;
 	}
 	return (exec);

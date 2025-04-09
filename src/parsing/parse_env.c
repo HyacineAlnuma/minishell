@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:05:15 by secros            #+#    #+#             */
-/*   Updated: 2025/03/21 14:39:59 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/09 10:27:19 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,9 @@ char	*find_node(t_list **env, char *var_env)
 
 	i = 0;
 	lst = *env;
+	var_env = ft_strjoin(var_env, "=");
 	if (!var_env)
 		return (NULL);
-	var_env = ft_strjoin(var_env, "=");
 	while (lst)
 	{
 		if (!ft_strcmp((char *)lst->content, var_env + 1))
@@ -69,9 +69,15 @@ char	*replace_env(char *str, t_list **env, t_vect pos, t_sink *bin)
 	char	*new_str;
 
 	var_env = fill_dishwasher(ft_substr(str, pos.x, pos.y), free, &bin);
+	if (!var_env)
+		return (NULL);
 	new_str = fill_dishwasher(ft_substr(str, 0, pos.x), free, &bin);
+	if (!new_str)
+		return (NULL);
 	new_str = fill_dishwasher(ft_strjoin(new_str, find_node(env, var_env)), \
 	free, &bin);
+	if (!new_str)
+		return (NULL);
 	new_str = fill_dishwasher(ft_strjoin(new_str, (str + pos.x + pos.y)), \
 	free, &bin);
 	return (new_str);
@@ -82,9 +88,8 @@ char	*handle_env(char *str, t_list **env, t_sink *bin)
 	size_t	i;
 	size_t	len;
 
-	(void)env;
 	i = 0;
-	while (str[i])
+	while (str && str[i])
 	{
 		len = 1;
 		if (str[i] == '$' && ft_isalnum(str[i + 1]))
