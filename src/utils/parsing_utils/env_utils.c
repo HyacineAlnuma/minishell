@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 09:18:38 by halnuma           #+#    #+#             */
-/*   Updated: 2025/03/28 14:49:28 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/09 14:29:37 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,13 @@ char	**lst_to_tab(t_list **lst)
 
 	lst_size = ft_lstsize(*lst);
 	tab = (char **)malloc(sizeof(char *) * (lst_size + 1));
+	if (!tab)
+		return (NULL);
 	i = 0;
 	ptr = *lst;
 	while (ptr)
 	{
-		tab[i] = (char *)ptr->content;	
+		tab[i] = (char *)ptr->content;
 		ptr = ptr->next;
 		i++;
 	}

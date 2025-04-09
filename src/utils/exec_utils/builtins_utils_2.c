@@ -1,35 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handle_signal.c                                    :+:      :+:    :+:   */
+/*   builtins_utils_2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/13 10:01:37 by secros            #+#    #+#             */
-/*   Updated: 2025/04/09 15:03:44 by halnuma          ###   ########.fr       */
+/*   Created: 2025/04/09 14:46:07 by halnuma           #+#    #+#             */
+/*   Updated: 2025/04/09 14:46:45 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	sig_handler(int signum)
+char	*get_previous_pwd(t_list **env)
 {
-	if (signum == SIGINT)
-	{
-		printf("\n");
-		rl_replace_line("", 0);
-		rl_on_new_line();
-		if (!g_sigint_flag)
-			rl_redisplay();
-	}
-	return ;
-}
+	char	*previouspwd;
+	char	*str;
+	int		i;
+	t_list	*ptr;
 
-void	sig_handler_hd(int signum)
-{
-	if (signum == SIGINT)
+	ptr = *env;
+	previouspwd = NULL;
+	while (ptr)
 	{
-		close(0);
-		g_sigint_flag = 1;
+		if (!ft_strncmp(ptr->content, "OLDPWD=", 7))
+		{
+			i = -1;
+			str = ptr->content;
+			while (str[++i])
+			{
+				if (str[i] == '=')
+					break ;
+			}
+			previouspwd = &str[++i];
+		}
+		ptr = ptr->next;
 	}
+	return (previouspwd);
 }

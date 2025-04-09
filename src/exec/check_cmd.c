@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 09:32:09 by halnuma           #+#    #+#             */
-/*   Updated: 2025/03/28 11:00:33 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/09 14:25:14 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,11 @@ int	check_if_cmd_exists(char **paths, char *cmd)
 		path = paths[i];
 		path = fill_dishwasher(ft_strjoin(path, "/"), free, get_sink(NULL));
 		path = fill_dishwasher(ft_strjoin(path, cmd), free, get_sink(NULL));
+		if (!path)
+		{
+			perror("malloc error");
+			return (2);
+		}
 		if (!access(path, F_OK))
 			return (1);
 		path = &paths[i][j + 1];
@@ -60,9 +65,14 @@ int	check_cmd_with_env(char *cmd, char *paths)
 
 	path = NULL;
 	path = fill_dishwasher(ft_strjoin(path, ":"), free, get_sink(NULL));
+	if (!path)
+	{
+		perror("malloc error");
+		return (2);
+	}
 	path = paths;
-	i = 0;
-	while (paths[i])
+	i = -1;
+	while (paths[++i])
 	{
 		if (paths[i] == ':')
 		{
@@ -73,7 +83,6 @@ int	check_cmd_with_env(char *cmd, char *paths)
 				return (1);
 			path = &paths[i + 1];
 		}
-		i++;
 	}
 	return (0);
 }

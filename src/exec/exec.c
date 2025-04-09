@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
+/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:27:50 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/09 11:15:05 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/09 15:21:12 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,24 @@ void	exec_bin(t_exec *cmd, t_list **env, char **envp)
 		path = "/bin/";
 	exe = ft_strjoin(path, cmd->cmd);
 	envp = lst_to_tab(env);
+	if (!exe || !envp)
+	{
+		perror("malloc error");
+		do_dishes(get_sink(NULL));
+		do_dishes(cmd->bin);
+		exit(EXIT_FAILURE);
+	}
 	execve(exe, cmd->opt, envp);
 }
 
 void	exec_cmd(t_exec *cmd, t_list **env, char **envp)
 {
-	if (!cmd->cmd || !check_cmd(cmd->cmd))
+	int	check_cmd_val;
+
+	check_cmd_val = check_cmd(cmd->cmd);
+	if (!cmd->cmd || check_cmd_val != 1)
 	{
-		if (cmd->cmd)
+		if (cmd->cmd && !check_cmd_val)
 		{
 			ft_putstr_fd(cmd->cmd, 2);
 			ft_putstr_fd(": command not found.\n", 2);
@@ -107,7 +117,8 @@ void	exec(t_exec **cmds, t_list **env, char **envp)
 	cur_cmd = 0;
 	cur_pipe = 0;
 	pipe_nb = ft_tablen((char **)cmds) - 1;
-	open_pipes(pipefd, pipe_nb);
+	if (!open_pipes(pipefd, pipe_nb))
+		return ;
 	while (cmds[cur_cmd])
 	{
 		init_fork(&fork_info, cmds, pipe_nb, cur_pipe);

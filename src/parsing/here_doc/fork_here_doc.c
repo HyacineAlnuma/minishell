@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fork_here_doc.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
+/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 10:52:29 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/09 11:31:40 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/09 14:31:36 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	process_hd(int *pipefd, char *eof, t_sink *bin)
 	signal(SIGINT, sig_handler_hd);
 	g_sigint_flag = 0;
 	f_str = readline_hd(f_str, eof, bin);
-	dup_fd(pipefd[1], STDOUT_FILENO);
+	dup_fd(pipefd[1], STDOUT_FILENO, NULL);
 	close(pipefd[1]);
 	if (!g_sigint_flag)
 	{

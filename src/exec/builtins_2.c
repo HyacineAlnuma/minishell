@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_bis.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
+/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:34:14 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/07 14:41:20 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/09 14:46:39 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,33 +46,6 @@ void	print_env(t_exec *cmd, t_list **env)
 	exit(EXIT_SUCCESS);
 }
 
-char	*get_previous_pwd(t_list **env)
-{
-	char	*previouspwd;
-	char	*str;
-	int		i;
-	t_list	*ptr;
-
-	ptr = *env;
-	previouspwd = NULL;
-	while (ptr)
-	{
-		if (!ft_strncmp(ptr->content, "OLDPWD=", 7))
-		{
-			i = -1;
-			str = ptr->content;
-			while (str[++i])
-			{
-				if (str[i] == '=')
-					break ;
-			}
-			previouspwd = &str[++i];
-		}
-		ptr = ptr->next;
-	}
-	return (previouspwd);
-}
-
 void	pwd(t_exec *cmd)
 {
 	char	pwd[PATH_MAX];
@@ -84,6 +57,25 @@ void	pwd(t_exec *cmd)
 	do_dishes(get_sink(NULL));
 	do_dishes(cmd->bin);
 	exit(EXIT_SUCCESS);
+}
+
+int	exec_builtins_bis(t_exec *cmd, t_list **env)
+{
+	if (!ft_strncmp(cmd->cmd, "unset", 6))
+	{
+		do_dishes(get_sink(NULL));
+		do_dishes(cmd->bin);
+		exit(EXIT_SUCCESS);
+	}
+	else if (!ft_strncmp(cmd->cmd, "env", 4))
+		print_env(cmd, env);
+	else if (!ft_strncmp(cmd->cmd, "exit", 5))
+	{
+		do_dishes(get_sink(NULL));
+		do_dishes(cmd->bin);
+		exit(EXIT_SUCCESS);
+	}
+	return (0);
 }
 
 int	exec_builtins(t_exec *cmd, t_list **env)
@@ -104,19 +96,5 @@ int	exec_builtins(t_exec *cmd, t_list **env)
 		do_dishes(cmd->bin);
 		exit(EXIT_SUCCESS);
 	}
-	else if (!ft_strncmp(cmd->cmd, "unset", 6))
-	{
-		do_dishes(get_sink(NULL));
-		do_dishes(cmd->bin);
-		exit(EXIT_SUCCESS);
-	}
-	else if (!ft_strncmp(cmd->cmd, "env", 4))
-		print_env(cmd, env);
-	else if (!ft_strncmp(cmd->cmd, "exit", 5))
-	{
-		do_dishes(get_sink(NULL));
-		do_dishes(cmd->bin);
-		exit(EXIT_SUCCESS);
-	}
-	return (0);
+	return (exec_builtins(cmd, env));
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
+/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:02:33 by secros            #+#    #+#             */
-/*   Updated: 2025/04/09 11:21:46 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/09 14:37:44 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,7 +182,7 @@ void		init_fork(t_fork *fork_info, t_exec **cmds, int pipe_nb, int cur_pipe);
 void		init_fork_bis(t_fork *f, int *pfd, t_exec *cmd, int cur_cmd);
 void		manage_files(t_exec *cmd);
 void		close_pipes(int *pipefd, int pipe_nb);
-void		open_pipes(int *pipefd, int pipe_nb);
+int			open_pipes(int *pipefd, int pipe_nb);
 void		dup_pipes(t_exec **cmds, int *pipefd, int cur_cmd, int cur_pipe);
 char		*get_previous_pwd(t_list **env);
 void		print_exp_env(t_list **env);
@@ -191,6 +191,6 @@ int			check_builtins(char *cmd);
 int			exec_builtins(t_exec *cmd, t_list **env);
 void		wait_all_pid(t_exec **cmds, int pipe_nb);
 void		exec_parent_builtins(t_exec *cmd, t_list **env);
-void		dup_fd(int fd1, int fd2);
+void		dup_fd(int fd1, int fd2, t_exec *cmd);
 
 #endif

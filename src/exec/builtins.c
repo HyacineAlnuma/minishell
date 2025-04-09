@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
+/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:32:53 by halnuma           #+#    #+#             */
-/*   Updated: 2025/03/28 15:43:43 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/09 14:17:23 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,11 @@ void	export(t_exec *cmd, t_list **env)
 	unset(cmd, env);
 	env_line = fill_dishwasher(ft_strdup(cmd->opt[1]), free, get_sink(NULL));
 	new_line = fill_dishwasher(ft_lstnew(env_line), free, get_sink(NULL));
-	if (!new_line)
+	if (!new_line || !new_line)
+	{
+		perror("malloc error");
 		return ;
+	}
 	ft_lstadd_back(env, new_line);
 }
 

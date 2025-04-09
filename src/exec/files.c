@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 10:21:35 by halnuma           #+#    #+#             */
-/*   Updated: 2025/03/28 12:33:24 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/09 14:47:34 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	manage_outfile(t_exec *cmd, int *outfile_fd, int i, int j)
 				);
 		if (outfile_fd[i] == -1)
 			return ((void) close(outfile_fd[i]));
-		dup_fd(outfile_fd[i], STDOUT_FILENO);
+		dup_fd(outfile_fd[i], STDOUT_FILENO, cmd);
 		close(outfile_fd[i]);
 		i++;
 	}
@@ -33,7 +33,7 @@ void	manage_outfile(t_exec *cmd, int *outfile_fd, int i, int j)
 				);
 		if (outfile_fd[i] == -1)
 			return ((void) close(outfile_fd[i]));
-		dup_fd(outfile_fd[i], STDOUT_FILENO);
+		dup_fd(outfile_fd[i], STDOUT_FILENO, cmd);
 		close(outfile_fd[i]);
 		i++;
 	}
@@ -51,13 +51,13 @@ void	manage_infile(t_exec *cmd, int *infile_fd, int k, int j)
 			close(infile_fd[k]);
 			return ;
 		}
-		dup_fd(infile_fd[k], STDIN_FILENO);
+		dup_fd(infile_fd[k], STDIN_FILENO, cmd);
 		close(infile_fd[k]);
 		k++;
 	}
 	else if (cmd->docs[j]->type >= HEREDOC)
 	{
-		dup_fd(cmd->docs[j]->type, STDIN_FILENO);
+		dup_fd(cmd->docs[j]->type, STDIN_FILENO, cmd);
 		close(cmd->docs[j]->type);
 	}
 }

@@ -6,7 +6,7 @@
 #    By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/18 09:48:16 by halnuma           #+#    #+#              #
-#    Updated: 2025/04/09 10:53:29 by halnuma          ###   ########.fr        #
+#    Updated: 2025/04/09 15:16:49 by halnuma          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,8 +34,11 @@ CFLAGS			= -Wall -Wextra -Werror -g3
 
 P_SRC 			= src/
 P_PARSING		= $(P_SRC)parsing/
+P_HEREDOC		= $(P_PARSING)here_doc/
 P_EXEC			= $(P_SRC)exec/
 P_UTILS			= $(P_SRC)utils/
+P_UTILS_E		= $(P_UTILS)exec_utils/
+P_UTILS_P		= $(P_UTILS)parsing_utils/
 P_INC			= includes/
 P_LIB			= libft/
 P_OBJ			= obj/
@@ -46,36 +49,45 @@ MAIN			=	 main
 
 PARSING			= parsing 				parse_env 			\
 	 			tokenization 			docs				\
-				unclosed				here_doc			\
-				create_exec				here_doc_bis		\
-				fork_here_doc
+				unclosed				create_exec			
 
+HEREDOC 		= fork_here_doc			here_doc_2			\
+				here_doc
 
-EXEC			= builtins				builtins_bis		\
+EXEC			= builtins				builtins_2 			\
 				check_cmd				exec				\
 				exec_utils				pipes				\
-				files					
+				files		
 
-UTILS			= handle_signal			print_ascii			\
-				env_utils				parsing_utils		\
-				parsing_utils2			here_doc_utils		\
-				builtins_utils
+UTILS			= handle_signal			print_ascii			
+				
+UTILS_E			= builtins_utils		builtins_utils_2
 
+UTILS_P			= env_utils				parsing_utils		\
+				parsing_utils2			here_doc_utils		
 
 HDR_SRC			= libft					minishell			\
 				color		
 
 SRC_MAIN		= $(addprefix $(P_SRC), $(addsuffix .c, $(MAIN)))
 SRC_PARSING		= $(addprefix $(P_PARSING), $(addsuffix .c, $(PARSING)))
+SRC_HEREDOC		= $(addprefix $(P_HEREDOC), $(addsuffix .c, $(HEREDOC)))
 SRC_EXEC		= $(addprefix $(P_EXEC), $(addsuffix .c, $(EXEC)))
 SRC_UTILS		= $(addprefix $(P_UTILS), $(addsuffix .c, $(UTILS)))
-SRC_ALL			= $(SRC_MAIN) $(SRC_EXEC) $(SRC_PARSING) $(SRC_UTILS)
+SRC_UTILS_E		= $(addprefix $(P_UTILS_E), $(addsuffix .c, $(UTILS_E)))
+SRC_UTILS_P		= $(addprefix $(P_UTILS_P), $(addsuffix .c, $(UTILS_P)))
+SRC_ALL			= $(SRC_MAIN) $(SRC_EXEC) $(SRC_HEREDOC) $(SRC_PARSING) \
+				$(SRC_UTILS) $(SRC_UTILS_E) $(SRC_UTILS_P)
 
 OBJ_MAIN		= $(addprefix $(P_OBJ), $(addsuffix .o, $(MAIN)))
 OBJ_PARSING		= $(addprefix $(P_OBJ), $(addsuffix .o, $(PARSING)))
+OBJ_HEREDOC		= $(addprefix $(P_OBJ), $(addsuffix .o, $(HEREDOC)))
 OBJ_EXEC		= $(addprefix $(P_OBJ), $(addsuffix .o, $(EXEC)))
 OBJ_UTILS		= $(addprefix $(P_OBJ), $(addsuffix .o, $(UTILS)))
-OBJ_ALL			= $(OBJ_MAIN) $(OBJ_PARSING) $(OBJ_EXEC) $(OBJ_UTILS)
+OBJ_UTILS_E		= $(addprefix $(P_OBJ), $(addsuffix .o, $(UTILS_E)))
+OBJ_UTILS_P		= $(addprefix $(P_OBJ), $(addsuffix .o, $(UTILS_P)))
+OBJ_ALL			= $(OBJ_MAIN) $(OBJ_PARSING) $(OBJ_HEREDOC) $(OBJ_EXEC) \
+				$(OBJ_UTILS) $(OBJ_UTILS_E) $(OBJ_UTILS_P)
 
 HEADERS			= $(addprefix $(P_INC), $(addsuffix .h, $(HDR_SRC)))
 LIBFT			= $(P_LIB)libft.a
@@ -99,11 +111,23 @@ $(P_OBJ)%.o:	$(P_PARSING)%.c Makefile $(HEADERS) | $(P_OBJ)
 				@echo "$(_YELLOW)Compiling $<...$(_END)"
 				@$(CC) $(CFLAGS) -I $(P_INC) -c $< -o $@
 
+$(P_OBJ)%.o:	$(P_HEREDOC)%.c Makefile $(HEADERS) | $(P_OBJ)
+				@echo "$(_YELLOW)Compiling $<...$(_END)"
+				@$(CC) $(CFLAGS) -I $(P_INC) -c $< -o $@
+
 $(P_OBJ)%.o:	$(P_EXEC)%.c Makefile $(HEADERS) | $(P_OBJ)
 				@echo "$(_YELLOW)Compiling $<...$(_END)"
 				@$(CC) $(CFLAGS) -I $(P_INC) -c $< -o $@
 
 $(P_OBJ)%.o:	$(P_UTILS)%.c Makefile $(HEADERS) | $(P_OBJ)
+				@echo "$(_YELLOW)Compiling $<...$(_END)"
+				@$(CC) $(CFLAGS) -I $(P_INC) -c $< -o $@
+
+$(P_OBJ)%.o:	$(P_UTILS_E)%.c Makefile $(HEADERS) | $(P_OBJ)
+				@echo "$(_YELLOW)Compiling $<...$(_END)"
+				@$(CC) $(CFLAGS) -I $(P_INC) -c $< -o $@
+
+$(P_OBJ)%.o:	$(P_UTILS_P)%.c Makefile $(HEADERS) | $(P_OBJ)
 				@echo "$(_YELLOW)Compiling $<...$(_END)"
 				@$(CC) $(CFLAGS) -I $(P_INC) -c $< -o $@
 
