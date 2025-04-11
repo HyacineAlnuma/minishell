@@ -6,7 +6,7 @@
 #    By: secros <secros@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/18 09:48:16 by halnuma           #+#    #+#              #
-#    Updated: 2025/04/11 16:28:57 by secros           ###   ########.fr        #
+#    Updated: 2025/04/11 16:40:32 by secros           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,32 +45,29 @@ P_OBJ			= obj/
 
 # ------ FILES ------ #
 
-MAIN			=	 main
+MAIN			= main
 
 PARSING			= parsing 				parse_env 			\
-	 			tokenization 			docs				\
-				here_doc			\
-				create_exec				here_doc_bis		\
-				fork_here_doc
+	 			tokenization 			create_exec			
 
 HEREDOC 		= fork_here_doc			here_doc_2			\
-				here_doc
+				here_doc				docs
 
 EXEC			= builtins				builtins_2 			\
 				check_cmd				exec				\
 				files					pipes				
 						
 
-UTILS			= handle_signal			print_ascii			
+UTILS			= handle_signal			print_ascii			\
+				lst_utils				debug
+						
 				
 UTILS_E			= builtins_utils		builtins_utils_2	\
 				exec_utils				exec_utils_2
 
-UTILS_P			= env_utils				parsing_utils		\
+UTILS_P			= init_hd_struct		parsing_utils		\
 				parsing_utils2			here_doc_utils		\
-				builtins_utils			debug				\
-				env_utils2				lst_utils			\
-				init_hd_struct
+				env_utils				env_utils2
 
 HDR_SRC			= libft					minishell			\
 				color		

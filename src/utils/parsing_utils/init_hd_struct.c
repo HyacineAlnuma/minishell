@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 14:02:19 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/11 16:32:18 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/11 16:42:21 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,20 +31,6 @@ void	init_hd_utils_3(t_hd_utils *hd, char *f, char **envp, t_sink **bin)
 	hd->formatted = f;
 	hd->envp = envp;
 	hd->bin = bin;
-}
-
-char	*remove_file_name(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i] && EXEC_TMP_FILE[i])
-	{
-		if (str[i] != EXEC_TMP_FILE[i])
-			return (str);
-		i++;
-	}
-	return (&str[i + 1]);
 }
 
 enum e_doc	find_type(char *str)
