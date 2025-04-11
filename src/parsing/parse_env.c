@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:05:15 by secros            #+#    #+#             */
-/*   Updated: 2025/04/11 13:56:47 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/11 14:38:05 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ char	*add_return_status(char *str)
 	if (!exit_status)
 		return (NULL);
 	str = ft_strjoin(str, exit_status);
+	free(exit_status);
 	return (str);
 }
 
@@ -59,7 +60,7 @@ char	*replace_env(char *str, t_list **env, t_vect pos, t_sink *bin)
 	new_str = fill_dishwasher(ft_substr(str, 0, pos.x), free, &bin);
 	if (!new_str)
 		return (NULL);
-	if (var_env[0] == '?')
+	if (var_env[1] == '?')
 		new_str = fill_dishwasher(add_return_status(new_str), free, &bin);
 	else
 		new_str = fill_dishwasher(ft_strjoin(new_str, find_node(env, var_env)), \
@@ -94,9 +95,11 @@ char	*handle_env(char *str, t_list **env, t_sink *bin)
 		if (str[i] == '$' && (ft_isalnum(str[i + 1]) || str[i + 1] == '?'))
 		{
 			if (ft_isdigit(str[i + len]))
-				return (digit_env(str, env, bin, i));
-			if (str[i + 1] == '?')
-				str = replace_env(str, env, (t_vect){i, len}, bin);
+				return (handle_env(replace_env(str, env, \
+					(t_vect){i, len + 1}, bin), env, bin));
+			if (str[i + len] == '?')
+				return (handle_env(replace_env(str, env, \
+					(t_vect){i, len + 1}, bin), env, bin));
 			while (str[i + len] && ft_isalnum(str[i + len]))
 				len++;
 			return (handle_env(replace_env(str, env, \
