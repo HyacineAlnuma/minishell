@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc_2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
+/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 14:10:18 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/11 17:13:37 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/11 17:40:28 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,21 +79,20 @@ char	*retrieve_result(void)
 	return (buffer);
 }
 
-char	*exec_hd(t_hd_utils *hd_utils, char *cmd)
+int	microshell(char *cmd, t_hd_utils *hd_utils)
 {
-	int		k;
 	t_exec	**cmds;
-	char	*buffer;
 	t_sink	*tmp_bin;
+	int		k;
 
-	buffer = NULL;
 	tmp_bin = NULL;
 	cmds = parsing(cmd, hd_utils->env, &tmp_bin);
 	if (!cmds)
 	{
 		free(hd_utils->formatted);
 		free(cmd);
-		return (do_dishes(&tmp_bin), NULL);
+		do_dishes(&tmp_bin);
+		return (0);
 	}
 	free(cmd);
 	k = -1;
@@ -101,6 +100,16 @@ char	*exec_hd(t_hd_utils *hd_utils, char *cmd)
 		cmds[k]->here_doc = 1;
 	exec(cmds, hd_utils->env, hd_utils->envp);
 	do_dishes(&tmp_bin);
+	return (1);
+}
+
+char	*exec_hd(t_hd_utils *hd_utils, char *cmd)
+{
+	char	*buffer;
+
+	buffer = NULL;
+	if (!microshell(cmd, hd_utils))
+		return (NULL);
 	buffer = retrieve_result();
 	if (!buffer)
 		return (NULL);
@@ -113,37 +122,4 @@ char	*exec_hd(t_hd_utils *hd_utils, char *cmd)
 	if (*buffer || buffer[0] == '\0')
 		free(buffer);
 	return (hd_utils->formatted);
-}
-
-t_hd_utils	*parse_and_dup(t_hd_utils *hd_utils, size_t j)
-{
-	(void)j;
-	hd_utils->formatted = ft_strappend(
-			hd_utils->formatted, &hd_utils->str[*hd_utils->begin_part]
-			);
-	if (!hd_utils->formatted)
-	{
-		perror("malloc error");
-		return (NULL);
-	}
-	*hd_utils->cmd = ft_strndup(
-			&hd_utils->str[*hd_utils->i + 2], (j - (*hd_utils->i + 2))
-			);
-	if (!hd_utils->cmd)
-	{
-		perror("malloc error");
-		return (NULL);
-	}
-	return (hd_utils);
-}
-
-int	last_concat(char **formatted, char *str)
-{
-	*formatted = ft_strappend(*formatted, str);
-	if (!*formatted)
-	{
-		perror("malloc error");
-		return (0);
-	}
-	return (1);
 }
