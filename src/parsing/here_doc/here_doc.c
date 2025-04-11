@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 10:28:35 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/11 15:14:15 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/11 16:31:46 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	expand_cmd(t_hd_utils *hd_utils, char **formatted, char **cmd)
 	if (!*formatted)
 		return (0);
 	*formatted = exec_hd(hd_utils, *cmd);
-	if (!*formatted)
+	if (!formatted || !*formatted)
 		return (0);
 	return (1);
 }
@@ -81,6 +81,7 @@ int	format_here_doc(char *str, t_list **env, char **envp, t_sink **bin)
 	int		hd_fd;
 	int		f_len;
 
+	// *bin = NULL;
 	formatted = parse_hd(str, env, envp, bin);
 	if (!formatted)
 	{
@@ -88,12 +89,18 @@ int	format_here_doc(char *str, t_list **env, char **envp, t_sink **bin)
 		return (0);
 	}
 	hd_fd = open(HD_TEMP_FILE, O_RDWR | O_CREAT, S_IWUSR | S_IRUSR);
-	f_len = ft_strlen(formatted);
-	write(hd_fd, formatted, f_len);
-	close(hd_fd);
-	hd_fd = open(HD_TEMP_FILE, O_RDONLY);
+	if (hd_fd != -1)
+	{
+		f_len = ft_strlen(formatted);
+		write(hd_fd, formatted, f_len);
+		close(hd_fd);
+		hd_fd = open(HD_TEMP_FILE, O_RDONLY);
+	}
+	else
+		perror("file error");
 	free(formatted);
 	free(envp);
+	do_dishes(bin);
 	return (hd_fd);
 }
 

@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 09:18:38 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/11 14:22:50 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/11 16:32:01 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ char	**lst_to_tab(t_list **lst)
 
 	lst_size = ft_lstsize(*lst);
 	tab = (char **)malloc(sizeof(char *) * (lst_size + 1));
+	if (!tab)
+		return (NULL);
 	i = 0;
 	ptr = *lst;
 	while (ptr)

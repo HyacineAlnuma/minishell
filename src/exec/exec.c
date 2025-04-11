@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:27:50 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/11 15:08:57 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/11 16:29:43 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,21 +30,27 @@ void	exec_bin(t_exec *cmd, t_list **env, char **envp)
 		path = "/bin/";
 	exe = ft_strjoin(path, cmd->cmd);
 	envp = lst_to_tab(env);
+	if (!exe || !envp)
+	{
+		perror("malloc error");
+		clean_exit(cmd->bin, EXIT_FAILURE);
+	}
 	execve(exe, cmd->opt, envp);
 }
 
 void	exec_cmd(t_exec *cmd, t_list **env, char **envp)
 {
-	if (!cmd->cmd || !check_cmd(cmd->cmd))
+	int	check_cmd_val;
+
+	check_cmd_val = check_cmd(cmd->cmd);
+	if (!cmd->cmd || check_cmd_val != 1)
 	{
-		if (cmd->cmd)
+		if (cmd->cmd && !check_cmd_val)
 		{
 			ft_putstr_fd(cmd->cmd, 2);
 			ft_putstr_fd(": command not found.\n", 2);
 		}
-		do_dishes(get_sink(NULL));
-		do_dishes(cmd->bin);
-		exit(CMD_NOT_FOUND);
+		clean_exit(cmd->bin, CMD_NOT_FOUND);
 	}
 	else if (!exec_builtins(cmd, env))
 		exec_bin(cmd, env, envp);
@@ -56,9 +62,7 @@ void	exec_process(t_fork *f, t_list **env, char **envp)
 	if (f->cmds[f->cur_cmd]->pid == -1)
 	{
 		perror("fork");
-		do_dishes(get_sink(f->cmds[f->cur_cmd]->bin));
-		do_dishes(get_sink(NULL));
-		exit(EXIT_FAILURE);
+		clean_exit(f->cmds[f->cur_cmd]->bin, CMD_NOT_FOUND);
 	}
 	else if (f->cmds[f->cur_cmd]->pid == 0)
 	{
@@ -107,7 +111,8 @@ void	exec(t_exec **cmds, t_list **env, char **envp)
 	cur_cmd = 0;
 	cur_pipe = 0;
 	pipe_nb = ft_tablen((char **)cmds) - 1;
-	open_pipes(pipefd, pipe_nb);
+	if (!open_pipes(pipefd, pipe_nb))
+		return ;
 	while (cmds[cur_cmd])
 	{
 		init_fork(&fork_info, cmds, pipe_nb, cur_pipe);

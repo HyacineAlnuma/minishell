@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:02:33 by secros            #+#    #+#             */
-/*   Updated: 2025/04/11 14:20:25 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/11 16:29:24 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,6 +154,9 @@ void		*add_empty(t_list **lst);
 enum e_doc	find_type(char *str);
 void		do_heredoc(t_doc *docs, char quote, t_sink *bin, t_list **env);
 int			last_concat(char **formatted, char *str);
+void		clean_exit(t_sink **bin, int exit_code);
+int			check_exit_arg(t_exec *cmd);
+char		*format_buffer(char *buffer);
 
 //parsing
 t_exec		**parsing(char *str, t_list **env, t_sink **bin);
@@ -212,7 +215,7 @@ int pipe_nb, int cur_pipe);
 void		init_fork_bis(t_fork *f, int *pfd, t_exec *cmd, int cur_cmd);
 void		manage_files(t_exec *cmd);
 void		close_pipes(int *pipefd, int pipe_nb);
-void		open_pipes(int *pipefd, int pipe_nb);
+int			open_pipes(int *pipefd, int pipe_nb);
 void		dup_pipes(t_exec **cmds, int *pipefd, int cur_cmd, int cur_pipe);
 char		*get_previous_pwd(t_list **env);
 void		print_exp_env(t_list **env);
@@ -221,6 +224,6 @@ int			check_builtins(char *cmd);
 int			exec_builtins(t_exec *cmd, t_list **env);
 void		wait_all_pid(t_exec **cmds, int pipe_nb);
 void		exec_parent_builtins(t_exec *cmd, t_list **env);
-void		dup_fd(int fd1, int fd2);
+void		dup_fd(int fd1, int fd2, t_exec *cmd);
 
 #endif

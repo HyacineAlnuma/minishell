@@ -16,7 +16,6 @@ MINISHELL="./minishell"
 run_test() {
 	command=$1
 	expected_output=$2
-	expected_error=$3
 
 	echo -e "${YELLOW}Running: $command${END}"
 	($MINISHELL <<EOF

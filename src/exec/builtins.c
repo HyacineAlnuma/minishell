@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:32:53 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/11 15:06:07 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/11 16:29:33 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,7 @@ void	echo(t_exec *cmd)
 	}
 	if (ft_strncmp(cmd->opt[1], "-n", 3))
 		ft_printf("\n");
-	do_dishes(get_sink(NULL));
-	do_dishes(cmd->bin);
-	exit(EXIT_SUCCESS);
+	clean_exit(cmd->bin, EXIT_SUCCESS);
 }
 
 void	change_dir(t_exec *cmd, t_list *ptr, char *oldpwd)
@@ -93,8 +91,11 @@ void	export(t_exec *cmd, t_list **env)
 	unset(cmd, env);
 	env_line = fill_dishwasher(ft_strdup(cmd->opt[1]), free, get_sink(NULL));
 	new_line = fill_dishwasher(ft_lstnew(env_line), free, get_sink(NULL));
-	if (!new_line)
+	if (!new_line || !new_line)
+	{
+		perror("malloc error");
 		return ;
+	}
 	ft_lstadd_back(env, new_line);
 }
 
