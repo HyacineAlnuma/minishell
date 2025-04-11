@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:34:14 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/11 11:31:40 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/11 17:30:18 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,11 @@ void	exit_program(t_exec *cmd)
 {
 	unsigned char	exit_code;
 
+	if (cmd->opt[1] && cmd->opt[2])
+	{
+		ft_putendl_fd("minishell: exit: too many arguments", 2);
+		return ;
+	}
 	rl_clear_history();
 	exit_code = check_exit_arg(cmd);
 	if (cmd->bin)

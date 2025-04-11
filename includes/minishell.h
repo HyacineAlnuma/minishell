@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:02:33 by secros            #+#    #+#             */
-/*   Updated: 2025/04/11 16:29:24 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/11 16:53:35 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,7 +163,7 @@ t_exec		**parsing(char *str, t_list **env, t_sink **bin);
 
 char		*handle_env(char *str, t_list **env, t_sink *bin);
 
-t_list		*create_token_list(char *str, t_sink *bin);
+t_list		*create_token_list(char *str, t_sink **bin);
 
 t_list		**lst_env(char **envp);
 

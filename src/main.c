@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 11:45:00 by secros            #+#    #+#             */
-/*   Updated: 2025/04/11 09:45:41 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/11 17:32:36 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ void	minishell(char **envp)
 		if (!input)
 			break ;
 		add_history(input);
-		// input = synthax_quote(input);
 		command = parsing(input, env, &bin);
 		if (command)
 			exec(command, env, envp);
@@ -74,7 +73,6 @@ void	minishell(char **envp)
 
 int	main(int ac, char **av, char **envp)
 {
-
 	(void) av;
 	if (ac != 1)
 	{

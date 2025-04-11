@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 14:10:18 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/11 16:31:36 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/11 17:13:37 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,19 +84,23 @@ char	*exec_hd(t_hd_utils *hd_utils, char *cmd)
 	int		k;
 	t_exec	**cmds;
 	char	*buffer;
+	t_sink	*tmp_bin;
 
 	buffer = NULL;
-	cmds = parsing(cmd, hd_utils->env, hd_utils->bin);
+	tmp_bin = NULL;
+	cmds = parsing(cmd, hd_utils->env, &tmp_bin);
 	if (!cmds)
 	{
+		free(hd_utils->formatted);
 		free(cmd);
-		return (NULL);
+		return (do_dishes(&tmp_bin), NULL);
 	}
 	free(cmd);
 	k = -1;
 	while (cmds[++k])
 		cmds[k]->here_doc = 1;
 	exec(cmds, hd_utils->env, hd_utils->envp);
+	do_dishes(&tmp_bin);
 	buffer = retrieve_result();
 	if (!buffer)
 		return (NULL);
@@ -106,13 +110,14 @@ char	*exec_hd(t_hd_utils *hd_utils, char *cmd)
 		perror("malloc error");
 		return (NULL);
 	}
-	if (*buffer || buffer[0] == '\n')
+	if (*buffer || buffer[0] == '\0')
 		free(buffer);
 	return (hd_utils->formatted);
 }
 
 t_hd_utils	*parse_and_dup(t_hd_utils *hd_utils, size_t j)
 {
+	(void)j;
 	hd_utils->formatted = ft_strappend(
 			hd_utils->formatted, &hd_utils->str[*hd_utils->begin_part]
 			);

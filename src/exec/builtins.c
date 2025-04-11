@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:32:53 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/11 16:29:33 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/11 17:32:25 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	change_dir(t_exec *cmd, t_list *ptr, char *oldpwd)
 	{
 		ft_putstr_fd("minishell: cd: ", 2);
 		ft_putstr_fd(cmd->opt[1], 2);
-		ft_putendl_fd(": No such file or directory", 2);	
+		ft_putendl_fd(": No such file or directory", 2);
 		last_status_code(1, 2);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:29:37 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/11 14:58:22 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/11 17:29:36 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,10 +56,10 @@ void	exec_parent_builtins(t_exec *cmd, t_list **env)
 {
 	if (!ft_strncmp(cmd->cmd, "cd", 3))
 		cd(cmd, env);
-	if (!ft_strncmp(cmd->cmd, "exit", 5))
+	else if (!ft_strncmp(cmd->cmd, "exit", 5))
 		exit_program(cmd);
-	if (!ft_strncmp(cmd->cmd, "export", 7))
+	else if (!ft_strncmp(cmd->cmd, "export", 7))
 		export(cmd, env);
-	if (!ft_strncmp(cmd->cmd, "unset", 6))
+	else if (!ft_strncmp(cmd->cmd, "unset", 6))
 		unset(cmd, env);
 }

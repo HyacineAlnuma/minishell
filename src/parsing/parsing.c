@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/04/11 16:30:02 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/11 16:53:43 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ t_list	**str_to_tokens(char *str, t_list **env, t_sink **bin, size_t *count)
 
 	if (!str)
 		return (NULL);
-	tokens = create_token_list(str, *bin);
+	tokens = create_token_list(str, bin);
 	if (!tokens)
 		return (NULL);
 	if (!env_handling(tokens, env, *bin))
