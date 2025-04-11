@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:27:50 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/09 15:21:12 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/11 09:41:26 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ void	exec_cmd(t_exec *cmd, t_list **env, char **envp)
 		}
 		do_dishes(get_sink(NULL));
 		do_dishes(cmd->bin);
+		ft_putstr_fd("yooo", 2);
 		exit(CMD_NOT_FOUND);
 	}
 	else if (!exec_builtins(cmd, env))

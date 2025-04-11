@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtins_bis.c                                     :+:      :+:    :+:   */
+/*   builtins_2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:34:14 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/09 14:46:39 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/11 09:48:57 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,5 +96,5 @@ int	exec_builtins(t_exec *cmd, t_list **env)
 		do_dishes(cmd->bin);
 		exit(EXIT_SUCCESS);
 	}
-	return (exec_builtins(cmd, env));
+	return (exec_builtins_bis(cmd, env));
 }
