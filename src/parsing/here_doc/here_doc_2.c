@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   here_doc_bis                                       :+:      :+:    :+:   */
+/*   here_doc_2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 14:10:18 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/07 14:11:08 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/11 16:17:02 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,16 +33,27 @@ char	*read_from_temp_file(char *char_buf)
 			return (NULL);
 		}
 	}
-	if (buffer)
-		buffer = remove_file_name(buffer);
+	buffer = format_buffer(buffer);
 	close(temp_file_fd);
 	unlink(EXEC_TMP_FILE);
 	return (buffer);
 }
 
+char	*remove_nl(char *buffer)
+{
+	int	g;
+
+	g = -1;
+	while (buffer[++g])
+	{
+		if (buffer[g] == '\n' && !buffer[g + 1])
+			buffer[g] = '\0';
+	}
+	return (buffer);
+}
+
 char	*retrieve_result(void)
 {
-	int		g;
 	char	*char_buf;
 	char	*buffer;
 
@@ -58,12 +69,12 @@ char	*retrieve_result(void)
 		free(char_buf);
 		return (NULL);
 	}
-	g = -1;
-	while (buffer[++g])
+	if (!ft_strncmp(buffer, "\n\0", 2))
 	{
-		if (buffer[g] == '\n' && !buffer[g + 1])
-			buffer[g] = '\0';
+		free(char_buf);
+		return (buffer);
 	}
+	buffer = remove_nl(buffer);
 	free(char_buf);
 	return (buffer);
 }
@@ -76,6 +87,11 @@ char	*exec_hd(t_hd_utils *hd_utils, char *cmd)
 
 	buffer = NULL;
 	cmds = parsing(cmd, hd_utils->env, hd_utils->bin);
+	if (!cmds)
+	{
+		free(cmd);
+		return (NULL);
+	}
 	free(cmd);
 	k = -1;
 	while (cmds[++k])
@@ -90,7 +106,7 @@ char	*exec_hd(t_hd_utils *hd_utils, char *cmd)
 		perror("malloc error");
 		return (NULL);
 	}
-	if (*buffer)
+	if (*buffer || buffer[0] == '\n')
 		free(buffer);
 	return (hd_utils->formatted);
 }

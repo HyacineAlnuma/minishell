@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 10:21:35 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/09 14:47:34 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/11 13:47:11 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,12 @@ void	manage_infile(t_exec *cmd, int *infile_fd, int k, int j)
 	if (cmd->docs[j]->type == INFILE)
 	{
 		infile_fd[k] = open(
-				cmd->docs[j]->str, O_RDWR | O_CREAT, S_IWUSR | S_IRUSR
+				cmd->docs[j]->str, O_RDWR | S_IWUSR | S_IRUSR
 				);
 		if (infile_fd[k] == -1)
 		{
+			ft_putstr_fd("minishell: no such file or directory:", 2);
+			ft_putendl_fd(cmd->docs[j]->str, 2);
 			close(infile_fd[k]);
 			return ;
 		}

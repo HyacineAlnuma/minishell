@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:56:31 by secros            #+#    #+#             */
-/*   Updated: 2025/04/11 10:45:36 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/11 16:24:14 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,20 +27,21 @@ enum e_doc	find_type(char *str)
 	return (-1);
 }
 
-void	do_heredoc(t_doc *docs, char quote, t_sink *bin, t_list **env)
+void	do_heredoc(t_doc **docs, char quote, t_sink *bin, t_list **env)
 {
 	char	*str;
 	char	*heredoc;
 	int		doc_fd;
 	size_t	i;
-	
-	str = docs->str;
+	// t_sink	*bin_hd;
+
+	str = (*docs)->str;
 	i = 0;
 	heredoc = handle_env(get_heredoc(bin, str), env, bin);
-	docs->str = heredoc;
+	(*docs)->str = heredoc;
 	if (quote == 0)
 	{
-		docs->type = format_here_doc(docs->str, env, lst_to_tab(env), &bin); //Can send null
+		(*docs)->type = format_here_doc((*docs)->str, env, lst_to_tab(env), &bin); //Can send null
 		return ;
 	}
 	doc_fd = open(HD_TEMP_FILE, O_RDWR | O_CREAT, S_IWUSR | S_IRUSR);
@@ -51,7 +52,7 @@ void	do_heredoc(t_doc *docs, char quote, t_sink *bin, t_list **env)
 	doc_fd = open(HD_TEMP_FILE, O_RDONLY);
 	if (doc_fd == -1)
 		return ;
-	docs->type = doc_fd;
+	(*docs)->type = doc_fd;
 }
 
 int	heredoc_quotes(t_list *lst)
@@ -87,7 +88,9 @@ int	polish_doc(t_list **lst, t_sink *bin, t_list **env, t_doc *document)
 	merge_tokens(*lst, bin);
 	document->str = (*lst)->content;
 	if (document->type == HEREDOC)
-		do_heredoc(document, i, bin, env);
+		do_heredoc(&document, i, bin, env);
+	if (document->type <= 0)
+		return (1);
 	*lst = (*lst)->next;
 	return (0);
 }

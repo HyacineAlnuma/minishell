@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:32:53 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/09 14:17:23 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/11 11:32:04 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,7 @@ void	echo(t_exec *cmd)
 	}
 	if (ft_strncmp(cmd->opt[1], "-n", 3))
 		ft_printf("\n");
-	do_dishes(get_sink(NULL));
-	do_dishes(cmd->bin);
-	exit(EXIT_SUCCESS);
+	clean_exit(cmd->bin, EXIT_SUCCESS);
 }
 
 void	change_dir(t_exec *cmd, t_list *ptr, char *oldpwd)

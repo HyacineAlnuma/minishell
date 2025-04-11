@@ -6,7 +6,7 @@
 #    By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/18 09:48:16 by halnuma           #+#    #+#              #
-#    Updated: 2025/04/09 15:16:49 by halnuma          ###   ########.fr        #
+#    Updated: 2025/04/11 15:15:10 by halnuma          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,15 +56,17 @@ HEREDOC 		= fork_here_doc			here_doc_2			\
 
 EXEC			= builtins				builtins_2 			\
 				check_cmd				exec				\
-				exec_utils				pipes				\
-				files		
+				files					pipes				
+						
 
 UTILS			= handle_signal			print_ascii			
 				
-UTILS_E			= builtins_utils		builtins_utils_2
+UTILS_E			= builtins_utils		builtins_utils_2	\
+				exec_utils				exec_utils_2
 
 UTILS_P			= env_utils				parsing_utils		\
-				parsing_utils2			here_doc_utils		
+				parsing_utils2			here_doc_utils		\
+				init_hd_struct
 
 HDR_SRC			= libft					minishell			\
 				color		

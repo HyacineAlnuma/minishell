@@ -1,39 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   here_doc_utils.c                                   :+:      :+:    :+:   */
+/*   init_hd_struct.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 14:02:19 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/11 15:30:24 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/11 15:14:22 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*remove_file_name(char *str)
+void	init_hd_utils(t_hd_utils *hd_utils, char *f, char *str, size_t *i)
 {
-	int	i;
-
-	i = 0;
-	while (str[i] && EXEC_TMP_FILE[i])
-	{
-		if (str[i] != EXEC_TMP_FILE[i])
-			return (str);
-		i++;
-	}
-	return (&str[i + 1]);
+	hd_utils->formatted = f;
+	hd_utils->str = str;
+	hd_utils->i = i;
 }
 
-char	*format_buffer(char *buffer)
+void	init_hd_utils_2(t_hd_utils *hd, size_t *b, char **cmd, t_list **env)
 {
-	if (buffer)
-		buffer = remove_file_name(buffer);
-	if (ft_strlen(buffer) == 0)
-	{
-		buffer = (char *)malloc(sizeof(char) * 1);
-		buffer[0] = '\0';
-	}
-	return (buffer);
+	hd->begin_part = b;
+	hd->cmd = cmd;
+	hd->env = env;
+}
+
+void	init_hd_utils_3(t_hd_utils *hd, char *f, char **envp, t_sink **bin)
+{
+	hd->formatted = f;
+	hd->envp = envp;
+	hd->bin = bin;
 }

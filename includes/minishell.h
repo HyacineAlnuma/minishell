@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:02:33 by secros            #+#    #+#             */
-/*   Updated: 2025/04/09 14:37:44 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/11 15:24:51 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,9 @@ char		*remove_file_name(char *str);
 void		init_hd_utils(t_hd_utils *hd_utils, char *f, char *str, size_t *i);
 void		init_hd_utils_2(t_hd_utils *hd, size_t *b, char **cmd, t_list **env);
 void		init_hd_utils_3(t_hd_utils *hd, char *f, char **envp, t_sink **bin);
+void		clean_exit(t_sink **bin, int exit_code);
+int			check_exit_arg(t_exec *cmd);
+char		*format_buffer(char *buffer);
 
 //parsing
 t_exec		**parsing(char *str, t_list **env, t_sink **bin);

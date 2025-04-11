@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:27:50 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/11 09:41:26 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/11 13:53:46 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,7 @@ void	exec_bin(t_exec *cmd, t_list **env, char **envp)
 	if (!exe || !envp)
 	{
 		perror("malloc error");
-		do_dishes(get_sink(NULL));
-		do_dishes(cmd->bin);
-		exit(EXIT_FAILURE);
+		clean_exit(cmd->bin, EXIT_FAILURE);
 	}
 	execve(exe, cmd->opt, envp);
 }
@@ -52,10 +50,7 @@ void	exec_cmd(t_exec *cmd, t_list **env, char **envp)
 			ft_putstr_fd(cmd->cmd, 2);
 			ft_putstr_fd(": command not found.\n", 2);
 		}
-		do_dishes(get_sink(NULL));
-		do_dishes(cmd->bin);
-		ft_putstr_fd("yooo", 2);
-		exit(CMD_NOT_FOUND);
+		clean_exit(cmd->bin, CMD_NOT_FOUND);
 	}
 	else if (!exec_builtins(cmd, env))
 		exec_bin(cmd, env, envp);
@@ -67,9 +62,7 @@ void	exec_process(t_fork *f, t_list **env, char **envp)
 	if (f->cmds[f->cur_cmd]->pid == -1)
 	{
 		perror("fork");
-		do_dishes(get_sink(f->cmds[f->cur_cmd]->bin));
-		do_dishes(get_sink(NULL));
-		exit(EXIT_FAILURE);
+		clean_exit(f->cmds[f->cur_cmd]->bin, CMD_NOT_FOUND);
 	}
 	else if (f->cmds[f->cur_cmd]->pid == 0)
 	{

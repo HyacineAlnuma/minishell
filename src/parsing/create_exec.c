@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_exec.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
+/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:57:54 by secros            #+#    #+#             */
-/*   Updated: 2025/04/09 14:56:15 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/11 10:46:28 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ t_list	**cut_instruction(t_list *tokens, int count)
 	pipe = ft_calloc(sizeof(t_list *), (count + 2));
 	if (!pipe)
 		return (NULL);
-	ft_printf("\n---%d---\n", count);
 	if (count == 0)
 	{
 		*pipe = tokens;

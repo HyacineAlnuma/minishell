@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:34:14 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/11 09:48:57 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/11 11:31:40 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,13 @@
 
 void	exit_program(t_exec *cmd)
 {
-	t_sink	**ptr;
-	int		i;
+	unsigned char	exit_code;
 
-	do_dishes(get_sink(NULL));
-	if (cmd->bin)
-		do_dishes(cmd->bin);
 	rl_clear_history();
-	ptr = get_sink(NULL);
-	i = 0;
-	while (*ptr)
-	{
-		i++;
-		*ptr = (*ptr)->next;
-	}
-	exit(EXIT_SUCCESS);
+	exit_code = check_exit_arg(cmd);
+	if (cmd->bin)
+		do_dishes(get_sink(cmd->bin));
+	clean_exit(NULL, exit_code);
 }
 
 void	print_env(t_exec *cmd, t_list **env)
@@ -41,9 +33,7 @@ void	print_env(t_exec *cmd, t_list **env)
 		ft_printf("%s\n", ptr->content);
 		ptr = ptr->next;
 	}
-	do_dishes(get_sink(NULL));
-	do_dishes(cmd->bin);
-	exit(EXIT_SUCCESS);
+	clean_exit(cmd->bin, EXIT_SUCCESS);
 }
 
 void	pwd(t_exec *cmd)
@@ -54,28 +44,7 @@ void	pwd(t_exec *cmd)
 		ft_printf("%s\n", pwd);
 	else
 		perror("getcwd() error");
-	do_dishes(get_sink(NULL));
-	do_dishes(cmd->bin);
-	exit(EXIT_SUCCESS);
-}
-
-int	exec_builtins_bis(t_exec *cmd, t_list **env)
-{
-	if (!ft_strncmp(cmd->cmd, "unset", 6))
-	{
-		do_dishes(get_sink(NULL));
-		do_dishes(cmd->bin);
-		exit(EXIT_SUCCESS);
-	}
-	else if (!ft_strncmp(cmd->cmd, "env", 4))
-		print_env(cmd, env);
-	else if (!ft_strncmp(cmd->cmd, "exit", 5))
-	{
-		do_dishes(get_sink(NULL));
-		do_dishes(cmd->bin);
-		exit(EXIT_SUCCESS);
-	}
-	return (0);
+	clean_exit(cmd->bin, EXIT_SUCCESS);
 }
 
 int	exec_builtins(t_exec *cmd, t_list **env)
@@ -83,18 +52,16 @@ int	exec_builtins(t_exec *cmd, t_list **env)
 	if (!ft_strncmp(cmd->cmd, "echo", 5))
 		echo(cmd);
 	else if (!ft_strncmp(cmd->cmd, "cd", 3))
-	{
-		do_dishes(get_sink(NULL));
-		do_dishes(cmd->bin);
-		exit(EXIT_SUCCESS);
-	}
+		clean_exit(cmd->bin, EXIT_SUCCESS);
 	else if (!ft_strncmp(cmd->cmd, "pwd", 4))
 		pwd(cmd);
 	else if (!ft_strncmp(cmd->cmd, "export", 7))
-	{
-		do_dishes(get_sink(NULL));
-		do_dishes(cmd->bin);
-		exit(EXIT_SUCCESS);
-	}
-	return (exec_builtins_bis(cmd, env));
+		clean_exit(cmd->bin, EXIT_SUCCESS);
+	else if (!ft_strncmp(cmd->cmd, "unset", 6))
+		clean_exit(cmd->bin, EXIT_SUCCESS);
+	else if (!ft_strncmp(cmd->cmd, "env", 4))
+		print_env(cmd, env);
+	else if (!ft_strncmp(cmd->cmd, "exit", 5))
+		clean_exit(cmd->bin, EXIT_SUCCESS);
+	return (0);
 }
