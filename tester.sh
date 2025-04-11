@@ -11,6 +11,8 @@ PURPLE="\033[0;35m"
 CYAN="\033[0;36m"
 BOLD="\e[1m"
 
+valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --trace-children=yes --track-fds=yes  --suppressions=ignore_readline.supp -s ./minishell 
+
 MINISHELL="./minishell"
 
 run_test() {
