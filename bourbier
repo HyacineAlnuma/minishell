@@ -34,18 +34,18 @@ built-in must be done in a fork if there is a pipe
  "cd include | ls" -> cd do nothing;
  "ls | cd include -> idem;
 
-valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --track-fds=yes  --suppressions=ignore_readline.supp -s ./minishell 
+valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --trace-children=yes --track-fds=yes  --suppressions=ignore_readline.supp -s ./minishell 
 
 # redirection :
 # 	- gere append
 # 	- gere redirection puis pipe
 # 	- gere double ou plus redirections
 
-/usr/bin/cat src/parsing/parsing.c 
-/usr/bin/cat cmd : cat and argv[0] = cmd
+# /usr/bin/cat src/parsing/parsing.c 
+# /usr/bin/cat cmd : cat and argv[0] = cmd
 
-here doc :
-eof > eo est considéré comme delim
-si juste delim segfault
+# here doc :
+# eof > eo est considéré comme delim
+# si juste delim segfault
 
 lancer here doc dans un child pour gérer les  signaux

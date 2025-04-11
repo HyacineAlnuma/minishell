@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 09:18:38 by halnuma           #+#    #+#             */
-/*   Updated: 2025/03/28 14:49:28 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/11 13:21:38 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,16 +101,11 @@ t_list	**lst_env(char **envp)
 
 	i = -1;
 	lst_env = (t_list **)new_plate(sizeof(t_list **), get_sink(NULL));
-	ft_bzero(lst_env, sizeof(t_list **));
 	if (!lst_env)
 		return (NULL);
+	ft_bzero(lst_env, sizeof(t_list **));
 	if (!envp[0])
-	{
-		lst_env = get_small_env(lst_env);
-		if (!lst_env)
-			return (NULL);
-		return (lst_env);
-	}
+		return (get_small_env(lst_env));
 	while (envp[++i])
 	{
 		if (!strncmp(envp[i], "SHLVL=", 6))

@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:10:47 by secros            #+#    #+#             */
-/*   Updated: 2025/04/09 15:15:00 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/11 11:47:56 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,11 @@ int	lst_count_char(t_list *tokens, char c)
 	search[0] = c;
 	while (tokens)
 	{
-		if (tokens->content && !ft_strcmp((char *)tokens->content, search))
+		if (tokens->content && *(char *)tokens->content != '\0'
+			&& !ft_strcmp((char *)tokens->content, search))
+		{
 			count++;
+		}
 		tokens = tokens->next;
 	}
 	return (count);

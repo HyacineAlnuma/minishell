@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:57:54 by secros            #+#    #+#             */
-/*   Updated: 2025/04/09 14:56:15 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/11 11:29:26 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,16 +39,16 @@ int	check_pipe(t_list **pipe, int count)
 	i = 0;
 	while (i <= count)
 	{
-		while (1)
+		while (pipe[i])
 		{
-			if (!pipe[i])
-			{
-				write(2, "hell: syntax error near unexpected token `|'\n", 46);
-				return (1);
-			}
 			if (pipe[i]->content)
 				break ;
 			pipe[i] = pipe[i]->next;
+		}
+		if (!pipe[i])
+		{
+			write(2, "hell: syntax error near unexpected token `|'\n", 46);
+			return (1);
 		}
 		i++;
 	}
@@ -64,7 +64,6 @@ t_list	**cut_instruction(t_list *tokens, int count)
 	pipe = ft_calloc(sizeof(t_list *), (count + 2));
 	if (!pipe)
 		return (NULL);
-	ft_printf("\n---%d---\n", count);
 	if (count == 0)
 	{
 		*pipe = tokens;
@@ -76,6 +75,6 @@ t_list	**cut_instruction(t_list *tokens, int count)
 		cut_pipe(&tokens);
 	}
 	if (check_pipe(pipe, count))
-		return (NULL);
+		return (free(pipe), NULL);
 	return (pipe);
 }
