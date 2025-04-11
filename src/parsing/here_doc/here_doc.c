@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 10:28:35 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/11 16:24:27 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/11 16:38:28 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,6 @@ int	format_here_doc(char *str, t_list **env, char **envp, t_sink **bin)
 		perror("file error");
 	free(formatted);
 	free(envp);
-	do_dishes(bin);
+	// do_dishes(bin);
 	return (hd_fd);
 }
