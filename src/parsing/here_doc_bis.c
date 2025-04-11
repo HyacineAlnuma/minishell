@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   here_doc_bis                                       :+:      :+:    :+:   */
+/*   here_doc_bis.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 14:10:18 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/07 14:11:08 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/11 14:09:31 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,4 +114,15 @@ t_hd_utils	*parse_and_dup(t_hd_utils *hd_utils, size_t j)
 		return (NULL);
 	}
 	return (hd_utils);
+}
+
+int	last_concat(char **formatted, char *str)
+{
+	*formatted = ft_strappend(*formatted, str);
+	if (!*formatted)
+	{
+		perror("malloc error");
+		return (0);
+	}
+	return (1);
 }

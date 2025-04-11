@@ -6,22 +6,11 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 11:38:20 by secros            #+#    #+#             */
-/*   Updated: 2025/04/09 15:12:58 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/11 14:05:10 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	*add_empty(t_list **lst)
-{
-	t_list	*new;
-
-	new = ft_lstnew(NULL);
-	if (!new)
-		return (NULL);
-	ft_lstadd_back(lst, new);
-	return (new);
-}
 
 int	merge_tokens(t_list *tokens, t_sink *bin)
 {
@@ -42,12 +31,6 @@ int	merge_tokens(t_list *tokens, t_sink *bin)
 	tokens->content = new_token;
 	clear_to(tokens, tmp);
 	return (1);
-}
-
-void	skip_space(char *str, size_t *i)
-{
-	while (is_space(str[*i]))
-	*i += 1;
 }
 
 void	count_token(char *str, size_t *i, size_t *count, char *quote)
@@ -91,7 +74,8 @@ char	*unify_token(char *str, char **token, t_sink **bin, size_t	*i)
 	{
 		if (str[*i] == '|')
 			break ;
-		*token = fill_dishwasher(ft_strjoin(*token, split_token(str, i, *bin)), free, bin);
+		*token = fill_dishwasher(ft_strjoin(*token, \
+split_token(str, i, *bin)), free, bin);
 		if (!*token)
 			return (NULL);
 	}

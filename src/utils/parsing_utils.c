@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:10:47 by secros            #+#    #+#             */
-/*   Updated: 2025/04/11 11:47:56 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/11 14:05:13 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,40 +30,6 @@ void	free_the_mallocs(void *alloc)
 	pt = NULL;
 }
 
-int	lst_count_char(t_list *tokens, char c)
-{
-	int		count;
-	char	search[2];
-
-	count = 0;
-	search[1] = '\0';
-	search[0] = c;
-	while (tokens)
-	{
-		if (tokens->content && *(char *)tokens->content != '\0'
-			&& !ft_strcmp((char *)tokens->content, search))
-		{
-			count++;
-		}
-		tokens = tokens->next;
-	}
-	return (count);
-}
-
-void	clear_to(t_list	*start, t_list *end)
-{
-	t_list	*tmp;
-	t_list	*next;
-
-	tmp = start->next;
-	while (tmp && tmp != end)
-	{
-		next = tmp->next;
-		tmp = next;
-	}
-	start->next = end;
-}
-
 int	is_space(char c)
 {
 	if (c == ' ' || (c >= 9 && c <= 13))
@@ -76,4 +42,21 @@ int	is_redir(char c)
 	if (c == '>' || c == '<' || c == '|')
 		return (1);
 	return (0);
+}
+
+void	skip_space(char *str, size_t *i)
+{
+	while (is_space(str[*i]))
+		*i += 1;
+}
+
+void	*add_empty(t_list **lst)
+{
+	t_list	*new;
+
+	new = ft_lstnew(NULL);
+	if (!new)
+		return (NULL);
+	ft_lstadd_back(lst, new);
+	return (new);
 }

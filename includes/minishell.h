@@ -6,10 +6,9 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:02:33 by secros            #+#    #+#             */
-/*   Updated: 2025/04/09 11:21:46 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/11 14:20:25 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -69,7 +68,6 @@
 # define ASCII33 "  \\______/       |__/     |__/|"
 # define ASCII34 "__/|__/  |__/|__/|_______/ |__"
 # define ASCII35 "/  |__/ \\_______/|__/|__/|__/\n"
-
 
 enum e_here_bool
 {
@@ -131,7 +129,7 @@ typedef struct s_hd_utils
 	t_sink	**bin;
 }	t_hd_utils;
 
-extern sig_atomic_t g_sigint_flag;
+extern sig_atomic_t	g_sigint_flag;
 
 //utils
 void		free_the_mallocs(void *pt);
@@ -145,30 +143,61 @@ void		sig_handler_hd(int signum);
 char		**lst_to_tab(t_list **lst);
 char		*remove_file_name(char *str);
 void		init_hd_utils(t_hd_utils *hd_utils, char *f, char *str, size_t *i);
-void		init_hd_utils_2(t_hd_utils *hd, size_t *b, char **cmd, t_list **env);
+
+void		init_hd_utils_2(t_hd_utils *hd, \
+size_t *b, char **cmd, t_list **env);
+
 void		init_hd_utils_3(t_hd_utils *hd, char *f, char **envp, t_sink **bin);
+char		**convert_lst_in_tab(t_list *lst, t_sink *bin);
+void		skip_space(char *str, size_t *i);
+void		*add_empty(t_list **lst);
+enum e_doc	find_type(char *str);
+void		do_heredoc(t_doc *docs, char quote, t_sink *bin, t_list **env);
+int			last_concat(char **formatted, char *str);
 
 //parsing
 t_exec		**parsing(char *str, t_list **env, t_sink **bin);
+
 char		*handle_env(char *str, t_list **env, t_sink *bin);
+
 t_list		*create_token_list(char *str, t_sink *bin);
+
 t_list		**lst_env(char **envp);
+
 char		*find_node(t_list **env, char *var_env);
+
 char		*remove_quote(char *str, t_sink *bin);
+
 char		*synthax_quote(char *str);
+
 int			merge_tokens(t_list *tokens, t_sink *bin);
+
 char		*find_user_in_pwd(void);
+
 char		*exec_hd(t_hd_utils *hd_utils, char *cmd);
+
 t_hd_utils	*parse_and_dup(t_hd_utils *hd_utils, size_t j);
+
 char		*get_heredoc(t_sink *bin, char *eof);
 
-t_list	**cut_instruction(t_list *tokens, int count);
-t_doc	**create_docs(t_list **head, t_list *lst, t_sink *bin, t_list **env);
-int		env_handling(t_list *tokens, t_list **env, t_sink *bin);
-int		compare(char *str, char *str_ref);
-void	merge_all(t_list *lst, t_sink *bin);
-void	ft_lst_hand_wash_if(t_list **begin_list, void *data_ref, int (*cmp)(), t_sink *bin);
-int		format_here_doc(char *str, t_list **env, char **envp, t_sink **bin);
+int			last_status_code(int status, int instruction);
+
+t_list		**cut_instruction(t_list *tokens, int count);
+
+t_doc		**create_docs(t_list **head, t_list *lst, \
+t_sink *bin, t_list **env);
+
+int			env_handling(t_list *tokens, t_list **env, t_sink *bin);
+
+int			compare(char *str, char *str_ref);
+
+void		merge_all(t_list *lst, t_sink *bin);
+
+void		ft_lst_hand_wash_if(t_list **begin_list, \
+void *data_ref, int (*cmp)(), t_sink *bin);
+
+int			format_here_doc(char *str, t_list **env, \
+char **envp, t_sink **bin);
 
 //exec
 void		exec(t_exec **cmds, t_list **env, char **envp);
@@ -178,7 +207,8 @@ void		cd(t_exec *cmd, t_list **env);
 void		pwd(t_exec *cmd	);
 void		unset(t_exec *cmd, t_list **env);
 void		export(t_exec *cmd, t_list **env);
-void		init_fork(t_fork *fork_info, t_exec **cmds, int pipe_nb, int cur_pipe);
+void		init_fork(t_fork *fork_info, t_exec **cmds, \
+int pipe_nb, int cur_pipe);
 void		init_fork_bis(t_fork *f, int *pfd, t_exec *cmd, int cur_cmd);
 void		manage_files(t_exec *cmd);
 void		close_pipes(int *pipefd, int pipe_nb);

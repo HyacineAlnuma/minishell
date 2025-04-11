@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:59:00 by secros            #+#    #+#             */
-/*   Updated: 2025/04/11 11:45:48 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/11 14:22:29 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ char	*remove_quote(char *str, t_sink *bin)
 	tmp = str;
 	if (str[0] == '\'' || str[0] == '"')
 	{
-		tmp = fill_dishwasher(ft_substr(str, 1, ft_strlen(str) - 2), free, &bin);
+		tmp = fill_dishwasher(ft_substr(str, 1, \
+ft_strlen(str) - 2), free, &bin);
 		if (tmp[0] == '\0')
 		{
 			hand_wash(tmp, &bin);
@@ -61,15 +62,6 @@ int	compare(char *str, char *str_ref)
 			return (1);
 	}
 	return (ft_strcmp(str, str_ref));
-}
-
-void	merge_all(t_list *lst, t_sink *bin)
-{
-	while (lst)
-	{
-		merge_tokens(lst, bin);
-		lst = lst->next;
-	}
 }
 
 void	ft_lst_hand_wash_if(t_list **begin_list, void *data_ref, \

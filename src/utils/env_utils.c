@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 09:18:38 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/11 13:21:38 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/11 14:22:50 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ char	**lst_to_tab(t_list **lst)
 	ptr = *lst;
 	while (ptr)
 	{
-		tab[i] = (char *)ptr->content;	
+		tab[i] = (char *)ptr->content;
 		ptr = ptr->next;
 		i++;
 	}

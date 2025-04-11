@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 13:42:38 by secros            #+#    #+#             */
-/*   Updated: 2025/03/28 15:39:56 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/11 13:53:37 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ void	hand_wash(void *pt, t_sink **head)
 	}
 	free(pt);
 }
+
 void	remove_plate(void *pt, t_sink **head)
 {
 	t_sink	*prev;

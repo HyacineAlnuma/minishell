@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 10:28:35 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/07 15:00:55 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/11 14:11:01 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,17 +34,6 @@ char	*isolate_cmd(t_hd_utils *hd_utils)
 	*hd_utils->i = j + 1;
 	*hd_utils->begin_part = *hd_utils->i;
 	return (hd_utils->formatted);
-}
-
-int	last_concat(char **formatted, char *str)
-{
-	*formatted = ft_strappend(*formatted, str);
-	if (!*formatted)
-	{
-		perror("malloc error");
-		return (0);
-	}
-	return (1);
 }
 
 int	expand_cmd(t_hd_utils *hd_utils, char **formatted, char **cmd)
@@ -106,4 +95,31 @@ int	format_here_doc(char *str, t_list **env, char **envp, t_sink **bin)
 	free(formatted);
 	free(envp);
 	return (hd_fd);
+}
+
+void	do_heredoc(t_doc *docs, char quote, t_sink *bin, t_list **env)
+{
+	char	*str;
+	char	*heredoc;
+	int		doc_fd;
+	size_t	i;
+
+	str = docs->str;
+	i = 0;
+	heredoc = handle_env(get_heredoc(bin, str), env, bin);
+	docs->str = heredoc;
+	if (quote == 0)
+	{
+		docs->type = format_here_doc(docs->str, env, lst_to_tab(env), &bin);
+		return ;
+	}
+	doc_fd = open(HD_TEMP_FILE, O_RDWR | O_CREAT, S_IWUSR | S_IRUSR);
+	if (doc_fd == -1)
+		return ;
+	write(doc_fd, heredoc, ft_strlen(heredoc));
+	close(doc_fd);
+	doc_fd = open(HD_TEMP_FILE, O_RDONLY);
+	if (doc_fd == -1)
+		return ;
+	docs->type = doc_fd;
 }

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+         #
+#    By: secros <secros@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/18 09:48:16 by halnuma           #+#    #+#              #
-#    Updated: 2025/04/09 10:53:29 by halnuma          ###   ########.fr        #
+#    Updated: 2025/04/11 14:17:25 by secros           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,7 +46,7 @@ MAIN			=	 main
 
 PARSING			= parsing 				parse_env 			\
 	 			tokenization 			docs				\
-				unclosed				here_doc			\
+				here_doc			\
 				create_exec				here_doc_bis		\
 				fork_here_doc
 
@@ -59,7 +59,8 @@ EXEC			= builtins				builtins_bis		\
 UTILS			= handle_signal			print_ascii			\
 				env_utils				parsing_utils		\
 				parsing_utils2			here_doc_utils		\
-				builtins_utils
+				builtins_utils			debug				\
+				env_utils2				lst_utils			
 
 
 HDR_SRC			= libft					minishell			\

@@ -6,53 +6,11 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:56:31 by secros            #+#    #+#             */
-/*   Updated: 2025/04/11 10:54:13 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/11 14:09:11 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// add an error check if invalid redirection like strlen > 2 or bad redirection
-enum e_doc	find_type(char *str)
-{
-	if (!strncmp(str, "<\0", 2))
-		return (INFILE);
-	else if (!strncmp(str, "<<\0", 3))
-		return (HEREDOC);
-	else if (!strncmp(str, ">\0", 2))
-		return (OUTFILE);
-	else if (!strncmp(str, ">>\0", 3))
-		return (APPEND);
-	ft_printf("hell: syntax error near unexpected token `%c'\n", str[ft_strlen(str) - 1]);
-	return (-1);
-}
-
-void	do_heredoc(t_doc *docs, char quote, t_sink *bin, t_list **env)
-{
-	char	*str;
-	char	*heredoc;
-	int		doc_fd;
-	size_t	i;
-	
-	str = docs->str;
-	i = 0;
-	heredoc = handle_env(get_heredoc(bin, str), env, bin);
-	docs->str = heredoc;
-	if (quote == 0)
-	{
-		docs->type = format_here_doc(docs->str, env, lst_to_tab(env), &bin); //Can send null
-		return ;
-	}
-	doc_fd = open(HD_TEMP_FILE, O_RDWR | O_CREAT, S_IWUSR | S_IRUSR);
-	if (doc_fd == -1)
-		return ;
-	write(doc_fd, heredoc, ft_strlen(heredoc));
-	close(doc_fd);
-	doc_fd = open(HD_TEMP_FILE, O_RDONLY);
-	if (doc_fd == -1)
-		return ;
-	docs->type = doc_fd;
-}
 
 int	heredoc_quotes(t_list *lst)
 {
@@ -91,7 +49,6 @@ int	polish_doc(t_list **lst, t_sink *bin, t_list **env, t_doc *document)
 	*lst = (*lst)->next;
 	return (0);
 }
-
 
 void	*alloc_docs(t_list *lst, t_sink *bin)
 {

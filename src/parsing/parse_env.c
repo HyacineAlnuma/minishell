@@ -6,36 +6,11 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:05:15 by secros            #+#    #+#             */
-/*   Updated: 2025/04/09 10:27:19 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/11 13:56:47 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-char	*find_user_in_pwd(void)
-{
-	char	*res;
-	char	pwd[PATH_MAX];
-	int		i;
-
-	if (getcwd(pwd, sizeof(pwd)) == NULL)
-	{
-		perror("getcwd() error");
-		return (NULL);
-	}
-	else
-	{
-		i = 1;
-		while (pwd[i] != '/')
-			i++;
-		res = &pwd[i + 1];
-		i++;
-		while (pwd[i] != '/')
-			i++;
-		pwd[i] = '\0';
-	}
-	return (res);
-}
 
 char	*find_node(t_list **env, char *var_env)
 {
@@ -62,7 +37,17 @@ char	*find_node(t_list **env, char *var_env)
 	return (NULL);
 }
 
-//Ca va etre fun a securiser !
+char	*add_return_status(char *str)
+{
+	char	*exit_status;
+
+	exit_status = ft_itoa(last_status_code(0, 1));
+	if (!exit_status)
+		return (NULL);
+	str = ft_strjoin(str, exit_status);
+	return (str);
+}
+
 char	*replace_env(char *str, t_list **env, t_vect pos, t_sink *bin)
 {
 	char	*var_env;
@@ -74,13 +59,27 @@ char	*replace_env(char *str, t_list **env, t_vect pos, t_sink *bin)
 	new_str = fill_dishwasher(ft_substr(str, 0, pos.x), free, &bin);
 	if (!new_str)
 		return (NULL);
-	new_str = fill_dishwasher(ft_strjoin(new_str, find_node(env, var_env)), \
+	if (var_env[0] == '?')
+		new_str = fill_dishwasher(add_return_status(new_str), free, &bin);
+	else
+		new_str = fill_dishwasher(ft_strjoin(new_str, find_node(env, var_env)), \
 	free, &bin);
 	if (!new_str)
 		return (NULL);
 	new_str = fill_dishwasher(ft_strjoin(new_str, (str + pos.x + pos.y)), \
 	free, &bin);
 	return (new_str);
+}
+
+char	*digit_env(char *str, t_list **env, t_sink *bin, size_t i)
+{
+	size_t	len;
+
+	len = 1;
+	while (ft_isdigit(str[i + len]))
+		len++;
+	return (handle_env(replace_env(str, env, \
+	(t_vect){i, len}, bin), env, bin));
 }
 
 char	*handle_env(char *str, t_list **env, t_sink *bin)
@@ -92,15 +91,12 @@ char	*handle_env(char *str, t_list **env, t_sink *bin)
 	while (str && str[i])
 	{
 		len = 1;
-		if (str[i] == '$' && ft_isalnum(str[i + 1]))
+		if (str[i] == '$' && (ft_isalnum(str[i + 1]) || str[i + 1] == '?'))
 		{
 			if (ft_isdigit(str[i + len]))
-			{
-				while (ft_isdigit(str[i + len]))
-					len++;
-				return (handle_env(replace_env(str, env, \
-				(t_vect){i, len}, bin), env, bin));
-			}
+				return (digit_env(str, env, bin, i));
+			if (str[i + 1] == '?')
+				str = replace_env(str, env, (t_vect){i, len}, bin);
 			while (str[i + len] && ft_isalnum(str[i + len]))
 				len++;
 			return (handle_env(replace_env(str, env, \
