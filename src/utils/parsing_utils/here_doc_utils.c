@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 14:02:19 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/11 17:41:11 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/11 17:44:01 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ char	*format_buffer(char *buffer)
 
 t_hd_utils	*parse_and_dup(t_hd_utils *hd_utils, size_t j)
 {
-	(void)j;
 	hd_utils->formatted = ft_strappend(
 			hd_utils->formatted, &hd_utils->str[*hd_utils->begin_part]
 			);
