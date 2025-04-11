@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:27:50 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/09 11:15:05 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/11 15:08:57 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,10 +116,10 @@ void	exec(t_exec **cmds, t_list **env, char **envp)
 		cur_cmd++;
 		cur_pipe += 2;
 	}
+	close_pipes(pipefd, pipe_nb);
+	wait_all_pid(cmds, pipe_nb);
 	cur_cmd--;
 	if (!cur_cmd && cmds[cur_cmd]->cmd)
 		exec_parent_builtins(cmds[cur_cmd], env);
-	close_pipes(pipefd, pipe_nb);
-	wait_all_pid(cmds, pipe_nb);
 	close_temp_file(cmds);
 }

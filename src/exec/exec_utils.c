@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:29:37 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/09 11:21:52 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/11 14:58:22 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ int	last_status_code(int status, int instruction)
 
 	if (!instruction && WIFEXITED(status))
 		status_code = WEXITSTATUS(status);
+	else if (instruction == 2)
+		status_code = status;
 	return (status_code);
 }
 

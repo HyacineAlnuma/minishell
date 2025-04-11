@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/04/11 14:22:01 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/11 15:16:21 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ t_exec	*setup_exec(t_list **piped, t_sink **bin, t_list **env)
 	t_exec	*new;
 	char	**tab;
 
+	if (!piped || !*piped)
+		return (NULL);
 	new = new_plate(sizeof(t_exec), bin);
 	if (!new)
 		return (NULL);
@@ -27,7 +29,6 @@ t_exec	*setup_exec(t_list **piped, t_sink **bin, t_list **env)
 	new->bin = bin;
 	merge_all(*piped, *bin);
 	ft_lst_hand_wash_if(piped, NULL, compare, *bin);
-	// if (new->docs && ! piped)
 	tab = convert_lst_in_tab(*piped, *bin);
 	if (!tab)
 		return (NULL);

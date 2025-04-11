@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:56:31 by secros            #+#    #+#             */
-/*   Updated: 2025/04/11 14:09:11 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/11 15:12:38 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ int	polish_doc(t_list **lst, t_sink *bin, t_list **env, t_doc *document)
 	document->str = (*lst)->content;
 	if (document->type == HEREDOC)
 		do_heredoc(document, i, bin, env);
+	if (document->type == -1)
+		return (1);
 	*lst = (*lst)->next;
 	return (0);
 }
