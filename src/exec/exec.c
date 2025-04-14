@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:27:50 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/14 12:36:36 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/14 13:32:18 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,11 @@ void	exec_cmd(t_exec *cmd, t_list **env, char **envp)
 		{
 			ft_putstr_fd(cmd->cmd, 2);
 			ft_putstr_fd(": command not found.\n", 2);
+		}
+		if (cmd->cmd && check_cmd_val == 3)
+		{
+			ft_putstr_fd(cmd->cmd, 2);
+			ft_putstr_fd(": Is a directory\n", 2);
 		}
 		clean_exit(cmd->bin, CMD_NOT_FOUND);
 	}
