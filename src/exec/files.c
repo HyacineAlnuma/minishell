@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 10:21:35 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/11 13:47:11 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/14 12:28:47 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,7 @@ void	manage_infile(t_exec *cmd, int *infile_fd, int k, int j)
 		{
 			ft_putstr_fd("minishell: no such file or directory:", 2);
 			ft_putendl_fd(cmd->docs[j]->str, 2);
-			close(infile_fd[k]);
-			return ;
+			clean_exit(cmd->bin, EXIT_FAILURE);
 		}
 		dup_fd(infile_fd[k], STDIN_FILENO, cmd);
 		close(infile_fd[k]);
