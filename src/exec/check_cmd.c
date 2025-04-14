@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 09:32:09 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/14 13:31:32 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/14 14:14:55 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ int	check_cmd_with_env(char *cmd, char *paths)
 			path = &paths[i + 1];
 		}
 	}
-	return (0);
+	return (free(paths), 0);
 }
 
 int	check_cmd(char *cmd)
@@ -98,7 +98,7 @@ int	check_cmd(char *cmd)
 		return (3);
 	if (stat(cmd, &fs) == 0 && (fs.st_mode & S_IXUSR))
 		return (1);
-	paths = getenv("PATH");
+	paths = ft_strdup(getenv("PATH"));
 	if (!paths)
 		return (check_cmd_no_env(cmd));
 	else
