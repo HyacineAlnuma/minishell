@@ -3,3 +3,4 @@ minishell
 *.txt
 obj/
 old_src/
+tester.sh
