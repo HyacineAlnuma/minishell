@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:56:31 by secros            #+#    #+#             */
-/*   Updated: 2025/04/11 17:19:55 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/14 09:02:23 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	*alloc_docs(t_list *lst, t_sink *bin)
 
 void	relink_lst(t_list **prev, t_list **head, t_list **lst)
 {
-	if (prev)
+	if (*prev)
 		(*prev)->next = *lst;
 	else
 		*head = *lst;
