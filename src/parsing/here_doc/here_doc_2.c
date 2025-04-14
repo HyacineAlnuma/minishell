@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 14:10:18 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/14 12:57:35 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/14 13:05:38 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,12 +89,7 @@ int	microshell(char *cmd, t_hd_utils *hd_utils)
 	tmp_bin = NULL;
 	cmds = parsing(cmd, hd_utils->env, &tmp_bin);
 	if (!cmds)
-	{
-		free(hd_utils->formatted);
-		free(cmd);
-		do_dishes(&tmp_bin);
-		return (0);
-	}
+		return (exit_hd(cmd, hd_utils, &tmp_bin));
 	free(cmd);
 	k = -1;
 	while (cmds[++k])

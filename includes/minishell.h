@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:02:33 by secros            #+#    #+#             */
-/*   Updated: 2025/04/14 12:48:50 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/14 13:05:31 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,6 @@ void		sig_handler_hd(int signum);
 char		**lst_to_tab(t_list **lst);
 char		*remove_file_name(char *str);
 void		init_hd_utils(t_hd_utils *hd_utils, char *f, char *str, size_t *i);
-
 void		init_hd_utils_2(t_hd_utils *hd, \
 size_t *b, char **cmd, t_list **env);
 
@@ -157,45 +156,29 @@ int			last_concat(char **formatted, char *str);
 void		clean_exit(t_sink **bin, int exit_code);
 int			check_exit_arg(t_exec *cmd);
 char		*format_buffer(char *buffer);
+int			exit_hd(char *cmd, t_hd_utils *hd_utils, t_sink	**tmp_bin);
 
 //parsing
 t_exec		**parsing(char *str, t_list **env, t_sink **bin);
-
 char		*handle_env(char *str, t_list **env, t_sink *bin);
-
 t_list		*create_token_list(char *str, t_sink **bin);
-
 t_list		**lst_env(char **envp);
-
 char		*find_node(t_list **env, char *var_env);
-
 char		*remove_quote(char *str, t_sink *bin);
-
 char		*synthax_quote(char *str);
-
 int			merge_tokens(t_list *tokens, t_sink *bin);
-
 char		*find_user_in_pwd(void);
-
 char		*exec_hd(t_hd_utils *hd_utils, char *cmd);
-
 t_hd_utils	*parse_and_dup(t_hd_utils *hd_utils, size_t j);
-
 char		*get_heredoc(t_sink *bin, char *eof);
-
 int			last_status_code(int status, int instruction);
-
 t_list		**cut_instruction(t_list *tokens, int count);
-
 t_doc		**create_docs(t_list **head, t_list *lst, \
 t_sink *bin, t_list **env);
 
 int			env_handling(t_list *tokens, t_list **env, t_sink *bin);
-
 int			compare(char *str, char *str_ref);
-
 void		merge_all(t_list *lst, t_sink *bin);
-
 void		ft_lst_hand_wash_if(t_list **begin_list, \
 void *data_ref, int (*cmp)(), t_sink *bin);
 
@@ -212,6 +195,7 @@ void		unset(t_exec *cmd, t_list **env);
 void		export(t_exec *cmd, t_list **env, int is_parent);
 void		init_fork(t_fork *fork_info, t_exec **cmds, \
 int pipe_nb, int cur_pipe);
+
 void		init_fork_bis(t_fork *f, int *pfd, t_exec *cmd, int cur_cmd);
 int			manage_files(t_exec *cmd);
 void		close_pipes(int *pipefd, int pipe_nb);

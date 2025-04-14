@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 14:02:19 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/14 12:57:04 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/14 13:05:43 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,4 +68,12 @@ int	last_concat(char **formatted, char *str)
 		return (0);
 	}
 	return (1);
+}
+
+int	exit_hd(char *cmd, t_hd_utils *hd_utils, t_sink	**tmp_bin)
+{
+	free(hd_utils->formatted);
+	free(cmd);
+	do_dishes(tmp_bin);
+	return (0);
 }
