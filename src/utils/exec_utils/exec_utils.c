@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
+/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:29:37 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/11 17:29:36 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/14 12:53:35 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	exec_parent_builtins(t_exec *cmd, t_list **env)
 	else if (!ft_strncmp(cmd->cmd, "exit", 5))
 		exit_program(cmd);
 	else if (!ft_strncmp(cmd->cmd, "export", 7))
-		export(cmd, env);
+		export(cmd, env, 1);
 	else if (!ft_strncmp(cmd->cmd, "unset", 6))
 		unset(cmd, env);
 }

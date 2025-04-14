@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:32:53 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/14 11:05:00 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/14 12:54:11 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,25 +80,31 @@ void	cd(t_exec *cmd, t_list **env)
 	change_dir(cmd, ptr, oldpwd);
 }
 
-void	export(t_exec *cmd, t_list **env)
+void	export(t_exec *cmd, t_list **env, int is_parent)
 {
 	t_list	*new_line;
 	char	*env_line;
 
-	if (!cmd->opt[1])
+	if (!cmd->opt[1] && !is_parent)
 	{
 		print_exp_env(env);
-		return ;
+		clean_exit(cmd->bin, EXIT_SUCCESS);
 	}
-	unset(cmd, env);
-	env_line = fill_dishwasher(ft_strdup(cmd->opt[1]), free, get_sink(NULL));
-	new_line = fill_dishwasher(ft_lstnew(env_line), free, get_sink(NULL));
-	if (!new_line || !new_line)
+	if (cmd->opt[1])
 	{
-		perror("malloc error");
-		return ;
+		unset(cmd, env);
+		env_line = fill_dishwasher(ft_strdup(cmd->opt[1]), \
+		free, get_sink(NULL));
+		new_line = fill_dishwasher(ft_lstnew(env_line), free, get_sink(NULL));
+		if (!new_line || !new_line)
+		{
+			perror("malloc error");
+			return ;
+		}
+		ft_lstadd_back(env, new_line);
 	}
-	ft_lstadd_back(env, new_line);
+	if (!is_parent)
+		clean_exit(cmd->bin, EXIT_SUCCESS);
 }
 
 void	unset(t_exec *cmd, t_list **env)
@@ -107,6 +113,8 @@ void	unset(t_exec *cmd, t_list **env)
 	t_list	*ptr;
 	int		var_size;
 
+	if (!cmd->opt[1])
+		return ;
 	var_size = 0;
 	while (cmd->opt[1][var_size] && cmd->opt[1][var_size] != '=')
 		var_size++;

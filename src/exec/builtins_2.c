@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
+/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:34:14 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/14 11:50:34 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/14 12:49:03 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	exec_builtins(t_exec *cmd, t_list **env)
 	else if (!ft_strncmp(cmd->cmd, "pwd", 4))
 		pwd(cmd);
 	else if (!ft_strncmp(cmd->cmd, "export", 7))
-		clean_exit(cmd->bin, EXIT_SUCCESS);
+		export(cmd, env, 0);
 	else if (!ft_strncmp(cmd->cmd, "unset", 6))
 		clean_exit(cmd->bin, EXIT_SUCCESS);
 	else if (!ft_strncmp(cmd->cmd, "env", 4))
