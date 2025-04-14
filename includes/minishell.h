@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:02:33 by secros            #+#    #+#             */
-/*   Updated: 2025/04/11 17:44:04 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/14 12:35:35 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,7 +213,7 @@ void		export(t_exec *cmd, t_list **env);
 void		init_fork(t_fork *fork_info, t_exec **cmds, \
 int pipe_nb, int cur_pipe);
 void		init_fork_bis(t_fork *f, int *pfd, t_exec *cmd, int cur_cmd);
-void		manage_files(t_exec *cmd);
+int			manage_files(t_exec *cmd);
 void		close_pipes(int *pipefd, int pipe_nb);
 int			open_pipes(int *pipefd, int pipe_nb);
 void		dup_pipes(t_exec **cmds, int *pipefd, int cur_cmd, int cur_pipe);

@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 10:21:35 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/14 12:28:47 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/14 12:35:17 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	manage_outfile(t_exec *cmd, int *outfile_fd, int i, int j)
 	}
 }
 
-void	manage_infile(t_exec *cmd, int *infile_fd, int k, int j)
+int	manage_infile(t_exec *cmd, int *infile_fd, int k, int j)
 {
 	if (cmd->docs[j]->type == INFILE)
 	{
@@ -50,7 +50,7 @@ void	manage_infile(t_exec *cmd, int *infile_fd, int k, int j)
 		{
 			ft_putstr_fd("minishell: no such file or directory:", 2);
 			ft_putendl_fd(cmd->docs[j]->str, 2);
-			clean_exit(cmd->bin, EXIT_FAILURE);
+			return (0);
 		}
 		dup_fd(infile_fd[k], STDIN_FILENO, cmd);
 		close(infile_fd[k]);
@@ -61,9 +61,10 @@ void	manage_infile(t_exec *cmd, int *infile_fd, int k, int j)
 		dup_fd(cmd->docs[j]->type, STDIN_FILENO, cmd);
 		close(cmd->docs[j]->type);
 	}
+	return (1);
 }
 
-void	manage_files(t_exec *cmd)
+int	manage_files(t_exec *cmd)
 {
 	int		outfile_fd[1024];
 	int		infile_fd[1024];
@@ -76,8 +77,10 @@ void	manage_files(t_exec *cmd)
 	k = 0;
 	while (cmd->docs[j])
 	{
-		manage_infile(cmd, infile_fd, k, j);
+		if (!manage_infile(cmd, infile_fd, k, j))
+			return (0);
 		manage_outfile(cmd, outfile_fd, i, j);
 		j++;
 	}
+	return (1);
 }

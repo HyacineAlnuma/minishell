@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
+/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:27:50 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/14 11:48:30 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/14 12:36:36 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ void	exec_cmd(t_exec *cmd, t_list **env, char **envp)
 
 void	exec_process(t_fork *f, t_list **env, char **envp)
 {
+	int	file_error;
+
 	f->cmds[f->cur_cmd]->pid = fork();
 	if (f->cmds[f->cur_cmd]->pid == -1)
 	{
@@ -67,8 +69,10 @@ void	exec_process(t_fork *f, t_list **env, char **envp)
 	else if (f->cmds[f->cur_cmd]->pid == 0)
 	{
 		dup_pipes(f->cmds, f->pipefd, f->cur_cmd, f->cur_pipe);
-		manage_files(f->cmds[f->cur_cmd]);
+		file_error = manage_files(f->cmds[f->cur_cmd]);
 		close_pipes(f->pipefd, f->pipe_nb);
+		if (!file_error)
+			clean_exit(f->cmd->bin, EXIT_FAILURE);
 		if (f->cmds[f->cur_cmd]->cmd)
 			exec_cmd(f->cmd, env, envp);
 		else
