@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:27:50 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/11 16:29:43 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/14 11:35:55 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,11 @@ void	exec_bin(t_exec *cmd, t_list **env, char **envp)
 		perror("malloc error");
 		clean_exit(cmd->bin, EXIT_FAILURE);
 	}
-	execve(exe, cmd->opt, envp);
+	if (execve(exe, cmd->opt, envp) == -1)
+	{
+		ft_printf("Yooo");
+		clean_exit(cmd->bin, EXIT_FAILURE);
+	}
 }
 
 void	exec_cmd(t_exec *cmd, t_list **env, char **envp)

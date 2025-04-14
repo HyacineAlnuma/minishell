@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc_2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 14:10:18 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/11 17:40:28 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/14 11:21:54 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ int	microshell(char *cmd, t_hd_utils *hd_utils)
 {
 	t_exec	**cmds;
 	t_sink	*tmp_bin;
+	t_sink	*tmp;
 	int		k;
 
 	tmp_bin = NULL;
@@ -98,7 +99,12 @@ int	microshell(char *cmd, t_hd_utils *hd_utils)
 	k = -1;
 	while (cmds[++k])
 		cmds[k]->here_doc = 1;
+	tmp = tmp_bin;
+	while (tmp->next)
+		tmp = tmp->next;
+	tmp->next = *(hd_utils)->bin;
 	exec(cmds, hd_utils->env, hd_utils->envp);
+	tmp->next = NULL;
 	do_dishes(&tmp_bin);
 	return (1);
 }
@@ -113,7 +119,7 @@ char	*exec_hd(t_hd_utils *hd_utils, char *cmd)
 	buffer = retrieve_result();
 	if (!buffer)
 		return (NULL);
-	hd_utils->formatted = ft_strappend(hd_utils->formatted, buffer);
+	hd_utils->formatted = fill_dishwasher(ft_strjoin(hd_utils->formatted, buffer), free, hd_utils->bin);
 	if (!hd_utils->formatted)
 	{
 		perror("malloc error");

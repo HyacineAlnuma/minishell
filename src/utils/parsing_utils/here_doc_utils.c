@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 14:02:19 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/11 17:44:01 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/14 11:22:51 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,9 @@ char	*format_buffer(char *buffer)
 
 t_hd_utils	*parse_and_dup(t_hd_utils *hd_utils, size_t j)
 {
-	hd_utils->formatted = ft_strappend(
+	hd_utils->formatted = fill_dishwasher(ft_strjoin(
 			hd_utils->formatted, &hd_utils->str[*hd_utils->begin_part]
-			);
+			), free, hd_utils->bin);
 	if (!hd_utils->formatted)
 	{
 		perror("malloc error");
@@ -61,7 +61,7 @@ t_hd_utils	*parse_and_dup(t_hd_utils *hd_utils, size_t j)
 
 int	last_concat(char **formatted, char *str)
 {
-	*formatted = ft_strappend(*formatted, str);
+	*formatted = ft_strjoin(*formatted, str);
 	if (!*formatted)
 	{
 		perror("malloc error");

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 10:28:35 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/11 17:44:09 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/14 11:24:52 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,10 +81,11 @@ int	format_here_doc(char *str, t_list **env, char **envp, t_sink **bin)
 	int		hd_fd;
 	int		f_len;
 
+	fill_dishwasher(envp, free, bin);
 	formatted = parse_hd(str, env, envp, bin);
 	if (!formatted)
 	{
-		free(envp);
+		// free(envp);
 		return (-1);
 	}
 	hd_fd = open(HD_TEMP_FILE, O_RDWR | O_CREAT, S_IWUSR | S_IRUSR);
@@ -97,8 +98,8 @@ int	format_here_doc(char *str, t_list **env, char **envp, t_sink **bin)
 	}
 	else
 		perror("file error");
-	free(formatted);
-	free(envp);
+	hand_wash(formatted, bin);
+	// free(envp);
 	return (hd_fd);
 }
 
