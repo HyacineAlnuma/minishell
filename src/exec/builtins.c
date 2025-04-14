@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
+/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:32:53 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/11 17:32:25 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/14 11:05:00 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	echo(t_exec *cmd)
 	int	i;
 
 	i = 1;
-	while (!ft_strncmp(cmd->opt[i], "-n", 3))
+	while (cmd->opt[i] && !ft_strncmp(cmd->opt[i], "-n", 3))
 		i++;
 	while (cmd->opt[i])
 	{
@@ -26,7 +26,7 @@ void	echo(t_exec *cmd)
 			ft_printf(" ");
 		i++;
 	}
-	if (ft_strncmp(cmd->opt[1], "-n", 3))
+	if (cmd->opt[1] && ft_strncmp(cmd->opt[1], "-n", 3))
 		ft_printf("\n");
 	clean_exit(cmd->bin, EXIT_SUCCESS);
 }
@@ -42,9 +42,11 @@ void	change_dir(t_exec *cmd, t_list *ptr, char *oldpwd)
 		while (ptr)
 		{
 			if (!ft_strncmp(ptr->content, "PWD=", 4))
-				ptr->content = ft_strjoin("PWD=", pwd);
+				ptr->content = fill_dishwasher(ft_strjoin("PWD=", pwd), \
+				free, get_sink(NULL));
 			if (!ft_strncmp(ptr->content, "OLDPWD=", 7))
-				ptr->content = ft_strjoin("OLDPWD=", oldpwd);
+				ptr->content = fill_dishwasher(ft_strjoin("OLDPWD=", oldpwd), \
+				free, get_sink(NULL));
 			ptr = ptr->next;
 		}
 	}
@@ -120,5 +122,5 @@ void	unset(t_exec *cmd, t_list **env)
 		ptr = ptr->next;
 	}
 	if (data_ref)
-		ft_lst_remove_if(env, data_ref, ft_strcmp);
+		ft_lst_remove_if(env, data_ref, ft_strcmp, 0);
 }

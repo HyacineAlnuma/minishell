@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
+/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:27:50 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/11 16:29:43 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/14 10:59:26 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,10 @@ void	exec_process(t_fork *f, t_list **env, char **envp)
 		dup_pipes(f->cmds, f->pipefd, f->cur_cmd, f->cur_pipe);
 		manage_files(f->cmds[f->cur_cmd]);
 		close_pipes(f->pipefd, f->pipe_nb);
-		exec_cmd(f->cmd, env, envp);
+		if (f->cmds[f->cur_cmd]->cmd)
+			exec_cmd(f->cmd, env, envp);
+		else
+			clean_exit(f->cmds[f->cur_cmd]->bin, EXIT_SUCCESS);
 	}
 }
 
