@@ -20,4 +20,18 @@ les variables d'env dans les here docs sont a gerer !
 Il faut egalement ignorer les brokens pipes quand le heredoc avec un crtl C
 Et pour finir n'oubliez pas de transmettre les signaux aux enfant (Crtl \) : Vous ignorez le Ctrl \ si vous etes dans l'execution d'un binaire alors qu'il faudrait le tranmettre au binaire.
 
+cd tout seul
+lorsque env -i ./minishell, ne pas check les paths qui contiennent USER
+protéger les mallocs
+export;
+	- ne pas afficher la variable "_"
+	- pouvoir export et unset plusieurs variables d'un coup
+	- problemes de parsing avec export s="'"'"'
+	- mettre entre double quotes le content de variables
+	- implementer +=
+echo $'
+heredoc dans heredoc
+leaks lorsque cat tout dans heredoc
+print exit dans exit program
+
 valgrind --suppressions=ignore_readline.supp --trace-children=yes --show-leak-kinds=all --leak-check=full --track-fds=yes ./minishell
