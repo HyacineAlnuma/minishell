@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:27:50 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/14 14:00:38 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/16 10:55:03 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,10 @@ void	exec_cmd(t_exec *cmd, t_list **env, char **envp)
 			ft_putstr_fd(cmd->cmd, 2);
 			ft_putstr_fd(": Is a directory\n", 2);
 		}
+		if (cmd->cmd && check_cmd_val == 4)
+			ft_putstr_fd("Malloc Error\n", 2);
 		clean_exit(cmd->bin, CMD_NOT_FOUND);
+		
 	}
 	else if (!exec_builtins(cmd, env))
 		exec_bin(cmd, env, envp);
