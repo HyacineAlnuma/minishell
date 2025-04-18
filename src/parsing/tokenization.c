@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 11:38:20 by secros            #+#    #+#             */
-/*   Updated: 2025/04/11 16:53:27 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/18 15:38:54 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ int	merge_tokens(t_list *tokens, t_sink *bin)
 		tmp->content = remove_quote((char *)tmp->content, bin);
 		new_token = fill_dishwasher(ft_strjoin(new_token, \
 		(char *)tmp->content), free, &bin);
+		if (!new_token)
+			return (2);
 		tmp = tmp->next;
 	}
 	tokens->content = new_token;

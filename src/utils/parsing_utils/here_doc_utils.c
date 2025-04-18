@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 14:02:19 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/18 14:40:46 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/18 15:54:02 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ char	*format_buffer(char *buffer)
 	if (ft_strlen(buffer) == 0)
 	{
 		buffer = (char *)malloc(sizeof(char) * 1);
-		buffer[0] = '\0';
+		if (buffer)
+			buffer[0] = '\0';
 	}
 	return (buffer);
 }
