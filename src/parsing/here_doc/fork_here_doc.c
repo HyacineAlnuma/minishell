@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 10:52:29 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/18 15:31:51 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/18 15:47:44 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ delimited by end-of-file (wanted `%s')\n", i, eof);
 		if (str && !ft_strncmp(str, eof, ft_strlen(eof) + 1))
 			return (free(str), f_str);
 		f_str = fill_dishwasher(ft_strjoin(f_str, str), free, &bin);
+		if (!f_str)
+			return (NULL);
 		f_str = fill_dishwasher(ft_strjoin(f_str, "\n"), free, &bin);
 		i++;
 	}
@@ -53,6 +55,11 @@ void	process_hd(int *pipefd, char *eof, t_sink *bin)
 	signal(SIGINT, sig_handler_hd);
 	g_sigint_flag = 0;
 	f_str = readline_hd(f_str, eof, bin);
+	if (!f_str)
+	{
+		do_dishes(get_sink(&bin));
+		exit(EXIT_SUCCESS);
+	}
 	dup_fd(pipefd[1], STDOUT_FILENO, NULL);
 	close(pipefd[1]);
 	if (!g_sigint_flag)

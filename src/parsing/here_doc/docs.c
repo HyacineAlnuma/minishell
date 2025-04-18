@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:56:31 by secros            #+#    #+#             */
-/*   Updated: 2025/04/14 09:02:23 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/18 15:44:06 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,11 @@ int	heredoc_quotes(t_list *lst)
 	return (0);
 }
 
-int	polish_doc(t_list **lst, t_sink *bin, t_list **env, t_doc *document)
+int	skip_to_file(t_list **lst)
 {
-	char		i;
+	int	i;
 
 	i = 0;
-	document->type = find_type((char *)(*lst)->content);
-	if (document->type == -1)
-		return (1);
 	while (*lst && i < 2)
 	{
 		(*lst) = (*lst)->next;
@@ -41,8 +38,22 @@ int	polish_doc(t_list **lst, t_sink *bin, t_list **env, t_doc *document)
 		ft_printf("hell: syntax error near unexpected token `\\n'\n");
 		return (1);
 	}
+	return (0);
+}
+
+int	polish_doc(t_list **lst, t_sink *bin, t_list **env, t_doc *document)
+{
+	char		i;
+
+	i = 0;
+	document->type = find_type((char *)(*lst)->content);
+	if (document->type == -1)
+		return (1);
+	if (skip_to_file(lst))
+		return (1);
 	i = heredoc_quotes(*lst);
-	merge_tokens(*lst, bin);
+	if (merge_tokens(*lst, bin) == 2)
+		return (1);
 	document->str = (*lst)->content;
 	if (document->type == HEREDOC)
 		do_heredoc(document, i, bin, env);

@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 10:28:35 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/18 15:20:52 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/18 15:51:07 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,8 @@ int	format_here_doc(char *str, t_list **env, char **envp, t_sink **bin)
 	int		f_len;
 
 	fill_dishwasher(envp, free, bin);
+	if (!envp)
+		return (-1);
 	formatted = parse_hd(str, env, envp, bin);
 	if (!formatted)
 		return (-1);
