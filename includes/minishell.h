@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:02:33 by secros            #+#    #+#             */
-/*   Updated: 2025/04/18 11:44:25 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/18 14:32:59 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,7 +196,7 @@ void		exit_program(t_exec *cmd);
 void		echo(t_exec *cmd);
 void		cd(t_exec *cmd, t_list **env);
 void		pwd(t_exec *cmd	);
-void		unset(t_exec *cmd, t_list **env);
+int			unset(t_exec *cmd, t_list **env, int index);
 void		export(t_exec *cmd, t_list **env, int is_parent);
 void		init_fork(t_fork *fork_info, t_exec **cmds, \
 int pipe_nb, int cur_pipe);

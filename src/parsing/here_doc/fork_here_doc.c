@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 10:52:29 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/18 13:19:24 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/18 14:56:26 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	process_hd(int *pipefd, char *eof, t_sink *bin)
 		f_len = ft_strlen(f_str);
 		write(STDOUT_FILENO, f_str, f_len);
 	}
-	// g_sigint_flag = 1;
+	g_sigint_flag = 1;
 	do_dishes(get_sink(&bin));
 	exit(EXIT_SUCCESS);
 }

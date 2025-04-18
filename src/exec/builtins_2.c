@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:34:14 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/18 12:56:23 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/18 14:45:50 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ void	exit_program(t_exec *cmd)
 	rl_clear_history();
 	if (cmd->bin)
 		do_dishes(get_sink(cmd->bin));
+	printf("exit\n");
 	clean_exit(NULL, exit_code);
 }
 

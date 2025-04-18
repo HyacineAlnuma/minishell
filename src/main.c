@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 11:45:00 by secros            #+#    #+#             */
-/*   Updated: 2025/04/18 13:04:29 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/18 14:59:35 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,10 @@ void	minishell(char **envp, t_list **env)
 
 	command = NULL;
 	bin = NULL;
+	signal(SIGINT, sig_handler);
 	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
-		signal(SIGINT, sig_handler);
 		g_sigint_flag = 0;
 		print_prompt(env);
 		input = fill_dishwasher(readline("minishell % "), free, &bin);
@@ -75,7 +75,7 @@ void	minishell(char **envp, t_list **env)
 
 int	main(int ac, char **av, char **envp)
 {
-	char	*mini_str;
+	// char	*mini_str;
 	t_list	**env;
 
 	(void) av;
@@ -85,14 +85,14 @@ int	main(int ac, char **av, char **envp)
 		return (1);
 	}
 	env = lst_env(envp);
-	if (!isatty(STDIN_FILENO))
-	{
-		mini_str = fill_dishwasher(get_next_line(0), free, get_sink(NULL));
-		if (!mini_str)
-			return (2);
-		exec(parsing(mini_str, env, get_sink(NULL)), env, envp);
-		return (do_dishes(get_sink(NULL)), 0);
-	}
+	// if (!isatty(STDIN_FILENO))
+	// {
+	// 	mini_str = fill_dishwasher(get_next_line(0), free, get_sink(NULL));
+	// 	if (!mini_str)
+	// 		return (2);
+	// 	exec(parsing(mini_str, env, get_sink(NULL)), env, envp);
+	// 	return (do_dishes(get_sink(NULL)), 0);
+	// }
 	print_ascii();
 	minishell(envp, env);
 	rl_clear_history();

@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 14:02:19 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/18 13:17:26 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/18 14:40:46 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,12 @@ t_hd_utils	*parse_and_dup(t_hd_utils *hd_utils, size_t j)
 	if (!hd_utils->cmd)
 	{
 		perror("malloc error");
+		return (NULL);
+	}
+	if (ft_strnstr(*hd_utils->cmd, "<<", ft_strlen(*hd_utils->cmd)))
+	{
+		ft_putendl_fd("Heredoc not supported inside heredoc", 2);
+		free(*hd_utils->cmd);
 		return (NULL);
 	}
 	return (hd_utils);

@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:32:53 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/18 10:48:41 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/18 14:01:59 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,11 @@ void	cd(t_exec *cmd, t_list **env)
 	char	*previouspwd;
 
 	if (!cmd->opt[1])
-		return ;
+	{
+		cmd->opt[1] = fill_dishwasher(ft_strjoin("/home/", find_user_in_pwd()), free, cmd->bin);
+		if (!cmd->opt[1])
+			return ;
+	}
 	if (!getcwd(oldpwd, sizeof(oldpwd)))
 		perror("getcwd() error");
 	ptr = *env;
@@ -117,54 +121,84 @@ void	export(t_exec *cmd, t_list **env, int is_parent)
 {
 	t_list	*new_line;
 	char	*env_line;
+	int		i;
 
+	i = 1;
 	if (!cmd->opt[1] && !is_parent)
 	{
 		print_exp_env(env);
 		clean_exit(cmd->bin, EXIT_SUCCESS);
 	}
-	if (cmd->opt[1] && is_parent)
+	while(cmd->opt[i])
 	{
-		if (!check_export_arg(cmd->opt[1]))
-			return ;
-		unset(cmd, env);
-		env_line = fill_dishwasher(ft_strdup(cmd->opt[1]), \
-		free, get_sink(NULL));
-		new_line = fill_dishwasher(ft_lstnew(env_line), free, get_sink(NULL));
-		if (!new_line || !new_line)
+		if (cmd->opt[i] && is_parent)
 		{
-			perror("malloc error");
-			return ;
+			if (!check_export_arg(cmd->opt[i]))
+				return ;
+			if (unset(cmd, env, i))
+			{
+				env_line = fill_dishwasher(ft_strdup(cmd->opt[i]), \
+				free, get_sink(NULL));
+				new_line = fill_dishwasher(ft_lstnew(env_line), free, get_sink(NULL));
+				if (!new_line || !new_line)
+				{
+					perror("malloc error");
+					return ;
+				}
+				ft_lstadd_back(env, new_line);
+			}
 		}
-		ft_lstadd_back(env, new_line);
+		i++;
 	}
 	if (!is_parent)
 		clean_exit(cmd->bin, EXIT_SUCCESS);
 }
 
-void	unset(t_exec *cmd, t_list **env)
+int	unset(t_exec *cmd, t_list **env, int index)
 {
 	char	*data_ref;
 	t_list	*ptr;
 	int		var_size;
+	int		i;
+	int		f;
 
+	i = 1;
+	f = 0;
 	if (!cmd->opt[1])
-		return ;
-	var_size = 0;
-	while (cmd->opt[1][var_size] && cmd->opt[1][var_size] != '=')
-		var_size++;
-	var_size++;
-	ptr = *env;
-	data_ref = NULL;
-	while (ptr)
+		return (0);
+	if (index)
+		i = index;
+	while (cmd->opt[i])
 	{
-		if (!ft_strncmp(ptr->content, cmd->opt[1], var_size))
+		var_size = 0;
+		while (cmd->opt[i][var_size] && cmd->opt[i][var_size] != '=')
+			var_size++;
+		if (cmd->opt[i][var_size])
+			var_size++;
+		else
+			f = 1;
+		ptr = *env;
+		data_ref = NULL;
+		while (ptr)
 		{
-			data_ref = ptr->content;
-			break ;
+			if (!ft_strncmp(ptr->content, cmd->opt[i], var_size))
+			{
+				data_ref = ptr->content;
+				break ;
+			}
+			ptr = ptr->next;
 		}
-		ptr = ptr->next;
+		if (data_ref && (!f || !index))
+		{
+			ft_lst_remove_if(env, data_ref, ft_strcmp, 0);
+			if (index)
+				return (1);
+		}
+		else if (data_ref)
+			return (0);
+		if (index)
+			break ;
+		i++;
 	}
-	if (data_ref)
-		ft_lst_remove_if(env, data_ref, ft_strcmp, 0);
+	return (1);
 }

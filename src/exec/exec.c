@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:27:50 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/18 13:04:39 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/18 14:57:34 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,9 +78,9 @@ void	exec_process(t_fork *f, t_list **env, char **envp)
 	}
 	else if (f->cmds[f->cur_cmd]->pid == 0)
 	{
-		// signal(SIGPIPE, SIG_IGN);
-		// signal(SIGINT, SIG_DFL);
-		// signal(SIGQUIT, SIG_DFL);
+		signal(SIGPIPE, SIG_IGN);
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
 		dup_pipes(f->cmds, f->pipefd, f->cur_cmd, f->cur_pipe);
 		file_error = manage_files(f->cmds[f->cur_cmd]);
 		close_pipes(f->pipefd, f->pipe_nb);

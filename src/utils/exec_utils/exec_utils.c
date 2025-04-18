@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:29:37 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/18 11:08:16 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/18 13:43:48 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	exec_parent_builtins(t_exec *cmd, t_list **env)
 	else if (!ft_strncmp(cmd->cmd, "export", 7))
 		export(cmd, env, 1);
 	else if (!ft_strncmp(cmd->cmd, "unset", 6))
-		unset(cmd, env);
+		unset(cmd, env, 0);
 }
 
 void	print_error(char *cmd, char *arg, char *message)
