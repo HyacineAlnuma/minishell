@@ -17,7 +17,7 @@
 
 # Votre minishell fonctionne mal si on l'execute avec env -i
 # les variables d'env dans les here docs sont a gerer !
-Il faut egalement ignorer les brokens pipes quand le heredoc avec un crtl C
+# Il faut egalement ignorer les brokens pipes quand le heredoc avec un crtl C
 # Et pour finir n'oubliez pas de transmettre les signaux aux enfant (Crtl \) : Vous ignorez le Ctrl \ si vous etes dans l'execution d'un binaire alors qu'il faudrait le tranmettre au binaire.
 
 # cd tout seul

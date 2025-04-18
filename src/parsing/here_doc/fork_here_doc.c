@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 10:52:29 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/18 14:56:26 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/18 15:31:51 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,11 @@ char	*readline_hd(char *f_str, char *eof, t_sink *bin)
 			if (!g_sigint_flag)
 				printf("minishell: warning: here-document at line %d \
 delimited by end-of-file (wanted `%s')\n", i, eof);
+			if (!f_str)
+			{
+				f_str = fill_dishwasher(ft_calloc(2, sizeof(char)), free, &bin);
+				f_str[0] = 3;
+			}
 			return (free(str), f_str);
 		}
 		if (str && !ft_strncmp(str, eof, ft_strlen(eof) + 1))

@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 10:28:35 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/18 14:36:35 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/18 15:20:52 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,6 @@ int	format_here_doc(char *str, t_list **env, char **envp, t_sink **bin)
 		f_len = ft_strlen(formatted);
 		write(hd_fd, formatted, f_len);
 		close(hd_fd);
-		// hd_fd = open(HD_TEMP_FILE, O_RDONLY);
 	}
 	else
 		perror("file error");

@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:59:00 by secros            #+#    #+#             */
-/*   Updated: 2025/04/18 12:53:38 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/18 15:33:46 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,13 @@ ft_strlen(str) - 2), free, &bin);
 int	check_heredoc(t_list **head)
 {
 	if (!strncmp((*head)->content, "<<\0", 3))
+	{
 		if ((*head)->next && (*head)->next->next)
 		{
 			*head = (*head)->next->next;
 			return (0);
 		}
+	}
 	return (1);
 }
 

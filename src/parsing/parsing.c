@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/04/18 13:21:51 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/18 15:20:14 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ t_exec	*setup_exec(t_list **piped, t_sink **bin, t_list **env)
 	ft_bzero(new, sizeof(t_exec));
 	new->docs = create_docs(piped, *piped, *bin, env);
 	verif_doc(new->docs);
-	if (!new->docs)
+	if (!new->docs || g_sigint_flag == 2)
 		return (NULL);
 	new->bin = bin;
 	merge_all(*piped, *bin);

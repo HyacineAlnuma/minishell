@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:01:37 by secros            #+#    #+#             */
-/*   Updated: 2025/04/18 13:14:16 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/18 15:20:05 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void	sig_handler(int signum)
 		rl_on_new_line();
 		if (!g_sigint_flag)
 			rl_redisplay();
+		g_sigint_flag = 2;
 	}
 	return ;
 }
