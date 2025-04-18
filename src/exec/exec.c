@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
+/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:27:50 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/18 14:57:34 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/18 15:51:36 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,19 +48,12 @@ void	exec_cmd(t_exec *cmd, t_list **env, char **envp)
 	if (!cmd->cmd || check_cmd_val != 1)
 	{
 		if (cmd->cmd && !check_cmd_val)
-		{
-			ft_putstr_fd(cmd->cmd, 2);
-			ft_putstr_fd(": command not found.\n", 2);
-		}
+			print_error(cmd->cmd, NULL, ": command not found.");
 		if (cmd->cmd && check_cmd_val == 3)
-		{
-			ft_putstr_fd(cmd->cmd, 2);
-			ft_putstr_fd(": Is a directory\n", 2);
-		}
+			print_error(cmd->cmd, NULL, ": Is a directory.");
 		if (cmd->cmd && check_cmd_val == 4)
-			ft_putstr_fd("Malloc Error\n", 2);
+			perror("Malloc Error");
 		clean_exit(cmd->bin, CMD_NOT_FOUND);
-		
 	}
 	else if (!exec_builtins(cmd, env))
 		exec_bin(cmd, env, envp);

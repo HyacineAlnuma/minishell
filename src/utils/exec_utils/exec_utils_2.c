@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:29:37 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/11 11:26:31 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/18 15:54:19 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,7 @@ int	check_exit_arg(t_exec *cmd)
 		{
 			if (!ft_isdigit(cmd->opt[1][i]))
 			{
-				ft_putstr_fd("minishell: exit:", 2);
-				ft_putstr_fd(cmd->opt[1], 2);
-				ft_putendl_fd(": numeric argument required", 2);
+				print_error("exit", cmd->opt[1], ": numeric argument required");
 				clean_exit(cmd->bin, 2);
 			}
 		}

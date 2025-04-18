@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
+/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:34:14 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/18 14:45:50 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/18 15:46:12 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,7 @@ void	exit_program(t_exec *cmd)
 
 	exit_code = manage_exit_args(cmd->opt);
 	if (exit_code == 2)
-	{
-		ft_putstr_fd("minishell: exit: ", 2);
-		ft_putstr_fd(cmd->opt[1], 2);
-		ft_putendl_fd(": numeric argument required", 2);
-	}
+		print_error("exit", cmd->opt[1], ": numeric argument required");
 	else if (exit_code == 1)
 	{
 		ft_putstr_fd("minishell: exit: too many arguments\n", 2);

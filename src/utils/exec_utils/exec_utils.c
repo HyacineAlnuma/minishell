@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
+/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:29:37 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/18 13:43:48 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/18 15:52:38 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,5 +77,8 @@ void	print_error(char *cmd, char *arg, char *message)
 		ft_putstr_fd(arg, 2);
 		ft_putstr_fd(": ", 2);
 	}
-	ft_putendl_fd(message, 2);
+	if (message)
+		ft_putendl_fd(message, 2);
+	else
+		ft_putstr_fd("\n", 2);
 }

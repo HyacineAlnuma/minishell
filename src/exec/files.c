@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   files.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
+/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 10:21:35 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/18 11:37:41 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/18 15:53:39 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,7 @@ int	manage_infile(t_exec *cmd, int *infile_fd, int k, int j)
 				);
 		if (infile_fd[k] == -1)
 		{
-			ft_putstr_fd("minishell: no such file or directory:", 2);
-			ft_putendl_fd(cmd->docs[j]->str, 2);
+			print_error("no such file or directory", cmd->docs[j]->str, NULL);
 			return (0);
 		}
 		dup_fd(infile_fd[k], STDIN_FILENO, cmd);
@@ -68,8 +67,7 @@ int	manage_infile(t_exec *cmd, int *infile_fd, int k, int j)
 		infile_fd[k] = open(HD_TEMP_FILE, O_RDONLY);
 		if (infile_fd[k] == -1)
 		{
-			ft_putstr_fd("minishell: no such file or directory:", 2);
-			ft_putendl_fd(cmd->docs[j]->str, 2);
+			print_error("no such file or directory", cmd->docs[j]->str, NULL);
 			return (0);
 		}
 		dup_fd(infile_fd[k], STDIN_FILENO, cmd);
@@ -96,9 +94,9 @@ int	manage_files(t_exec *cmd)
 		else
 		{
 			if (!manage_infile(cmd, infile_fd, k, j))
-			return (0);
+				return (0);
 			if (!manage_outfile(cmd, outfile_fd, i, j))
-			return (0);
+				return (0);
 			j++;
 		}
 	}

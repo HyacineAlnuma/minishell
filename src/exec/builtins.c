@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
+/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:32:53 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/18 14:01:59 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/18 15:46:45 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	echo(t_exec *cmd)
 	while (cmd->opt[i] && cmd->opt[i][0] == '-')
 	{
 		j = 1;
-		while(cmd->opt[i][j] == 'n')
+		while (cmd->opt[i][j] == 'n')
 			j++;
 		if (cmd->opt[i][j] != '\0')
 			break ;
@@ -41,7 +41,7 @@ void	echo(t_exec *cmd)
 	clean_exit(cmd->bin, EXIT_SUCCESS);
 }
 
-void	change_dir(t_exec *cmd, t_list *ptr, char *oldpwd)
+int	change_dir(t_exec *cmd, t_list *ptr, char *oldpwd)
 {
 	char	pwd[PATH_MAX];
 
@@ -52,21 +52,34 @@ void	change_dir(t_exec *cmd, t_list *ptr, char *oldpwd)
 		while (ptr)
 		{
 			if (!ft_strncmp(ptr->content, "PWD=", 4))
+			{
 				ptr->content = fill_dishwasher(ft_strjoin("PWD=", pwd), \
 				free, get_sink(NULL));
+				if (!ptr->content)
+				{
+					perror("Malloc error");
+					return (0);
+				}
+			}
 			if (!ft_strncmp(ptr->content, "OLDPWD=", 7))
+			{
 				ptr->content = fill_dishwasher(ft_strjoin("OLDPWD=", oldpwd), \
 				free, get_sink(NULL));
+				if (!ptr->content)
+				{
+					perror("Malloc error");
+					return (0);
+				}
+			}
 			ptr = ptr->next;
 		}
 	}
 	else
 	{
-		ft_putstr_fd("minishell: cd: ", 2);
-		ft_putstr_fd(cmd->opt[1], 2);
-		ft_putendl_fd(": No such file or directory", 2);
+		print_error("cd", cmd->opt[1], ": No such file or directory");
 		last_status_code(1, 2);
 	}
+	return (1);
 }
 
 void	cd(t_exec *cmd, t_list **env)
@@ -91,7 +104,8 @@ void	cd(t_exec *cmd, t_list **env)
 			printf("minishell: cd: OLDPWD not set\n");
 		cmd->opt[1] = previouspwd;
 	}
-	change_dir(cmd, ptr, oldpwd);
+	if (!change_dir(cmd, ptr, oldpwd))
+		return ;
 }
 
 int	check_export_arg(char *arg)
@@ -129,7 +143,7 @@ void	export(t_exec *cmd, t_list **env, int is_parent)
 		print_exp_env(env);
 		clean_exit(cmd->bin, EXIT_SUCCESS);
 	}
-	while(cmd->opt[i])
+	while (cmd->opt[i])
 	{
 		if (cmd->opt[i] && is_parent)
 		{
@@ -139,7 +153,8 @@ void	export(t_exec *cmd, t_list **env, int is_parent)
 			{
 				env_line = fill_dishwasher(ft_strdup(cmd->opt[i]), \
 				free, get_sink(NULL));
-				new_line = fill_dishwasher(ft_lstnew(env_line), free, get_sink(NULL));
+				new_line = fill_dishwasher(ft_lstnew(env_line), \
+				free, get_sink(NULL));
 				if (!new_line || !new_line)
 				{
 					perror("malloc error");

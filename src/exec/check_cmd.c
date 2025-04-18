@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_cmd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
+/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 09:32:09 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/18 11:54:37 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/18 15:43:20 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,17 @@ int	check_cmd_with_env(t_exec *cmd, char *paths)
 		{
 			paths[i] = '\0';
 			path = fill_dishwasher(ft_strjoin(path, "/"), free, get_sink(NULL));
+			if (!path)
+			{
+				perror("malloc error");
+				return (free(paths), 0);
+			}
 			path = fill_dishwasher(ft_strjoin(path, cmd->cmd), free, get_sink(NULL));
+			if (!path)
+			{
+				perror("malloc error");
+				return (free(paths), 0);
+			}
 			if (!access(path, F_OK))
 			{
 				cmd->path = path;
