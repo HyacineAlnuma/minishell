@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:29:37 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/18 15:52:38 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/18 17:35:57 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,23 +62,4 @@ void	exec_parent_builtins(t_exec *cmd, t_list **env)
 		export(cmd, env, 1);
 	else if (!ft_strncmp(cmd->cmd, "unset", 6))
 		unset(cmd, env, 0);
-}
-
-void	print_error(char *cmd, char *arg, char *message)
-{
-	ft_putstr_fd("minishell: ", 2);
-	if (cmd)
-	{
-		ft_putstr_fd(cmd, 2);
-		ft_putstr_fd(": ", 2);
-	}
-	if (arg)
-	{
-		ft_putstr_fd(arg, 2);
-		ft_putstr_fd(": ", 2);
-	}
-	if (message)
-		ft_putendl_fd(message, 2);
-	else
-		ft_putstr_fd("\n", 2);
 }

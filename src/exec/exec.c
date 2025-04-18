@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:27:50 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/18 17:12:20 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/18 17:46:32 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,33 +85,6 @@ void	exec_process(t_fork *f, t_list **env, char **envp)
 	}
 }
 
-void	close_temp_file(t_exec **cmds)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	while (cmds[i])
-	{
-		if (cmds[i]->here_doc)
-		{
-			i++;
-			continue ;
-		}
-		j = 0;
-		while (cmds[i]->docs[j])
-		{
-			if (cmds[i]->docs[j]->type >= HEREDOC)
-			{
-				close(cmds[i]->docs[j]->type);
-				unlink(HD_TEMP_FILE);
-			}
-			j++;
-		}
-		i++;
-	}
-}
-
 void	launch_forks(t_exec **cmds, t_list **env, char **envp, int pipe_nb)
 {
 	int		cur_cmd;
@@ -143,6 +116,8 @@ void	exec(t_exec **cmds, t_list **env, char **envp)
 {
 	int		pipe_nb;
 
+	if (!cmds)
+		return ;
 	pipe_nb = ft_tablen((char **)cmds) - 1;
 	if (pipe_nb > MAX_PIPE / 2)
 		return (print_error(NULL, NULL, "too many commands"));

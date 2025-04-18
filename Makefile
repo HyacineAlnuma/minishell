@@ -6,7 +6,7 @@
 #    By: secros <secros@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/18 09:48:16 by halnuma           #+#    #+#              #
-#    Updated: 2025/04/16 11:00:12 by secros           ###   ########.fr        #
+#    Updated: 2025/04/18 17:38:03 by secros           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,7 +55,8 @@ HEREDOC 		= fork_here_doc			here_doc_2			\
 
 EXEC			= builtins				builtins_2 			\
 				check_cmd				exec				\
-				files					pipes				
+				files					pipes				\
+				unset					export			
 						
 
 UTILS			= handle_signal			print_ascii			\
@@ -63,11 +64,13 @@ UTILS			= handle_signal			print_ascii			\
 						
 				
 UTILS_E			= builtins_utils		builtins_utils_2	\
-				exec_utils				exec_utils_2
+				exec_utils				exec_utils_2		\
+				file_utils
 
 UTILS_P			= init_hd_struct		parsing_utils		\
-				parsing_utils2			here_doc_utils		\
-				env_utils				env_utils2
+				parsing_utils_2			here_doc_utils		\
+				env_utils				env_utils2			\
+				parsing_utils_3
 
 HDR_SRC			= libft					minishell			\
 				color					bt_malloc	

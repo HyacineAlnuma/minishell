@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:02:33 by secros            #+#    #+#             */
-/*   Updated: 2025/04/18 17:04:35 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/18 17:43:07 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,8 @@ typedef struct s_hd_utils
 
 extern sig_atomic_t	g_sigint_flag;
 
-//utils
+//--------- UTILS ---------//
+
 void		free_the_mallocs(void *pt);
 void		print_ascii(void);
 int			lst_count_char(t_list *tokens, char c);
@@ -161,8 +162,16 @@ void		clean_exit(t_sink **bin, int exit_code);
 int			check_exit_arg(t_exec *cmd);
 char		*format_buffer(char *buffer);
 int			exit_hd(char *cmd, t_hd_utils *hd_utils, t_sink	**tmp_bin);
+void		relink_lst(t_list **prev, t_list **head, t_list **lst);
+int			manage_outfile(t_exec *cmd, int *outfile_fd, int i, int j);
+int			manage_append(t_exec *cmd, int *outfile_fd, int i, int j);
+int			manage_infile(t_exec *cmd, int *infile_fd, int k, int j);
+int			manage_here_doc(t_exec *cmd, int *infile_fd, int k, int j);
+t_list		**get_alpha_env(t_list **env);
+void		print_quoted_env(char *var_env);
 
-//parsing
+//--------- PARSING ---------//
+
 t_exec		**parsing(char *str, t_list **env, t_sink **bin);
 char		*handle_env(char *str, t_list **env, t_sink *bin);
 t_list		*create_token_list(char *str, t_sink **bin);
@@ -189,7 +198,8 @@ void *data_ref, int (*cmp)(), t_sink *bin);
 int			format_here_doc(char *str, t_list **env, \
 char **envp, t_sink **bin);
 
-//exec
+//--------- EXEC ---------//
+
 void		exec(t_exec **cmds, t_list **env, char **envp);
 void		exit_program(t_exec *cmd);
 void		echo(t_exec *cmd);
@@ -213,5 +223,6 @@ int			exec_builtins(t_exec *cmd, t_list **env);
 void		wait_all_pid(t_exec **cmds, int pipe_nb);
 void		exec_parent_builtins(t_exec *cmd, t_list **env);
 void		dup_fd(int fd1, int fd2, t_exec *cmd);
+void		close_temp_file(t_exec **cmds);
 
 #endif

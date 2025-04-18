@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:56:31 by secros            #+#    #+#             */
-/*   Updated: 2025/04/18 15:44:06 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/18 17:35:13 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,14 +83,6 @@ void	*alloc_docs(t_list *lst, t_sink *bin)
 		j++;
 	}
 	return (docs);
-}
-
-void	relink_lst(t_list **prev, t_list **head, t_list **lst)
-{
-	if (*prev)
-		(*prev)->next = *lst;
-	else
-		*head = *lst;
 }
 
 t_doc	**create_docs(t_list **head, t_list *lst, t_sink *bin, t_list **env)

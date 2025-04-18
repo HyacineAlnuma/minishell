@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 13:55:51 by secros            #+#    #+#             */
-/*   Updated: 2025/04/18 16:02:45 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/18 17:41:40 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,4 +36,32 @@ char	*find_user_in_pwd(void)
 		res = fill_dishwasher(ft_substr(pwd, i, i + j), free, get_sink(NULL));
 	}
 	return (res);
+}
+
+void	relink_lst(t_list **prev, t_list **head, t_list **lst)
+{
+	if (*prev)
+		(*prev)->next = *lst;
+	else
+		*head = *lst;
+}
+
+void	print_exp_env(t_list **env)
+{
+	t_list	*ptr;
+	t_list	**alpha_env;
+	char	*var_env;
+
+	alpha_env = get_alpha_env(env);
+	if (!alpha_env)
+		return ;
+	ptr = *alpha_env;
+	while (ptr)
+	{
+		var_env = (char *)ptr->content;
+		ft_printf("declare -x ");
+		print_quoted_env(var_env);
+		ptr = ptr->next;
+	}
+	ft_lstclear(alpha_env, NULL);
 }

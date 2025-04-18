@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:35:19 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/18 16:02:16 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/18 17:41:11 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,24 +107,4 @@ void	print_quoted_env(char *var_env)
 		write(1, "\"", 1);
 	}
 	write(1, "\n", 1);
-}
-
-void	print_exp_env(t_list **env)
-{
-	t_list	*ptr;
-	t_list	**alpha_env;
-	char	*var_env;
-
-	alpha_env = get_alpha_env(env);
-	if (!alpha_env)
-		return ;
-	ptr = *alpha_env;
-	while (ptr)
-	{
-		var_env = (char *)ptr->content;
-		ft_printf("declare -x ");
-		print_quoted_env(var_env);
-		ptr = ptr->next;
-	}
-	ft_lstclear(alpha_env, NULL);
 }
