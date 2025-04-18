@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:59:00 by secros            #+#    #+#             */
-/*   Updated: 2025/04/18 15:33:46 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/18 16:04:56 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,17 @@ int	check_heredoc(t_list **head)
 	return (1);
 }
 
+int	is_quote(char c)
+{
+	if (c == '"' || c == '\'')
+		return (1);
+	return (0);
+}
+
 int	env_handling(t_list *tokens, t_list **env, t_sink *bin)
 {
 	char	*token;
-	char	*token_next;
+	char	*n_tok;
 	char	*new_str;
 	int		i;
 
@@ -56,16 +63,16 @@ int	env_handling(t_list *tokens, t_list **env, t_sink *bin)
 	{
 		token = (char *)tokens->content;
 		if (tokens->next)
-			token_next = (char *)tokens->next->content;
+			n_tok = (char *)tokens->next->content;
 		else
-			token_next = NULL;
+			n_tok = NULL;
 		if (token && token[0] != '\'' && check_heredoc(&tokens))
 		{
 			new_str = handle_env(token, env, bin);
 			if (!new_str)
 				return (0);
 			i = ft_strlen(new_str);
-			if (new_str[i - 1] == '$' && token_next && (token_next[0] == '\'' || token_next[0] == '"'))
+			if (new_str[i - 1] == '$' && n_tok && (is_quote(n_tok[0])))
 				new_str[i - 1] = '\0';
 			tokens->content = new_str;
 		}
@@ -119,4 +126,3 @@ int	all_digit(char *str)
 	}
 	return ((i != 0));
 }
-

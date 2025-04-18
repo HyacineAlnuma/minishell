@@ -35,4 +35,9 @@ protéger les mallocs
 # print exit dans exit program
 utiliser print error
 
+env -i cd recreer oldpwd
+cd 		$HOME
+si $HOME > erreur not HOME set
+exit code in unset and export
+
 # valgrind --suppressions=ignore_readline.supp --trace-children=yes --show-leak-kinds=all --leak-check=full --track-fds=yes ./minishell

@@ -6,11 +6,22 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 10:52:29 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/18 15:47:44 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/18 16:16:05 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	end_heredoc(char *str, char **f_str, char *eof, t_sink **bin)
+{
+	if (str && !ft_strncmp(str, eof, ft_strlen(eof) + 1))
+		return (free(str), 1);
+	*f_str = fill_dishwasher(ft_strjoin(*f_str, str), free, bin);
+	if (!*f_str)
+		return (free(str), 2);
+	*f_str = fill_dishwasher(ft_strjoin(*f_str, "\n"), free, bin);
+	return (0);
+}
 
 char	*readline_hd(char *f_str, char *eof, t_sink *bin)
 {
@@ -35,12 +46,8 @@ delimited by end-of-file (wanted `%s')\n", i, eof);
 			}
 			return (free(str), f_str);
 		}
-		if (str && !ft_strncmp(str, eof, ft_strlen(eof) + 1))
-			return (free(str), f_str);
-		f_str = fill_dishwasher(ft_strjoin(f_str, str), free, &bin);
-		if (!f_str)
-			return (NULL);
-		f_str = fill_dishwasher(ft_strjoin(f_str, "\n"), free, &bin);
+		if (end_heredoc(str, &f_str, eof, &bin))
+			return (f_str);
 		i++;
 	}
 }
