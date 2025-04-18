@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 10:52:29 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/11 16:31:08 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/18 13:19:24 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ char	*readline_hd(char *f_str, char *eof, t_sink *bin)
 delimited by end-of-file (wanted `%s')\n", i, eof);
 			return (free(str), f_str);
 		}
-		if (str && !ft_strncmp(str, eof, ft_strlen(eof)))
+		if (str && !ft_strncmp(str, eof, ft_strlen(eof) + 1))
 			return (free(str), f_str);
 		f_str = fill_dishwasher(ft_strjoin(f_str, str), free, &bin);
 		f_str = fill_dishwasher(ft_strjoin(f_str, "\n"), free, &bin);
@@ -55,7 +55,7 @@ void	process_hd(int *pipefd, char *eof, t_sink *bin)
 		f_len = ft_strlen(f_str);
 		write(STDOUT_FILENO, f_str, f_len);
 	}
-	g_sigint_flag = 1;
+	// g_sigint_flag = 1;
 	do_dishes(get_sink(&bin));
 	exit(EXIT_SUCCESS);
 }

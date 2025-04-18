@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:27:50 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/16 10:55:03 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/18 13:04:39 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,13 @@ void	exec_bin(t_exec *cmd, t_list **env, char **envp)
 		getcwd(pwd, sizeof(pwd));
 		cmd->cmd[0] = '/';
 		path = pwd;
+		// signal(SIGINT, SIG_IGN);
+		exe = ft_strjoin(path, cmd->cmd);
 	}
 	else if (!ft_strncmp(cmd->cmd, "/", 1) || !ft_strncmp(cmd->cmd, "../", 3))
-		path = "\0";
+		exe = cmd->cmd;
 	else
-		path = "/bin/";
-	exe = ft_strjoin(path, cmd->cmd);
+		exe = cmd->path; 
 	envp = lst_to_tab(env);
 	if (!exe || !envp)
 	{
@@ -36,13 +37,14 @@ void	exec_bin(t_exec *cmd, t_list **env, char **envp)
 		clean_exit(cmd->bin, EXIT_FAILURE);
 	}
 	execve(exe, cmd->opt, envp);
+	clean_exit(cmd->bin, EXIT_FAILURE);
 }
 
 void	exec_cmd(t_exec *cmd, t_list **env, char **envp)
 {
 	int	check_cmd_val;
 
-	check_cmd_val = check_cmd(cmd->cmd);
+	check_cmd_val = check_cmd(cmd);
 	if (!cmd->cmd || check_cmd_val != 1)
 	{
 		if (cmd->cmd && !check_cmd_val)
@@ -76,6 +78,9 @@ void	exec_process(t_fork *f, t_list **env, char **envp)
 	}
 	else if (f->cmds[f->cur_cmd]->pid == 0)
 	{
+		// signal(SIGPIPE, SIG_IGN);
+		// signal(SIGINT, SIG_DFL);
+		// signal(SIGQUIT, SIG_DFL);
 		dup_pipes(f->cmds, f->pipefd, f->cur_cmd, f->cur_pipe);
 		file_error = manage_files(f->cmds[f->cur_cmd]);
 		close_pipes(f->pipefd, f->pipe_nb);
@@ -126,6 +131,8 @@ void	exec(t_exec **cmds, t_list **env, char **envp)
 	cur_cmd = 0;
 	cur_pipe = 0;
 	pipe_nb = ft_tablen((char **)cmds) - 1;
+	if (pipe_nb > 1024 / 2)
+		return (print_error(NULL, NULL, "too many commands"));
 	if (!open_pipes(pipefd, pipe_nb))
 		return ;
 	while (cmds[cur_cmd])

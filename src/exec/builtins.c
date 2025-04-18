@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:32:53 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/16 11:09:40 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/18 10:48:41 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,29 @@ void	cd(t_exec *cmd, t_list **env)
 	change_dir(cmd, ptr, oldpwd);
 }
 
+int	check_export_arg(char *arg)
+{
+	int	i;
+
+	i = 0;
+	if (!ft_isalpha(arg[0]) && arg[0] != '_')
+	{
+		print_error("export", arg, ": not a valid identifier");
+		return (0);
+	}
+	while (arg[++i])
+	{
+		if (arg[i] == '=')
+			break ;
+		if (!ft_isalnum(arg[i]) && arg[i] != '_')
+		{
+			print_error("export", arg, ": not a valid identifier");
+			return (0);
+		}
+	}
+	return (1);
+}
+
 void	export(t_exec *cmd, t_list **env, int is_parent)
 {
 	t_list	*new_line;
@@ -100,8 +123,10 @@ void	export(t_exec *cmd, t_list **env, int is_parent)
 		print_exp_env(env);
 		clean_exit(cmd->bin, EXIT_SUCCESS);
 	}
-	if (cmd->opt[1])
+	if (cmd->opt[1] && is_parent)
 	{
+		if (!check_export_arg(cmd->opt[1]))
+			return ;
 		unset(cmd, env);
 		env_line = fill_dishwasher(ft_strdup(cmd->opt[1]), \
 		free, get_sink(NULL));
@@ -128,6 +153,7 @@ void	unset(t_exec *cmd, t_list **env)
 	var_size = 0;
 	while (cmd->opt[1][var_size] && cmd->opt[1][var_size] != '=')
 		var_size++;
+	var_size++;
 	ptr = *env;
 	data_ref = NULL;
 	while (ptr)

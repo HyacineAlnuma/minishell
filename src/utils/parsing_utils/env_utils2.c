@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 13:55:51 by secros            #+#    #+#             */
-/*   Updated: 2025/04/11 13:56:51 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/18 10:05:03 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,9 @@ char	*find_user_in_pwd(void)
 	char	*res;
 	char	pwd[PATH_MAX];
 	int		i;
+	int 	j;
 
+	j = 0;
 	if (getcwd(pwd, sizeof(pwd)) == NULL)
 	{
 		perror("getcwd() error");
@@ -28,11 +30,10 @@ char	*find_user_in_pwd(void)
 		i = 1;
 		while (pwd[i] != '/')
 			i++;
-		res = &pwd[i + 1];
+		while (pwd[i + j] != '/')
+			j++;
 		i++;
-		while (pwd[i] != '/')
-			i++;
-		pwd[i] = '\0';
+		res = fill_dishwasher(ft_substr(pwd, i, i +j), free, get_sink(NULL));
 	}
 	return (res);
 }

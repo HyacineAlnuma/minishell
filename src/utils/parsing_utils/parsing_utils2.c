@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:59:00 by secros            #+#    #+#             */
-/*   Updated: 2025/04/11 14:22:29 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/18 12:53:38 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,19 +32,39 @@ ft_strlen(str) - 2), free, &bin);
 	return (tmp);
 }
 
+int	check_heredoc(t_list **head)
+{
+	if (!strncmp((*head)->content, "<<\0", 3))
+		if ((*head)->next && (*head)->next->next)
+		{
+			*head = (*head)->next->next;
+			return (0);
+		}
+	return (1);
+}
+
 int	env_handling(t_list *tokens, t_list **env, t_sink *bin)
 {
 	char	*token;
+	char	*token_next;
 	char	*new_str;
+	int		i;
 
 	while (tokens)
 	{
 		token = (char *)tokens->content;
-		if (token && token[0] != '\'')
+		if (tokens->next)
+			token_next = (char *)tokens->next->content;
+		else
+			token_next = NULL;
+		if (token && token[0] != '\'' && check_heredoc(&tokens))
 		{
 			new_str = handle_env(token, env, bin);
 			if (!new_str)
 				return (0);
+			i = ft_strlen(new_str);
+			if (new_str[i - 1] == '$' && token_next && (token_next[0] == '\'' || token_next[0] == '"'))
+				new_str[i - 1] = '\0';
 			tokens->content = new_str;
 		}
 		tokens = tokens->next;
@@ -81,3 +101,20 @@ int (*cmp)(), t_sink *bin)
 	else
 		ft_lst_hand_wash_if(&((*begin_list)->next), data_ref, cmp, bin);
 }
+
+int	all_digit(char *str)
+{
+	size_t	i;
+
+	i = 0;
+	if (str[i] == '+' || str[i] == '-')
+		i++;
+	while (str[i])
+	{
+		if (!ft_isdigit(str[i]))
+			return (0);
+		i++;
+	}
+	return ((i != 0));
+}
+

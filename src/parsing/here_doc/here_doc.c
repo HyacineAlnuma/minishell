@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 10:28:35 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/14 12:58:55 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/18 13:07:52 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,12 +91,12 @@ int	format_here_doc(char *str, t_list **env, char **envp, t_sink **bin)
 		f_len = ft_strlen(formatted);
 		write(hd_fd, formatted, f_len);
 		close(hd_fd);
-		hd_fd = open(HD_TEMP_FILE, O_RDONLY);
+		// hd_fd = open(HD_TEMP_FILE, O_RDONLY);
 	}
 	else
 		perror("file error");
 	hand_wash(formatted, bin);
-	return (hd_fd);
+	return (HEREDOC);
 }
 
 void	do_heredoc(t_doc *docs, char quote, t_sink *bin, t_list **env)
@@ -120,8 +120,4 @@ void	do_heredoc(t_doc *docs, char quote, t_sink *bin, t_list **env)
 		return ;
 	write(doc_fd, heredoc, ft_strlen(heredoc));
 	close(doc_fd);
-	doc_fd = open(HD_TEMP_FILE, O_RDONLY);
-	if (doc_fd == -1)
-		return ;
-	docs->type = doc_fd;
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:02:33 by secros            #+#    #+#             */
-/*   Updated: 2025/04/14 13:05:31 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/18 11:44:25 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ typedef struct s_exec
 	char	*cmd;
 	char	**opt;
 	int		here_doc;
+	char	*path;
 	t_doc	**docs;
 	t_sink	**bin;
 }	t_exec;
@@ -145,6 +146,10 @@ char		*remove_file_name(char *str);
 void		init_hd_utils(t_hd_utils *hd_utils, char *f, char *str, size_t *i);
 void		init_hd_utils_2(t_hd_utils *hd, \
 size_t *b, char **cmd, t_list **env);
+int			all_digit(char *str);
+void		print_error(char *cmd, char *arg, char *message);
+
+
 
 void		init_hd_utils_3(t_hd_utils *hd, char *f, char **envp, t_sink **bin);
 char		**convert_lst_in_tab(t_list *lst, t_sink *bin);
@@ -203,7 +208,7 @@ int			open_pipes(int *pipefd, int pipe_nb);
 void		dup_pipes(t_exec **cmds, int *pipefd, int cur_cmd, int cur_pipe);
 char		*get_previous_pwd(t_list **env);
 void		print_exp_env(t_list **env);
-int			check_cmd(char *cmd);
+int			check_cmd(t_exec *cmd);
 int			check_builtins(char *cmd);
 int			exec_builtins(t_exec *cmd, t_list **env);
 void		wait_all_pid(t_exec **cmds, int pipe_nb);

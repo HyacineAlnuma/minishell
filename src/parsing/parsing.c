@@ -6,11 +6,40 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/04/11 16:53:43 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/18 13:21:51 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	verif_doc(t_doc **docs)
+{
+	size_t	i;
+	int		count;
+
+	i = 0;
+	count = 0;
+	if (!docs)
+		return ;
+	while (docs[i])
+	{
+		if (docs[i]->type >= HEREDOC)
+			count++;
+		i++;
+	}
+	i = 0;
+	while (docs[i] && count > 1)
+	{
+		if (docs[i]->type >= HEREDOC)
+		{
+			ft_printf("YOOOO\n");
+			docs[i]->str = NULL;
+			close(docs[i]->type);
+			count--;
+		}
+		i++;
+	}
+}
 
 t_exec	*setup_exec(t_list **piped, t_sink **bin, t_list **env)
 {
@@ -24,6 +53,7 @@ t_exec	*setup_exec(t_list **piped, t_sink **bin, t_list **env)
 		return (NULL);
 	ft_bzero(new, sizeof(t_exec));
 	new->docs = create_docs(piped, *piped, *bin, env);
+	verif_doc(new->docs);
 	if (!new->docs)
 		return (NULL);
 	new->bin = bin;

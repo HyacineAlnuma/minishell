@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 14:02:19 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/14 13:05:43 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/18 13:17:26 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,8 @@ int	last_concat(char **formatted, char *str)
 
 int	exit_hd(char *cmd, t_hd_utils *hd_utils, t_sink	**tmp_bin)
 {
-	free(hd_utils->formatted);
+	if (!g_sigint_flag)
+		free(hd_utils->formatted);
 	free(cmd);
 	do_dishes(tmp_bin);
 	return (0);

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   files.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 10:21:35 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/14 12:35:17 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/18 11:37:41 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	manage_outfile(t_exec *cmd, int *outfile_fd, int i, int j)
+int	manage_outfile(t_exec *cmd, int *outfile_fd, int i, int j)
 {
 	if (cmd->docs[j]->type == OUTFILE)
 	{
@@ -20,7 +20,10 @@ void	manage_outfile(t_exec *cmd, int *outfile_fd, int i, int j)
 				cmd->docs[j]->str, O_RDWR | O_CREAT | O_TRUNC, S_IWUSR | S_IRUSR
 				);
 		if (outfile_fd[i] == -1)
-			return ((void) close(outfile_fd[i]));
+		{
+			print_error(cmd->docs[j]->str, NULL, "Permission denied");
+			return (0);
+		}
 		dup_fd(outfile_fd[i], STDOUT_FILENO, cmd);
 		close(outfile_fd[i]);
 		i++;
@@ -32,11 +35,15 @@ void	manage_outfile(t_exec *cmd, int *outfile_fd, int i, int j)
 				| O_CREAT, S_IWUSR | S_IRUSR
 				);
 		if (outfile_fd[i] == -1)
-			return ((void) close(outfile_fd[i]));
+		{
+			print_error(cmd->docs[j]->str, NULL, "Permission denied");
+			return (0);
+		}
 		dup_fd(outfile_fd[i], STDOUT_FILENO, cmd);
 		close(outfile_fd[i]);
 		i++;
 	}
+	return (1);
 }
 
 int	manage_infile(t_exec *cmd, int *infile_fd, int k, int j)
@@ -58,8 +65,15 @@ int	manage_infile(t_exec *cmd, int *infile_fd, int k, int j)
 	}
 	else if (cmd->docs[j]->type >= HEREDOC)
 	{
-		dup_fd(cmd->docs[j]->type, STDIN_FILENO, cmd);
-		close(cmd->docs[j]->type);
+		infile_fd[k] = open(HD_TEMP_FILE, O_RDONLY);
+		if (infile_fd[k] == -1)
+		{
+			ft_putstr_fd("minishell: no such file or directory:", 2);
+			ft_putendl_fd(cmd->docs[j]->str, 2);
+			return (0);
+		}
+		dup_fd(infile_fd[k], STDIN_FILENO, cmd);
+		close(infile_fd[k]);
 	}
 	return (1);
 }
@@ -77,10 +91,16 @@ int	manage_files(t_exec *cmd)
 	k = 0;
 	while (cmd->docs[j])
 	{
-		if (!manage_infile(cmd, infile_fd, k, j))
+		if (!cmd->docs[j]->str)
+			j++;
+		else
+		{
+			if (!manage_infile(cmd, infile_fd, k, j))
 			return (0);
-		manage_outfile(cmd, outfile_fd, i, j);
-		j++;
+			if (!manage_outfile(cmd, outfile_fd, i, j))
+			return (0);
+			j++;
+		}
 	}
 	return (1);
 }

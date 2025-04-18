@@ -6,13 +6,13 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 09:32:09 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/16 10:56:04 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/18 11:54:37 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	check_if_cmd_exists(char **paths, char *cmd)
+int	check_if_cmd_exists(char **paths, t_exec *cmd)
 {
 	char	*path;
 	int		i;
@@ -25,40 +25,41 @@ int	check_if_cmd_exists(char **paths, char *cmd)
 	{
 		path = paths[i];
 		path = fill_dishwasher(ft_strjoin(path, "/"), free, get_sink(NULL));
-		path = fill_dishwasher(ft_strjoin(path, cmd), free, get_sink(NULL));
+		path = fill_dishwasher(ft_strjoin(path, cmd->cmd), free, get_sink(NULL));
 		if (!path)
 		{
 			perror("malloc error");
 			return (2);
 		}
 		if (!access(path, F_OK))
+		{
+			cmd->path = path;
 			return (1);
+		}
 		path = &paths[i][j + 1];
 		i++;
 	}
 	return (0);
 }
 
-int	check_cmd_no_env(char *cmd)
+int	check_cmd_no_env(t_exec *cmd)
 {
-	char	*paths[12];
+	char	*paths[10];
 
-	paths[0] = "/home/halnuma/bin";
-	paths[1] = "/usr/local/sbin";
-	paths[2] = "/usr/local/bin";
-	paths[3] = "/usr/sbin";
-	paths[4] = "/bin";
-	paths[5] = "/usr/games";
-	paths[6] = "/usr/local/games";
-	paths[7] = "/snap/bin";
-	paths[8] = "/home/halnuma/.dotnet/tools";
-	paths[9] = "/usr/bin";
-	paths[10] = "/sbin";
-	paths[11] = NULL;
+	paths[0] = "/usr/local/sbin";
+	paths[1] = "/usr/local/bin";
+	paths[2] = "/usr/sbin";
+	paths[3] = "/bin";
+	paths[4] = "/usr/games";
+	paths[5] = "/usr/local/games";
+	paths[6] = "/snap/bin";
+	paths[7] = "/usr/bin";
+	paths[8] = "/sbin";
+	paths[9] = NULL;
 	return (check_if_cmd_exists(paths, cmd));
 }
 
-int	check_cmd_with_env(char *cmd, char *paths)
+int	check_cmd_with_env(t_exec *cmd, char *paths)
 {
 	char	*path;
 	int		i;
@@ -78,25 +79,28 @@ int	check_cmd_with_env(char *cmd, char *paths)
 		{
 			paths[i] = '\0';
 			path = fill_dishwasher(ft_strjoin(path, "/"), free, get_sink(NULL));
-			path = fill_dishwasher(ft_strjoin(path, cmd), free, get_sink(NULL));
+			path = fill_dishwasher(ft_strjoin(path, cmd->cmd), free, get_sink(NULL));
 			if (!access(path, F_OK))
+			{
+				cmd->path = path;
 				return (1);
+			}
 			path = &paths[i + 1];
 		}
 	}
 	return (free(paths), 0);
 }
 
-int	check_cmd(char *cmd)
+int	check_cmd(t_exec *cmd)
 {
 	char		*paths;
 	struct stat	fs;
 
-	if (check_builtins(cmd))
+	if (check_builtins(cmd->cmd))
 		return (1);
-	if (stat(cmd, &fs) == 0 && !S_ISREG(fs.st_mode))
+	if (stat(cmd->cmd, &fs) == 0 && !S_ISREG(fs.st_mode))
 		return (3);
-	if (stat(cmd, &fs) == 0 && (fs.st_mode & S_IXUSR))
+	if (stat(cmd->cmd, &fs) == 0 && (fs.st_mode & S_IXUSR))
 		return (1);
 	paths = getenv("PATH");
 	if (!paths)

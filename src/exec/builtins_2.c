@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:34:14 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/16 11:51:02 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/18 12:56:23 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,27 +15,22 @@
 unsigned char	manage_exit_args(char **opt)
 {
 	int	i;
-	int	j;
 	ull exit_code;
 
 	i = 0;
 	if (!opt[1])
 		return (0);
-	while(opt[++i])
-	{
-		j = -1;
-		while (opt[i][++j])
-			if (opt[i][j] && ft_isalpha(opt[i][j]))
-				return (2);
-	}
-	if (i > 2)
-		return (1);
+	if (!all_digit(opt[1]))
+		return (2);
+	else
+		if (opt[2])
+			return (1);
 	if (ft_strlen(opt[1]) > 18)
 		return (2);
 	else
 	{
 		exit_code = ft_atoull(opt[1]);
-		if (exit_code > 9223372036854775807)
+		if (exit_code > LLONG_MAX)
 			return (2);
 	}
 	return ((unsigned char)exit_code);
@@ -70,7 +65,8 @@ void	print_env(t_exec *cmd, t_list **env)
 	ptr = *env;
 	while (ptr)
 	{
-		ft_printf("%s\n", ptr->content);
+		if (ft_strchr(ptr->content, '='))
+			ft_printf("%s\n", ptr->content);
 		ptr = ptr->next;
 	}
 	clean_exit(cmd->bin, EXIT_SUCCESS);
@@ -89,7 +85,6 @@ void	pwd(t_exec *cmd)
 
 int	exec_builtins(t_exec *cmd, t_list **env)
 {
-	signal(SIGPIPE, SIG_IGN);
 	if (!ft_strncmp(cmd->cmd, "echo", 5))
 		echo(cmd);
 	else if (!ft_strncmp(cmd->cmd, "cd", 3))
