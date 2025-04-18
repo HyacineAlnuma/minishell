@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+         #
+#    By: secros <secros@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/18 08:45:55 by halnuma           #+#    #+#              #
-#    Updated: 2025/03/21 10:40:34 by halnuma          ###   ########.fr        #
+#    Updated: 2025/04/16 10:58:11 by secros           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -61,7 +61,7 @@ SRC_ALL			= $(SRC_MAIN) $(SRC_UTILS) $(SRC_GNL)
 OBJ_ALL 		= $(OBJ_MAIN) $(OBJ_UTILS) $(OBJ_GNL)
 LIBFT			= $(P_LIB)libft.a
 HEADERS			= $(P_INC)libft.h 			$(P_INC)ft_printf.h \
-				$(P_INC)get_next_line.h
+				$(P_INC)get_next_line.h		$(P_INC)bt_malloc.h
 
 # ------ RULES ------ #
 

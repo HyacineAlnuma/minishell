@@ -1,5 +1,5 @@
-Make recompile pas sur le touch btmalloc.h, 
-echo -nnnnnnnn devrait foncitonner, attention echo -na.
+# Make recompile pas sur le touch btmalloc.h, 
+# echo -nnnnnnnn devrait foncitonner, attention echo -na.
 exit, message d'erreur  si overflow de l'argument numerique.
 exit doit quitter si  premier argument est une valeur non numeric, mais quitte si deux argument dont le premier est pas numerique.
 minishell dans minishell ctrl-c erreur. 

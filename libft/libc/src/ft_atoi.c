@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: halnuma <halnuma@student.42.fr>            +#+  +:+       +#+        */
+/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 16:28:07 by halnuma           #+#    #+#             */
-/*   Updated: 2024/11/07 16:54:19 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/16 11:37:57 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,4 +35,23 @@ int	ft_atoi(const char *nptr)
 		i++;
 	}
 	return (result * sign);
+}
+
+unsigned long long	ft_atoull(const char *nptr)
+{
+	int	i;
+	unsigned long long	result;
+
+	i = 0;
+	result = 0;
+	while (nptr[i] == ' ' || (nptr[i] >= 9 && nptr[i] <= 13))
+		i++;
+	if (nptr[i] == '-' || nptr[i] == '+')
+		i++;
+	while (ft_isdigit(nptr[i]))
+	{
+		result = result * 10 + (nptr[i] - '0');
+		i++;
+	}
+	return (result);
 }

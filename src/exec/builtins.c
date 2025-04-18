@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:32:53 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/14 12:54:11 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/16 11:09:40 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,28 @@
 void	echo(t_exec *cmd)
 {
 	int	i;
+	int	j;
+	int	k;
 
 	i = 1;
-	while (cmd->opt[i] && !ft_strncmp(cmd->opt[i], "-n", 3))
-		i++;
-	while (cmd->opt[i])
+	while (cmd->opt[i] && cmd->opt[i][0] == '-')
 	{
-		ft_printf("%s", cmd->opt[i]);
-		if (cmd->opt[i + 1])
-			ft_printf(" ");
+		j = 1;
+		while(cmd->opt[i][j] == 'n')
+			j++;
+		if (cmd->opt[i][j] != '\0')
+			break ;
 		i++;
 	}
-	if (cmd->opt[1] && ft_strncmp(cmd->opt[1], "-n", 3))
+	k = i;
+	while (cmd->opt[k])
+	{
+		ft_printf("%s", cmd->opt[k]);
+		if (cmd->opt[k + 1])
+			ft_printf(" ");
+		k++;
+	}
+	if (i == 1)
 		ft_printf("\n");
 	clean_exit(cmd->bin, EXIT_SUCCESS);
 }

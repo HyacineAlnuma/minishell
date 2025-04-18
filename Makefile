@@ -6,7 +6,7 @@
 #    By: secros <secros@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/18 09:48:16 by halnuma           #+#    #+#              #
-#    Updated: 2025/04/11 16:40:32 by secros           ###   ########.fr        #
+#    Updated: 2025/04/16 11:00:12 by secros           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -70,7 +70,7 @@ UTILS_P			= init_hd_struct		parsing_utils		\
 				env_utils				env_utils2
 
 HDR_SRC			= libft					minishell			\
-				color		
+				color					bt_malloc	
 
 SRC_MAIN		= $(addprefix $(P_SRC), $(addsuffix .c, $(MAIN)))
 SRC_PARSING		= $(addprefix $(P_PARSING), $(addsuffix .c, $(PARSING)))
@@ -106,31 +106,31 @@ $(NAME): 		$(OBJ_ALL) Makefile $(HEADERS) $(LIBFT)
 $(P_OBJ):
 				@mkdir -p $(P_OBJ)
 
-$(P_OBJ)%.o:	$(P_SRC)%.c Makefile $(HEADERS) | $(P_OBJ)
+$(P_OBJ)%.o:	$(P_SRC)%.c Makefile $(HEADERS) $(LIBFT) | $(P_OBJ)
 				@echo "$(_YELLOW)Compiling $<...$(_END)"
 				@$(CC) $(CFLAGS) -I $(P_INC) -c $< -o $@
 
-$(P_OBJ)%.o:	$(P_PARSING)%.c Makefile $(HEADERS) | $(P_OBJ)
+$(P_OBJ)%.o:	$(P_PARSING)%.c Makefile $(HEADERS) $(LIBFT) | $(P_OBJ)
 				@echo "$(_YELLOW)Compiling $<...$(_END)"
 				@$(CC) $(CFLAGS) -I $(P_INC) -c $< -o $@
 
-$(P_OBJ)%.o:	$(P_HEREDOC)%.c Makefile $(HEADERS) | $(P_OBJ)
+$(P_OBJ)%.o:	$(P_HEREDOC)%.c Makefile $(HEADERS) $(LIBFT) | $(P_OBJ)
 				@echo "$(_YELLOW)Compiling $<...$(_END)"
 				@$(CC) $(CFLAGS) -I $(P_INC) -c $< -o $@
 
-$(P_OBJ)%.o:	$(P_EXEC)%.c Makefile $(HEADERS) | $(P_OBJ)
+$(P_OBJ)%.o:	$(P_EXEC)%.c Makefile $(HEADERS) $(LIBFT) | $(P_OBJ)
 				@echo "$(_YELLOW)Compiling $<...$(_END)"
 				@$(CC) $(CFLAGS) -I $(P_INC) -c $< -o $@
 
-$(P_OBJ)%.o:	$(P_UTILS)%.c Makefile $(HEADERS) | $(P_OBJ)
+$(P_OBJ)%.o:	$(P_UTILS)%.c Makefile $(HEADERS) $(LIBFT) | $(P_OBJ)
 				@echo "$(_YELLOW)Compiling $<...$(_END)"
 				@$(CC) $(CFLAGS) -I $(P_INC) -c $< -o $@
 
-$(P_OBJ)%.o:	$(P_UTILS_E)%.c Makefile $(HEADERS) | $(P_OBJ)
+$(P_OBJ)%.o:	$(P_UTILS_E)%.c Makefile $(HEADERS) $(LIBFT) | $(P_OBJ)
 				@echo "$(_YELLOW)Compiling $<...$(_END)"
 				@$(CC) $(CFLAGS) -I $(P_INC) -c $< -o $@
 
-$(P_OBJ)%.o:	$(P_UTILS_P)%.c Makefile $(HEADERS) | $(P_OBJ)
+$(P_OBJ)%.o:	$(P_UTILS_P)%.c Makefile $(HEADERS) $(LIBFT) | $(P_OBJ)
 				@echo "$(_YELLOW)Compiling $<...$(_END)"
 				@$(CC) $(CFLAGS) -I $(P_INC) -c $< -o $@
 
