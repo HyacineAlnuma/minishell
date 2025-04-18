@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
+/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 16:28:07 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/18 09:46:33 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/18 16:00:32 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	ft_atoi(const char *nptr)
 
 unsigned long long	ft_atoull(const char *nptr)
 {
-	int	i;
+	int					i;
 	unsigned long long	result;
 
 	i = 0;

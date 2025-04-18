@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:34:14 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/18 15:46:12 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/18 16:00:46 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 unsigned char	manage_exit_args(char **opt)
 {
-	int	i;
-	ull exit_code;
+	int		i;
+	t_ull	exit_code;
 
 	i = 0;
 	if (!opt[1])

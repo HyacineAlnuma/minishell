@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:27:50 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/18 15:51:36 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/18 17:12:20 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,12 @@ void	exec_bin(t_exec *cmd, t_list **env, char **envp)
 		getcwd(pwd, sizeof(pwd));
 		cmd->cmd[0] = '/';
 		path = pwd;
-		// signal(SIGINT, SIG_IGN);
 		exe = ft_strjoin(path, cmd->cmd);
 	}
 	else if (!ft_strncmp(cmd->cmd, "/", 1) || !ft_strncmp(cmd->cmd, "../", 3))
 		exe = cmd->cmd;
 	else
-		exe = cmd->path; 
+		exe = cmd->path;
 	envp = lst_to_tab(env);
 	if (!exe || !envp)
 	{
@@ -113,19 +112,15 @@ void	close_temp_file(t_exec **cmds)
 	}
 }
 
-void	exec(t_exec **cmds, t_list **env, char **envp)
+void	launch_forks(t_exec **cmds, t_list **env, char **envp, int pipe_nb)
 {
 	int		cur_cmd;
 	int		cur_pipe;
-	int		pipefd[1024];
+	int		pipefd[MAX_PIPE];
 	t_fork	fork_info;
-	int		pipe_nb;
 
 	cur_cmd = 0;
 	cur_pipe = 0;
-	pipe_nb = ft_tablen((char **)cmds) - 1;
-	if (pipe_nb > 1024 / 2)
-		return (print_error(NULL, NULL, "too many commands"));
 	if (!open_pipes(pipefd, pipe_nb))
 		return ;
 	while (cmds[cur_cmd])
@@ -142,4 +137,14 @@ void	exec(t_exec **cmds, t_list **env, char **envp)
 	if (!cur_cmd && cmds[cur_cmd]->cmd)
 		exec_parent_builtins(cmds[cur_cmd], env);
 	close_temp_file(cmds);
+}
+
+void	exec(t_exec **cmds, t_list **env, char **envp)
+{
+	int		pipe_nb;
+
+	pipe_nb = ft_tablen((char **)cmds) - 1;
+	if (pipe_nb > MAX_PIPE / 2)
+		return (print_error(NULL, NULL, "too many commands"));
+	launch_forks(cmds, env, envp, pipe_nb);
 }

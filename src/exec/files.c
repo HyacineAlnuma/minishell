@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 10:21:35 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/18 15:53:39 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/18 17:11:53 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,12 @@ int	manage_outfile(t_exec *cmd, int *outfile_fd, int i, int j)
 		close(outfile_fd[i]);
 		i++;
 	}
-	else if (cmd->docs[j]->type == APPEND)
+	return (1);
+}
+
+int	manage_append(t_exec *cmd, int *outfile_fd, int i, int j)
+{
+	if (cmd->docs[j]->type == APPEND)
 	{
 		outfile_fd[i] = open(
 				cmd->docs[j]->str, O_RDWR | O_APPEND \
@@ -62,7 +67,12 @@ int	manage_infile(t_exec *cmd, int *infile_fd, int k, int j)
 		close(infile_fd[k]);
 		k++;
 	}
-	else if (cmd->docs[j]->type >= HEREDOC)
+	return (1);
+}
+
+int	manage_here_doc(t_exec *cmd, int *infile_fd, int k, int j)
+{
+	if (cmd->docs[j]->type >= HEREDOC)
 	{
 		infile_fd[k] = open(HD_TEMP_FILE, O_RDONLY);
 		if (infile_fd[k] == -1)
@@ -73,6 +83,24 @@ int	manage_infile(t_exec *cmd, int *infile_fd, int k, int j)
 		dup_fd(infile_fd[k], STDIN_FILENO, cmd);
 		close(infile_fd[k]);
 	}
+	return (1);
+}
+
+int	manage_outfiles(t_exec *cmd, int *outfile_fd, int i, int j)
+{
+	if (!manage_outfile(cmd, outfile_fd, i, j))
+		return (0);
+	if (!manage_append(cmd, outfile_fd, i, j))
+		return (0);
+	return (1);
+}
+
+int	manage_infiles(t_exec *cmd, int *outfile_fd, int i, int j)
+{
+	if (!manage_infile(cmd, outfile_fd, i, j))
+		return (0);
+	if (!manage_here_doc(cmd, outfile_fd, i, j))
+		return (0);
 	return (1);
 }
 
@@ -93,9 +121,9 @@ int	manage_files(t_exec *cmd)
 			j++;
 		else
 		{
-			if (!manage_infile(cmd, infile_fd, k, j))
+			if (!manage_infiles(cmd, infile_fd, k, j))
 				return (0);
-			if (!manage_outfile(cmd, outfile_fd, i, j))
+			if (!manage_outfiles(cmd, outfile_fd, i, j))
 				return (0);
 			j++;
 		}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
+/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:02:33 by secros            #+#    #+#             */
-/*   Updated: 2025/04/18 15:44:35 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/18 17:04:35 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@
 # define HD_TEMP_FILE "tmp/here_doc_temp.txt"
 # define EXEC_TMP_FILE "tmp/exec_temp.txt"
 # define CMD_NOT_FOUND 127
+# define MAX_PIPE 1024
 
 # define ASCII1 " /$$      /$$           /$$                                   "
 # define ASCII2 "                  /$$                     /$$      /$$ /$$    "
@@ -148,8 +149,6 @@ void		init_hd_utils_2(t_hd_utils *hd, \
 size_t *b, char **cmd, t_list **env);
 int			all_digit(char *str);
 void		print_error(char *cmd, char *arg, char *message);
-
-
 
 void		init_hd_utils_3(t_hd_utils *hd, char *f, char **envp, t_sink **bin);
 char		**convert_lst_in_tab(t_list *lst, t_sink *bin);

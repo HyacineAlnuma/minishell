@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 09:32:09 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/18 15:43:20 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/18 17:00:18 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,15 @@ int	check_if_cmd_exists(char **paths, t_exec *cmd)
 {
 	char	*path;
 	int		i;
-	int		j;
 
 	path = NULL;
-	i = 0;
-	j = 0;
-	while (paths[i])
+	i = -1;
+	while (paths[++i])
 	{
 		path = paths[i];
 		path = fill_dishwasher(ft_strjoin(path, "/"), free, get_sink(NULL));
-		path = fill_dishwasher(ft_strjoin(path, cmd->cmd), free, get_sink(NULL));
+		path = fill_dishwasher(ft_strjoin(path, cmd->cmd), \
+		free, get_sink(NULL));
 		if (!path)
 		{
 			perror("malloc error");
@@ -36,8 +35,6 @@ int	check_if_cmd_exists(char **paths, t_exec *cmd)
 			cmd->path = path;
 			return (1);
 		}
-		path = &paths[i][j + 1];
-		i++;
 	}
 	return (0);
 }
@@ -59,10 +56,38 @@ int	check_cmd_no_env(t_exec *cmd)
 	return (check_if_cmd_exists(paths, cmd));
 }
 
+int	check_cmd_path(char *paths, char **path, int i, t_exec *cmd)
+{
+	paths[i] = '\0';
+	*path = fill_dishwasher(ft_strjoin(*path, "/"), free, get_sink(NULL));
+	if (!path)
+	{
+		perror("malloc error");
+		free(paths);
+		return (0);
+	}
+	*path = fill_dishwasher(ft_strjoin(*path, cmd->cmd), \
+	free, get_sink(NULL));
+	if (!*path)
+	{
+		perror("malloc error");
+		free(paths);
+		return (0);
+	}
+	if (!access(*path, F_OK))
+	{
+		cmd->path = *path;
+		return (1);
+	}
+	*path = &paths[i + 1];
+	return (2);
+}
+
 int	check_cmd_with_env(t_exec *cmd, char *paths)
 {
 	char	*path;
 	int		i;
+	int		check_cmd_val;
 
 	path = NULL;
 	path = fill_dishwasher(ft_strjoin(path, ":"), free, get_sink(NULL));
@@ -77,25 +102,9 @@ int	check_cmd_with_env(t_exec *cmd, char *paths)
 	{
 		if (paths[i] == ':')
 		{
-			paths[i] = '\0';
-			path = fill_dishwasher(ft_strjoin(path, "/"), free, get_sink(NULL));
-			if (!path)
-			{
-				perror("malloc error");
-				return (free(paths), 0);
-			}
-			path = fill_dishwasher(ft_strjoin(path, cmd->cmd), free, get_sink(NULL));
-			if (!path)
-			{
-				perror("malloc error");
-				return (free(paths), 0);
-			}
-			if (!access(path, F_OK))
-			{
-				cmd->path = path;
-				return (1);
-			}
-			path = &paths[i + 1];
+			check_cmd_val = check_cmd_path(paths, &path, i, cmd);
+			if (!check_cmd_val || check_cmd_val == 1)
+				return (check_cmd_val);
 		}
 	}
 	return (free(paths), 0);
