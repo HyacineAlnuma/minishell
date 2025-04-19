@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 11:45:00 by secros            #+#    #+#             */
-/*   Updated: 2025/04/18 17:51:54 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/18 19:30:36 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	minishell(char **envp, t_list **env)
 	printf("exit\n");
 }
 
-int_least64_t	no_interactive_shell(char **envp, t_list **env)
+int	no_interactive_shell(char **envp, t_list **env)
 {
 	char	*mini_str;
 
