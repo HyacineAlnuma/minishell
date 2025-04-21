@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 10:28:35 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/18 15:51:07 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/21 10:17:24 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,30 +49,31 @@ int	expand_cmd(t_hd_utils *hd_utils, char **formatted, char **cmd)
 
 char	*parse_hd(char *str, t_list **env, char **envp, t_sink **bin)
 {
-	size_t		i;
-	size_t		begin_part;
-	char		*formatted;
+	size_t		i[2];
+	char		*f;
 	char		*cmd;
 	t_hd_utils	hd_utils;
+	int			synthax;
 
-	i = -1;
-	begin_part = 0;
-	formatted = NULL;
+	i[0] = -1;
+	i[1] = 0;
+	f = NULL;
 	cmd = NULL;
-	while (str && str[++i])
+	while (str && str[++i[0]])
 	{
-		if (str[i] == '$' && str[i + 1] == '(')
+		synthax = synthax_expand(str, i[0]);
+		if (synthax == 1)
 		{
-			init_hd_utils(&hd_utils, formatted, str, &i);
-			init_hd_utils_2(&hd_utils, &begin_part, &cmd, env);
-			init_hd_utils_3(&hd_utils, formatted, envp, bin);
-			if (!expand_cmd(&hd_utils, &formatted, &cmd))
+			hd_utils = (t_hd_utils){f, str, &i[1], &i[0], &cmd, env, envp, bin};
+			if (!expand_cmd(&hd_utils, &f, &cmd))
 				return (NULL);
 		}
+		else if (!synthax)
+			return (NULL);
 	}
-	if (!last_concat(&formatted, &str[begin_part]))
+	if (!last_concat(&f, &str[i[1]]))
 		return (NULL);
-	return (formatted);
+	return (f);
 }
 
 int	format_here_doc(char *str, t_list **env, char **envp, t_sink **bin)

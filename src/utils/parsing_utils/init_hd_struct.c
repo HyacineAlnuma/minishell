@@ -6,31 +6,24 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 14:02:19 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/11 16:42:21 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/21 10:17:32 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	init_hd_utils(t_hd_utils *hd_utils, char *f, char *str, size_t *i)
+int	synthax_expand(char *str, int i)
 {
-	hd_utils->formatted = f;
-	hd_utils->str = str;
-	hd_utils->i = i;
-}
-
-void	init_hd_utils_2(t_hd_utils *hd, size_t *b, char **cmd, t_list **env)
-{
-	hd->begin_part = b;
-	hd->cmd = cmd;
-	hd->env = env;
-}
-
-void	init_hd_utils_3(t_hd_utils *hd, char *f, char **envp, t_sink **bin)
-{
-	hd->formatted = f;
-	hd->envp = envp;
-	hd->bin = bin;
+	if (!(str[i] == '$' && str[i + 1] == '('))
+		return (2);
+	while (str[i] && str[i] != ')')
+		i++;
+	if (!str[i])
+	{
+		ft_putendl_fd("minishell: can't find matching `)'", 2);
+		return (0);
+	}
+	return (1);
 }
 
 enum e_doc	find_type(char *str)

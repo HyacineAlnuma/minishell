@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 11:45:00 by secros            #+#    #+#             */
-/*   Updated: 2025/04/18 19:30:36 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/21 10:22:59 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,10 @@ void	minishell(char **envp, t_list **env)
 
 	command = NULL;
 	bin = NULL;
-	signal(SIGINT, sig_handler);
 	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
+		signal(SIGINT, sig_handler);
 		g_sigint_flag = 0;
 		print_prompt(env);
 		input = fill_dishwasher(readline("minishell % "), free, &bin);
@@ -63,6 +63,7 @@ void	minishell(char **envp, t_list **env)
 			break ;
 		add_history(input);
 		command = parsing(input, env, &bin);
+		signal(SIGINT, SIG_IGN);
 		if (command)
 			exec(command, env, envp);
 		do_dishes(&bin);

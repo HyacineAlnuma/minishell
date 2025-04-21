@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:02:33 by secros            #+#    #+#             */
-/*   Updated: 2025/04/18 17:43:07 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/21 10:17:47 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,6 +188,7 @@ int			last_status_code(int status, int instruction);
 t_list		**cut_instruction(t_list *tokens, int count);
 t_doc		**create_docs(t_list **head, t_list *lst, \
 t_sink *bin, t_list **env);
+int			synthax_expand(char *str, int i);
 
 int			env_handling(t_list *tokens, t_list **env, t_sink *bin);
 int			compare(char *str, char *str_ref);
