@@ -6,7 +6,7 @@
 #    By: secros <secros@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/18 09:48:16 by halnuma           #+#    #+#              #
-#    Updated: 2025/04/21 11:22:49 by secros           ###   ########.fr        #
+#    Updated: 2025/04/21 11:41:53 by secros           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ _BOLD			= \e[1m
 
 NAME			= minishell
 CC				= cc
-CFLAGS			= -Wall -Wextra -Werror -g3
+CFLAGS			= -Wall -Wextra -Werror 
 
 # ------ PATHS ------ #
 
