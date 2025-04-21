@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 11:45:00 by secros            #+#    #+#             */
-/*   Updated: 2025/04/21 11:38:46 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/21 14:14:05 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,8 @@ void	minishell(char **envp, t_list **env)
 		g_sigint_flag = 1;
 		if (!input)
 			break ;
-		add_history(input);
+		if (*input)
+			add_history(input);
 		command = parsing(input, env, &bin);
 		signal(SIGINT, SIG_IGN);
 		if (command)

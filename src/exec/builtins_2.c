@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:34:14 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/21 10:58:43 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/21 14:12:48 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ void	exit_program(t_exec *cmd, int is_parent)
 		do_dishes(get_sink(cmd->bin));
 	if (is_parent)
 		printf("exit\n");
+	if (!cmd->opt[1])
+		exit_code = last_status_code(0, 1);
 	clean_exit(NULL, exit_code);
 }
 
