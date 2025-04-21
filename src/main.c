@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 11:45:00 by secros            #+#    #+#             */
-/*   Updated: 2025/04/21 11:14:58 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/21 11:38:46 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,14 +74,17 @@ void	minishell(char **envp, t_list **env)
 int	no_interactive_shell(char **envp, t_list **env)
 {
 	char	*mini_str;
+	t_sink	*bin;
 
+	bin = NULL;
 	mini_str = fill_dishwasher(get_next_line(0), free, get_sink(NULL));
 	while (mini_str)
 	{
 		if (!mini_str)
 			return (2);
-		exec(parsing(mini_str, env, get_sink(NULL)), env, envp);
+		exec(parsing(mini_str, env, &bin), env, envp);
 		mini_str = fill_dishwasher(get_next_line(0), free, get_sink(NULL));
+		do_dishes(&bin);
 	}
 	return (do_dishes(get_sink(NULL)), 0);
 }
