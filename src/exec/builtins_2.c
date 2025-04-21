@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:34:14 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/18 17:13:10 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/21 10:58:43 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,22 +36,24 @@ unsigned char	manage_exit_args(char **opt)
 	return ((unsigned char)exit_code);
 }
 
-void	exit_program(t_exec *cmd)
+void	exit_program(t_exec *cmd, int is_parent)
 {
 	unsigned char	exit_code;
 
 	exit_code = manage_exit_args(cmd->opt);
-	if (exit_code == 2)
+	if (exit_code == 2 && (is_parent || !cmd->nb_cmd))
 		print_error("exit", cmd->opt[1], ": numeric argument required");
-	else if (exit_code == 1)
+	else if (exit_code == 1 && (is_parent || !cmd->nb_cmd))
 	{
 		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
-		return ;
+		if (is_parent)
+			return ;
 	}
 	rl_clear_history();
 	if (cmd->bin)
 		do_dishes(get_sink(cmd->bin));
-	printf("exit\n");
+	if (is_parent)
+		printf("exit\n");
 	clean_exit(NULL, exit_code);
 }
 
@@ -95,6 +97,6 @@ int	exec_builtins(t_exec *cmd, t_list **env)
 	else if (!ft_strncmp(cmd->cmd, "env", 4))
 		print_env(cmd, env);
 	else if (!ft_strncmp(cmd->cmd, "exit", 5))
-		clean_exit(cmd->bin, EXIT_SUCCESS);
+		exit_program(cmd, 0);
 	return (0);
 }

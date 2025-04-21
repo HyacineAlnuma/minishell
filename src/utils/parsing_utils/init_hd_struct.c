@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 14:02:19 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/21 10:17:32 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/21 10:35:51 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,21 @@ int	synthax_expand(char *str, int i)
 		return (0);
 	}
 	return (1);
+}
+
+char	*empty_str(char *f_str, t_sink **bin)
+{
+	if (!f_str)
+	{
+		f_str = fill_dishwasher(ft_calloc(2, sizeof(char)), free, bin);
+		if (!f_str)
+		{
+			perror("Malloc error");
+			return (NULL);
+		}
+		f_str[0] = 3;
+	}
+	return (f_str);
 }
 
 enum e_doc	find_type(char *str)

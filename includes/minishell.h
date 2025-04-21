@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:02:33 by secros            #+#    #+#             */
-/*   Updated: 2025/04/21 10:17:47 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/21 10:52:13 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ typedef struct s_exec
 	char	*path;
 	t_doc	**docs;
 	t_sink	**bin;
+	int		nb_cmd;
 }	t_exec;
 
 typedef struct s_fork
@@ -189,6 +190,7 @@ t_list		**cut_instruction(t_list *tokens, int count);
 t_doc		**create_docs(t_list **head, t_list *lst, \
 t_sink *bin, t_list **env);
 int			synthax_expand(char *str, int i);
+char		*empty_str(char *f_str, t_sink **bin);
 
 int			env_handling(t_list *tokens, t_list **env, t_sink *bin);
 int			compare(char *str, char *str_ref);
@@ -202,7 +204,7 @@ char **envp, t_sink **bin);
 //--------- EXEC ---------//
 
 void		exec(t_exec **cmds, t_list **env, char **envp);
-void		exit_program(t_exec *cmd);
+void		exit_program(t_exec *cmd, int is_parent);
 void		echo(t_exec *cmd);
 void		cd(t_exec *cmd, t_list **env);
 void		pwd(t_exec *cmd	);

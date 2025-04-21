@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 10:52:29 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/21 10:34:53 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/21 10:35:38 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,21 +21,6 @@ int	end_heredoc(char *str, char **f_str, char *eof, t_sink **bin)
 		return (free(str), 2);
 	*f_str = fill_dishwasher(ft_strjoin(*f_str, "\n"), free, bin);
 	return (0);
-}
-
-char	*empty_str(char *f_str, t_sink **bin)
-{
-	if (!f_str)
-	{
-		f_str = fill_dishwasher(ft_calloc(2, sizeof(char)), free, bin);
-		if (!f_str)
-		{
-			perror("Malloc error");
-			return (NULL);
-		}
-		f_str[0] = 3;
-	}
-	return (f_str);
 }
 
 char	*readline_hd(char *f_str, char *eof, t_sink *bin)

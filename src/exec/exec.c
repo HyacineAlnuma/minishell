@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:27:50 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/18 17:46:32 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/21 10:54:33 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,8 @@ void	exec(t_exec **cmds, t_list **env, char **envp)
 	if (!cmds)
 		return ;
 	pipe_nb = ft_tablen((char **)cmds) - 1;
+	if (pipe_nb == 0)
+		cmds[0]->nb_cmd = 1;
 	if (pipe_nb > MAX_PIPE / 2)
 		return (print_error(NULL, NULL, "too many commands"));
 	launch_forks(cmds, env, envp, pipe_nb);
