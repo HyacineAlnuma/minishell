@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:56:31 by secros            #+#    #+#             */
-/*   Updated: 2025/04/18 17:35:13 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/21 11:27:48 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	skip_to_file(t_list **lst)
 	}
 	if (i != 2 || !(*lst))
 	{
-		ft_printf("hell: syntax error near unexpected token `\\n'\n");
+		ft_printf("minishell: syntax error near unexpected token `\\n'\n");
 		return (1);
 	}
 	return (0);

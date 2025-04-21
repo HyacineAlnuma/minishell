@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:57:54 by secros            #+#    #+#             */
-/*   Updated: 2025/04/11 16:29:52 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/21 11:27:39 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	check_pipe(t_list **pipe, int count)
 		}
 		if (!pipe[i])
 		{
-			write(2, "hell: syntax error near unexpected token `|'\n", 46);
+			write(2, "minishell: syntax error near unexpected token `|'\n", 46);
 			return (1);
 		}
 		i++;

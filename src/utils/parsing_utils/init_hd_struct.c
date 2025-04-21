@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 14:02:19 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/21 10:35:51 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/21 11:27:59 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ enum e_doc	find_type(char *str)
 		return (OUTFILE);
 	else if (!strncmp(str, ">>\0", 3))
 		return (APPEND);
-	ft_printf("hell: syntax error near unexpected token `%c'\n", \
+	ft_printf("minishell: syntax error near unexpected token `%c'\n", \
 str[ft_strlen(str) - 1]);
 	return (-1);
 }
