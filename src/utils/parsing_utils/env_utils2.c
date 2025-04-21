@@ -6,34 +6,34 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 13:55:51 by secros            #+#    #+#             */
-/*   Updated: 2025/04/18 17:41:40 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/21 11:23:37 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*find_user_in_pwd(void)
+char	*find_user_in_pwd(t_list **env)
 {
 	char	*res;
-	char	pwd[PATH_MAX];
+	char	*pwd;
 	int		i;
 	int		j;
 
 	j = 0;
-	if (getcwd(pwd, sizeof(pwd)) == NULL)
-	{
-		perror("getcwd() error");
+	pwd = find_node(env, "$PWD");
+	if (!pwd)
 		return (NULL);
-	}
 	else
 	{
 		i = 1;
-		while (pwd[i] != '/')
+		while (pwd[i] && pwd[i] != '/')
 			i++;
-		while (pwd[i + j] != '/')
-			j++;
 		i++;
-		res = fill_dishwasher(ft_substr(pwd, i, i + j), free, get_sink(NULL));
+		while (pwd[i + j] && pwd[i + j] != '/' )
+			j++;
+		if (!j)
+			return (NULL);
+		res = fill_dishwasher(ft_substr(pwd, i, j), free, get_sink(NULL));
 	}
 	return (res);
 }

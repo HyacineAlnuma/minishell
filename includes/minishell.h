@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:02:33 by secros            #+#    #+#             */
-/*   Updated: 2025/04/21 10:52:13 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/21 11:23:40 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "libft.h"
 # include "color.h"
 # include "bt_malloc.h"
+# include "ascii.h"
 
 # include <readline/readline.h>
 # include <readline/history.h>
@@ -33,42 +34,6 @@
 # define EXEC_TMP_FILE "tmp/exec_temp.txt"
 # define CMD_NOT_FOUND 127
 # define MAX_PIPE 1024
-
-# define ASCII1 " /$$      /$$           /$$                                   "
-# define ASCII2 "                  /$$                     /$$      /$$ /$$    "
-# define ASCII3 "       /$$           /$$                 /$$ /$$ /$$\n"
-# define ASCII4 "| $$  /$ | $$          | $$                                   "
-# define ASCII5 "                 | $$                    | $$$    /$$$|__/    "
-# define ASCII6 "      |__/          | $$                | $$| $$| $$\n"
-# define ASCII7 "| $$ /$$$| $$  /$$$$$$ | $$  /$$$$$$$  /$$$$$$  /$$$$$$/$$$$  "
-# define ASCII8 " /$$$$$$        /$$$$$$    /$$$$$$       | $$$$  /$$$$ /$$ /$$"
-# define ASCII9 "$$$$$  /$$  /$$$$$$$| $$$$$$$   /$$$$$$ | $$| $$| $$\n"
-# define ASCII10 "| $$/$$ $$ $$ /$$__  $$| $$"
-# define ASCII11 " /$$_____/ /$$__  $$| $$_  $$_  $$ "
-# define ASCII12 "/$$__  $$      |_  $$_/   /$$__"
-# define ASCII13 "  $$      | $$ $$/$$ $$| $$| $$"
-# define ASCII14 "__  $$| $$ /$$_____/| $$__  $$ /$$__  $$| $$| $$| $$\n"
-# define ASCII15 "| $$$$_  $$$$| $$$$$$$$|"
-# define ASCII16 " $$| $$      | $$  \\ $$| $$ \\ $$ \\ "
-# define ASCII17 "$$| $$$$$$$$        | $$    "
-# define ASCII18 "| $$  \\ $$      | $$  $$$| $$| $$"
-# define ASCII19 "| $$  \\ $$| $$|  $$$$$$ | $$  \\ $$| $$$$$$$$| $$| $$|__/\n"
-# define ASCII20 "| $$$/ \\  $$$| $$_____/| "
-# define ASCII21 "$$| $$      | $$  | $$| $$ | $$ | $$"
-# define ASCII22 "| $$_____/        | $$ /$$| $"
-# define ASCII23 "$  | $$      | $$\\  $ | $$| $$| "
-# define ASCII24 "$$  | $$| $$ \\____  $$| $$  | $$| $$_____/| $$| $$    \n"
-# define ASCII25 "| $$/   \\  $$|  $$$$$$$| "
-# define ASCII26 "$$|  $$$$$$$|  $$$$$$/| $$ | $$ | $$"
-# define ASCII27 "|  $$$$$$$        |  $$$$/|  "
-# define ASCII28 "$$$$$$/      | $$ \\/  | $$| $$| "
-# define ASCII29 "$$  | $$| $$ /$$$$$$$/| $$  | $$|  $$$$$$$| $$| $$ /$$\n"
-# define ASCII30 "|__/     \\__/ \\_______/|_"
-# define ASCII31 "_/ \\_______/ \\______/ |__/ |__/ |"
-# define ASCII32 "__/ \\_______/         \\___/ "
-# define ASCII33 "  \\______/       |__/     |__/|"
-# define ASCII34 "__/|__/  |__/|__/|_______/ |__"
-# define ASCII35 "/  |__/ \\_______/|__/|__/|__/\n"
 
 enum e_here_bool
 {
@@ -181,7 +146,7 @@ char		*find_node(t_list **env, char *var_env);
 char		*remove_quote(char *str, t_sink *bin);
 char		*synthax_quote(char *str);
 int			merge_tokens(t_list *tokens, t_sink *bin);
-char		*find_user_in_pwd(void);
+char		*find_user_in_pwd(t_list **env);
 char		*exec_hd(t_hd_utils *hd_utils, char *cmd);
 t_hd_utils	*parse_and_dup(t_hd_utils *hd_utils, size_t j);
 char		*get_heredoc(t_sink *bin, char *eof);
