@@ -6,7 +6,7 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 09:32:09 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/23 11:52:15 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/23 14:20:01 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,12 @@ int	check_cmd_with_env(t_exec *cmd, char *paths)
 	int		i;
 	int		check_cmd_val;
 
+	paths = fill_dishwasher(ft_strjoin(paths, ":"), free, get_sink(NULL));
+	if (!paths)
+	{
+		perror("malloc error");
+		return (2);
+	}
 	path = paths;
 	i = -1;
 	if (strchr(cmd->cmd, '/'))
