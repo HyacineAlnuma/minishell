@@ -6,14 +6,14 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 17:36:42 by secros            #+#    #+#             */
-/*   Updated: 2025/04/18 17:41:51 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/23 11:36:53 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 void	ft_lst_hand_wash_if(t_list **begin_list, void *data_ref, \
-int (*cmp)(), t_sink *bin)
+int (*cmp)(), t_sink **bin)
 {
 	t_list	*tmp;
 
@@ -23,7 +23,7 @@ int (*cmp)(), t_sink *bin)
 	{
 		tmp = *begin_list;
 		*begin_list = (*begin_list)->next;
-		hand_wash(tmp, &bin);
+		hand_wash(tmp, bin);
 		ft_lst_hand_wash_if(begin_list, data_ref, cmp, bin);
 	}
 	else
