@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing_utils2.c                                   :+:      :+:    :+:   */
+/*   parsing_utils_2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:59:00 by secros            #+#    #+#             */
-/*   Updated: 2025/04/18 17:37:00 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/23 11:34:09 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,5 +90,5 @@ int	compare(char *str, char *str_ref)
 		else
 			return (1);
 	}
-	return (ft_strcmp(str, str_ref));
+	return (ft_strncmp(str, str_ref, ft_strlen(str_ref)));
 }
