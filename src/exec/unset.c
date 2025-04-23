@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 17:32:35 by secros            #+#    #+#             */
-/*   Updated: 2025/04/23 11:52:20 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/23 11:56:20 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ int	unset_exp(char *var, t_list **env)
 				if (var[var_size] != '=')
 					return (0);
 				ft_lst_remove_if(env, ptr->content, compare, 0);
+				return (1);
 			}
 		}
 		ptr = ptr->next;
