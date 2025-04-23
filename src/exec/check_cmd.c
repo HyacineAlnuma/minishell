@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_cmd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
+/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 09:32:09 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/23 09:37:31 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/23 11:52:15 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,8 +114,6 @@ int	check_cmd(t_exec *cmd, t_list **env)
 		return (1);
 	if (stat(cmd->cmd, &fs) == 0 && !S_ISREG(fs.st_mode))
 		return (3);
-	// if (stat(cmd->cmd, &fs) == 0 && !(fs.st_mode & S_IXUSR))
-	// 	return (1);
 	paths = find_node(env, "$PATH");
 	if (!paths)
 		return (check_cmd_no_env(cmd));

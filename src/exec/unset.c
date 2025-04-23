@@ -6,87 +6,79 @@
 /*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 17:32:35 by secros            #+#    #+#             */
-/*   Updated: 2025/04/23 10:59:04 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/23 11:52:20 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	calc_var_sizes(char *var, int *have_equal)
+int	calc_var_size(char *var)
 {
 	int		var_size;
 
 	var_size = 0;
 	while (var[var_size] && var[var_size] != '=')
 		var_size++;
-	if (var[var_size])
-		var_size++;
-	else
-		*have_equal = 0;
 	return (var_size);
 }
 
-char	*find_data_ref(t_list **env, char *var, int var_size, int index)
+int	unset_exp(char *var, t_list **env)
 {
-	char	*data_ref;
 	t_list	*ptr;
+	int		var_size;
+	int		env_var_size;
 
+	var_size = calc_var_size(var);
 	ptr = *env;
-	data_ref = NULL;
 	while (ptr)
 	{
-		data_ref = ft_strnstr(ptr->content, var, var_size);
-		if (data_ref)
-			printf("%s\n", data_ref);
-		if (!index && (data_ref[var_size] == '=' || !data_ref[var_size]))
-		// if (!ft_strncmp(ptr->content, var, var_size))
+		env_var_size = calc_var_size(ptr->content);
+		if (env_var_size == var_size)
 		{
-			data_ref = ptr->content;
-			break ;
+			if (!ft_strncmp(ptr->content, var, var_size))
+			{
+				if (var[var_size] != '=')
+					return (0);
+				ft_lst_remove_if(env, ptr->content, compare, 0);
+			}
 		}
 		ptr = ptr->next;
 	}
-	return (data_ref);
+	return (1);
 }
 
-int	unset_var(char *data_ref, int have_equal, int index, t_list **env)
+char	*find_env(t_list **env, char *var)
 {
-	if (data_ref && (have_equal || !index))
+	t_list	*ptr;
+	size_t	size;
+	char	*ref;
+
+	ptr = *env;
+	size = ft_strlen(var);
+	if (!size || var[size - 1] == '=')
+		return (NULL);
+	while (ptr)
 	{
-		ft_lst_remove_if(env, data_ref, ft_strcmp, 0);
-		if (index)
-			return (1);
+		ref = ft_strnstr(ptr->content, var, size);
+		if (ref && (!ref[size] || ref[size] == '='))
+			return (ref);
+		ptr = ptr->next;
 	}
-	else if (data_ref)
-		return (2);
-	return (0);
+	return (NULL);
 }
 
 int	unset(t_exec *cmd, t_list **env, int index)
 {
-	char	*data_ref;
-	int		var_size;
 	int		i;
-	int		have_equal;
-	int		unset_val;
+	char	*ref;
 
 	i = 1;
-	unset_val = 0;
-	have_equal = 1;
-	if (!cmd->opt[1])
-		return (0);
-	if (index)
-		i = index;
+	(void) index;
 	while (cmd->opt[i])
 	{
-		var_size = calc_var_sizes(cmd->opt[i], &have_equal);
-		data_ref = find_data_ref(env, cmd->opt[i], var_size, index);
-		unset_val = unset_var(data_ref, have_equal, index, env);
-		if (unset_val)
-			return (unset_val);
-		if (index)
-			break ;
+		ref = find_env(env, cmd->opt[i]);
 		i++;
+		ft_lst_hand_wash_if(env, ref, compare, get_sink(NULL));
 	}
-	return (1);
+	return (0);
 }

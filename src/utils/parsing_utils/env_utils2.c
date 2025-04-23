@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
+/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 13:55:51 by secros            #+#    #+#             */
-/*   Updated: 2025/04/23 09:48:27 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/23 11:52:32 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void	print_exp_env(t_list **env)
 		if (ft_strncmp(var_env, "_=", 2))
 		{
 			ft_printf("declare -x ");
-			print_quoted_env(var_env);	
+			print_quoted_env(var_env);
 		}
 		ptr = ptr->next;
 	}
