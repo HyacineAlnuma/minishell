@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:56:31 by secros            #+#    #+#             */
-/*   Updated: 2025/04/21 11:27:48 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/23 13:49:08 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,29 +41,28 @@ int	skip_to_file(t_list **lst)
 	return (0);
 }
 
-int	polish_doc(t_list **lst, t_sink *bin, t_list **env, t_doc *document)
+int	polish_doc(t_list **lst, t_sink **bin, t_list **env, t_doc *document)
 {
-	char		i;
+	char	quote;
 
-	i = 0;
 	document->type = find_type((char *)(*lst)->content);
 	if (document->type == -1)
 		return (1);
 	if (skip_to_file(lst))
 		return (1);
-	i = heredoc_quotes(*lst);
+	quote = heredoc_quotes(*lst);
 	if (merge_tokens(*lst, bin) == 2)
 		return (1);
 	document->str = (*lst)->content;
 	if (document->type == HEREDOC)
-		do_heredoc(document, i, bin, env);
+		do_heredoc(document, quote, bin, env);
 	if (document->type < 0)
 		return (1);
 	*lst = (*lst)->next;
 	return (0);
 }
 
-void	*alloc_docs(t_list *lst, t_sink *bin)
+void	*alloc_docs(t_list *lst, t_sink **bin)
 {
 	t_doc	**docs;
 	size_t	i;
@@ -71,13 +70,13 @@ void	*alloc_docs(t_list *lst, t_sink *bin)
 
 	j = 0;
 	i = lst_count_char(lst, '<') + lst_count_char(lst, '>');
-	docs = new_plate(sizeof(t_doc *) * (i + 1), &bin);
+	docs = new_plate(sizeof(t_doc *) * (i + 1), bin);
 	if (!docs)
 		return (NULL);
 	ft_bzero(docs, sizeof(t_doc *) * (i + 1));
 	while (j < i)
 	{
-		docs[j] = new_plate(sizeof(t_doc), &bin);
+		docs[j] = new_plate(sizeof(t_doc), bin);
 		if (!docs)
 			return (NULL);
 		j++;
@@ -85,7 +84,7 @@ void	*alloc_docs(t_list *lst, t_sink *bin)
 	return (docs);
 }
 
-t_doc	**create_docs(t_list **head, t_list *lst, t_sink *bin, t_list **env)
+t_doc	**create_docs(t_list **head, t_list *lst, t_sink **bin, t_list **env)
 {
 	t_doc	**docs;
 	t_list	*prev;

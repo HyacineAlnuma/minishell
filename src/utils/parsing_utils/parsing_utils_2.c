@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils_2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:59:00 by secros            #+#    #+#             */
-/*   Updated: 2025/04/23 11:47:06 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/23 13:51:30 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*remove_quote(char *str, t_sink *bin)
+char	*remove_quote(char *str, t_sink **bin)
 {
 	char	*tmp;
 
@@ -22,10 +22,10 @@ char	*remove_quote(char *str, t_sink *bin)
 	if (str[0] == '\'' || str[0] == '"')
 	{
 		tmp = fill_dishwasher(ft_substr(str, 1, \
-ft_strlen(str) - 2), free, &bin);
+ft_strlen(str) - 2), free, bin);
 		if (tmp[0] == '\0')
 		{
-			hand_wash(tmp, &bin);
+			hand_wash(tmp, bin);
 			return (NULL);
 		}
 	}
@@ -52,7 +52,7 @@ int	is_quote(char c)
 	return (0);
 }
 
-int	env_handling(t_list *tokens, t_list **env, t_sink *bin)
+int	env_handling(t_list *tokens, t_list **env, t_sink **bin)
 {
 	char	*token;
 	char	*n_tok;

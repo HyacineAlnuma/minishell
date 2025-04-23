@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 10:28:35 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/21 10:17:24 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/23 13:59:34 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,9 +82,9 @@ int	format_here_doc(char *str, t_list **env, char **envp, t_sink **bin)
 	int		hd_fd;
 	int		f_len;
 
-	fill_dishwasher(envp, free, bin);
 	if (!envp)
 		return (-1);
+	fill_dishwasher(envp, free, bin);
 	formatted = parse_hd(str, env, envp, bin);
 	if (!formatted)
 		return (-1);
@@ -101,7 +101,7 @@ int	format_here_doc(char *str, t_list **env, char **envp, t_sink **bin)
 	return (HEREDOC);
 }
 
-void	do_heredoc(t_doc *docs, char quote, t_sink *bin, t_list **env)
+void	do_heredoc(t_doc *docs, char quote, t_sink **bin, t_list **env)
 {
 	char	*str;
 	char	*heredoc;
@@ -114,7 +114,8 @@ void	do_heredoc(t_doc *docs, char quote, t_sink *bin, t_list **env)
 	docs->str = heredoc;
 	if (quote == 0)
 	{
-		docs->type = format_here_doc(docs->str, env, lst_to_tab(env), &bin);
+		docs->str = handle_env(heredoc, env, bin);
+		docs->type = format_here_doc(docs->str, env, lst_to_tab(env), bin);
 		return ;
 	}
 	doc_fd = open(HD_TEMP_FILE, O_RDWR | O_CREAT, S_IWUSR | S_IRUSR);

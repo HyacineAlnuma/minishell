@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:05:15 by secros            #+#    #+#             */
-/*   Updated: 2025/04/11 14:38:05 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/23 13:47:54 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,30 +49,30 @@ char	*add_return_status(char *str)
 	return (str);
 }
 
-char	*replace_env(char *str, t_list **env, t_vect pos, t_sink *bin)
+char	*replace_env(char *str, t_list **env, t_vect pos, t_sink **bin)
 {
 	char	*var_env;
 	char	*new_str;
 
-	var_env = fill_dishwasher(ft_substr(str, pos.x, pos.y), free, &bin);
+	var_env = fill_dishwasher(ft_substr(str, pos.x, pos.y), free, bin);
 	if (!var_env)
 		return (NULL);
-	new_str = fill_dishwasher(ft_substr(str, 0, pos.x), free, &bin);
+	new_str = fill_dishwasher(ft_substr(str, 0, pos.x), free, bin);
 	if (!new_str)
 		return (NULL);
 	if (var_env[1] == '?')
-		new_str = fill_dishwasher(add_return_status(new_str), free, &bin);
+		new_str = fill_dishwasher(add_return_status(new_str), free, bin);
 	else
 		new_str = fill_dishwasher(ft_strjoin(new_str, find_node(env, var_env)), \
-	free, &bin);
+	free, bin);
 	if (!new_str)
 		return (NULL);
 	new_str = fill_dishwasher(ft_strjoin(new_str, (str + pos.x + pos.y)), \
-	free, &bin);
+	free, bin);
 	return (new_str);
 }
 
-char	*digit_env(char *str, t_list **env, t_sink *bin, size_t i)
+char	*digit_env(char *str, t_list **env, t_sink **bin, size_t i)
 {
 	size_t	len;
 
@@ -83,7 +83,7 @@ char	*digit_env(char *str, t_list **env, t_sink *bin, size_t i)
 	(t_vect){i, len}, bin), env, bin));
 }
 
-char	*handle_env(char *str, t_list **env, t_sink *bin)
+char	*handle_env(char *str, t_list **env, t_sink **bin)
 {
 	size_t	i;
 	size_t	len;

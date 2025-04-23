@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 14:00:23 by secros            #+#    #+#             */
-/*   Updated: 2025/04/18 15:40:11 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/23 13:49:15 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	clear_to(t_list	*start, t_list *end)
 	start->next = end;
 }
 
-int	merge_all(t_list *lst, t_sink *bin)
+int	merge_all(t_list *lst, t_sink **bin)
 {
 	while (lst)
 	{

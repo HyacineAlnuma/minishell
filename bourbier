@@ -1,0 +1,3 @@
+unset PATH, export PATH=$PWD
+minishell
+-> cmd not found. Problem est surement pour le dernier chemin de PATH

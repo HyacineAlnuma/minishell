@@ -6,13 +6,13 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 11:38:20 by secros            #+#    #+#             */
-/*   Updated: 2025/04/18 15:38:54 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/23 13:48:06 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	merge_tokens(t_list *tokens, t_sink *bin)
+int	merge_tokens(t_list *tokens, t_sink **bin)
 {
 	t_list	*tmp;
 	char	*new_token;
@@ -25,7 +25,7 @@ int	merge_tokens(t_list *tokens, t_sink *bin)
 	{
 		tmp->content = remove_quote((char *)tmp->content, bin);
 		new_token = fill_dishwasher(ft_strjoin(new_token, \
-		(char *)tmp->content), free, &bin);
+		(char *)tmp->content), free, bin);
 		if (!new_token)
 			return (2);
 		tmp = tmp->next;
@@ -74,7 +74,7 @@ char	*unify_token(char *str, char **token, t_sink **bin, size_t	*i)
 {
 	while (str[*i] && is_redir(str[*i]) && is_redir(str[*i - 1]))
 	{
-		if (str[*i] == '|')
+		if (*i == 0 || str[*i] == '|' || str[*i - 1] == '|')
 			break ;
 		*token = fill_dishwasher(ft_strjoin(*token, \
 split_token(str, i, bin)), free, bin);

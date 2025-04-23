@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 10:52:29 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/21 10:35:38 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/23 13:46:45 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	end_heredoc(char *str, char **f_str, char *eof, t_sink **bin)
 	return (0);
 }
 
-char	*readline_hd(char *f_str, char *eof, t_sink *bin)
+char	*readline_hd(char *f_str, char *eof, t_sink **bin)
 {
 	int		i;
 	char	*str;
@@ -39,15 +39,15 @@ char	*readline_hd(char *f_str, char *eof, t_sink *bin)
 			if (!g_sigint_flag)
 				printf("minishell: warning: here-document at line %d \
 delimited by end-of-file (wanted `%s')\n", i, eof);
-			return (free(str), empty_str(f_str, &bin));
+			return (free(str), empty_str(f_str, bin));
 		}
-		if (end_heredoc(str, &f_str, eof, &bin))
-			return (empty_str(f_str, &bin));
+		if (end_heredoc(str, &f_str, eof, bin))
+			return (empty_str(f_str, bin));
 		i++;
 	}
 }
 
-void	process_hd(int *pipefd, char *eof, t_sink *bin)
+void	process_hd(int *pipefd, char *eof, t_sink **bin)
 {
 	int		f_len;
 	char	*f_str;
@@ -59,7 +59,7 @@ void	process_hd(int *pipefd, char *eof, t_sink *bin)
 	f_str = readline_hd(f_str, eof, bin);
 	if (!f_str)
 	{
-		do_dishes(get_sink(&bin));
+		do_dishes(get_sink(bin));
 		exit(EXIT_SUCCESS);
 	}
 	dup_fd(pipefd[1], STDOUT_FILENO, NULL);
@@ -70,18 +70,18 @@ void	process_hd(int *pipefd, char *eof, t_sink *bin)
 		write(STDOUT_FILENO, f_str, f_len);
 	}
 	g_sigint_flag = 1;
-	do_dishes(get_sink(&bin));
+	do_dishes(get_sink(bin));
 	exit(EXIT_SUCCESS);
 }
 
-char	*read_pipe(int *pipefd, char *f_str, t_sink *bin)
+char	*read_pipe(int *pipefd, char *f_str, t_sink **bin)
 {
 	char	char_buf[2];
 
 	ft_bzero(char_buf, 2);
 	while (read(pipefd[0], char_buf, 1))
 	{
-		f_str = fill_dishwasher(ft_strjoin(f_str, char_buf), free, &bin);
+		f_str = fill_dishwasher(ft_strjoin(f_str, char_buf), free, bin);
 		if (!f_str)
 		{
 			perror("malloc error");
@@ -92,7 +92,7 @@ char	*read_pipe(int *pipefd, char *f_str, t_sink *bin)
 	return (f_str);
 }
 
-char	*get_heredoc(t_sink *bin, char *eof)
+char	*get_heredoc(t_sink **bin, char *eof)
 {
 	pid_t	pid;
 	int		pipefd[2];

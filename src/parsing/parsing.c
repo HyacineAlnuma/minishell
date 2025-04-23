@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/04/23 11:36:45 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/23 13:51:41 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,12 @@ t_exec	*setup_exec(t_list **piped, t_sink **bin, t_list **env)
 	if (!new)
 		return (NULL);
 	ft_bzero(new, sizeof(t_exec));
-	new->docs = create_docs(piped, *piped, *bin, env);
+	new->docs = create_docs(piped, *piped, bin, env);
 	verif_doc(new->docs);
 	if (!new->docs || g_sigint_flag == 2)
 		return (NULL);
 	new->bin = bin;
-	merge_all(*piped, *bin);
+	merge_all(*piped, bin);
 	ft_lst_hand_wash_if(piped, NULL, compare, bin);
 	tab = convert_lst_in_tab(*piped, *bin);
 	if (!tab)
@@ -77,7 +77,7 @@ t_list	**str_to_tokens(char *str, t_list **env, t_sink **bin, size_t *count)
 	tokens = create_token_list(str, bin);
 	if (!tokens)
 		return (NULL);
-	if (!env_handling(tokens, env, *bin))
+	if (!env_handling(tokens, env, bin))
 		return (NULL);
 	*count = lst_count_char(tokens, '|');
 	piped = fill_dishwasher(cut_instruction(tokens, *count), free, bin);
