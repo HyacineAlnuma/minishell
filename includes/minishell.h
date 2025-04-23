@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
+/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:02:33 by secros            #+#    #+#             */
-/*   Updated: 2025/04/23 09:12:57 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/23 10:51:02 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,5 +188,6 @@ void		wait_all_pid(t_exec **cmds, int pipe_nb);
 void		exec_parent_builtins(t_exec *cmd, t_list **env);
 void		dup_fd(int fd1, int fd2, t_exec *cmd);
 void		close_temp_file(t_exec **cmds);
+int			unset_exp(char *var, t_list **env);
 
 #endif

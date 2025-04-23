@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
+/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 17:32:35 by secros            #+#    #+#             */
-/*   Updated: 2025/04/23 08:24:22 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/23 10:50:35 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	export_vars(t_exec *cmd, t_list **env, int i)
 
 	if (!check_export_arg(cmd->opt[i]))
 		return ;
-	if (unset(cmd, env, i) == 1)
+	if (unset_exp(cmd->opt[i], env) == 1)
 	{
 		env_line = fill_dishwasher(ft_strdup(cmd->opt[i]), \
 		free, get_sink(NULL));

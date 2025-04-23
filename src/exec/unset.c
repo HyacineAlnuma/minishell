@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
+/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 17:32:35 by secros            #+#    #+#             */
-/*   Updated: 2025/04/23 10:44:20 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/23 10:59:04 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	calc_var_size(char *var, int *have_equal)
+int	calc_var_sizes(char *var, int *have_equal)
 {
 	int		var_size;
 
@@ -79,7 +79,7 @@ int	unset(t_exec *cmd, t_list **env, int index)
 		i = index;
 	while (cmd->opt[i])
 	{
-		var_size = calc_var_size(cmd->opt[i], &have_equal);
+		var_size = calc_var_sizes(cmd->opt[i], &have_equal);
 		data_ref = find_data_ref(env, cmd->opt[i], var_size, index);
 		unset_val = unset_var(data_ref, have_equal, index, env);
 		if (unset_val)

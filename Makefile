@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: secros <secros@student.42.fr>              +#+  +:+       +#+         #
+#    By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/18 09:48:16 by halnuma           #+#    #+#              #
-#    Updated: 2025/04/23 09:28:10 by secros           ###   ########.fr        #
+#    Updated: 2025/04/23 11:39:30 by halnuma          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,7 +56,7 @@ HEREDOC 		= fork_here_doc			here_doc_2			\
 EXEC			= builtins				builtins_2 			\
 				check_cmd				exec				\
 				files					pipes				\
-				unset					export			
+				unset					export					
 						
 
 UTILS			= handle_signal			print_ascii			\
