@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_utils_2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 14:46:07 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/09 14:46:45 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/23 09:43:22 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,7 @@ char	*get_previous_pwd(t_list **env)
 		}
 		ptr = ptr->next;
 	}
+	if (!previouspwd)
+		last_status_code(1, 2);
 	return (previouspwd);
 }

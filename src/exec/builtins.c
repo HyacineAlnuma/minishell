@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:32:53 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/18 17:33:25 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/23 09:45:37 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,8 +93,8 @@ int	change_dir(t_exec *cmd, t_list *ptr, char *oldpwd, t_list **env)
 
 	if (!chdir(cmd->opt[1]))
 	{
-		if (!getcwd(pwd, sizeof(pwd)))
-			perror("getcwd() error");
+		getcwd(pwd, sizeof(pwd));
+			// perror("getcwd() error");
 		while (ptr)
 		{
 			pwd_val = change_pwd_vars(ptr, oldpwd, pwd);
@@ -126,7 +126,7 @@ void	cd(t_exec *cmd, t_list **env)
 		if (!cmd->opt[1])
 		{
 			ft_putendl_fd("minishell: cd: HOME not set", 2);
-			return ;
+			return ((void)last_status_code(1, 2));
 		}
 	}
 	if (!getcwd(oldpwd, sizeof(oldpwd)))
@@ -136,7 +136,7 @@ void	cd(t_exec *cmd, t_list **env)
 	if (!ft_strncmp(cmd->opt[1], "-", 2))
 	{
 		if (!previouspwd)
-			printf("minishell: cd: OLDPWD not set\n");
+			return ((void)printf("minishell: cd: OLDPWD not set\n"));
 		cmd->opt[1] = previouspwd;
 	}
 	if (!change_dir(cmd, ptr, oldpwd, env))

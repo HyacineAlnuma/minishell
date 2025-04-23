@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:29:37 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/21 10:47:34 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/23 09:34:40 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,17 @@ int	last_status_code(int status, int instruction)
 {
 	static int	status_code;
 
-	if (!instruction && WIFEXITED(status))
+	if (WTERMSIG(status) == SIGINT)
+	{
+		ft_putchar_fd('\n', 1);
+		status_code = 130;
+	}
+	else if (WTERMSIG(status) == SIGQUIT)
+	{
+		ft_putstr_fd("Quit (core dumped)\n", 1);
+		status_code = 131;
+	}
+	else if (!instruction && WIFEXITED(status))
 		status_code = WEXITSTATUS(status);
 	else if (instruction == 2)
 		status_code = status;

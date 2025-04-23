@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:27:50 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/21 14:09:25 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/23 09:38:38 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,19 +23,20 @@ void	exec_bin(t_exec *cmd, t_list **env, char **envp)
 		getcwd(pwd, sizeof(pwd));
 		cmd->cmd[0] = '/';
 		path = pwd;
-		exe = ft_strjoin(path, cmd->cmd);
+		exe = fill_dishwasher(ft_strjoin(path, cmd->cmd), free, cmd->bin);
 	}
 	else if (!ft_strncmp(cmd->cmd, "/", 1) || !ft_strncmp(cmd->cmd, "../", 3))
 		exe = cmd->cmd;
 	else
 		exe = cmd->path;
-	envp = lst_to_tab(env);
+	envp = fill_dishwasher(lst_to_tab(env), free, cmd->bin);
 	if (!exe || !envp)
 	{
-		perror("malloc error");
+		perror("Malloc error");
 		clean_exit(cmd->bin, EXIT_FAILURE);
 	}
 	execve(exe, cmd->opt, envp);
+	print_error(cmd->cmd + 2, NULL, "command not found");
 	clean_exit(cmd->bin, EXIT_FAILURE);
 }
 
@@ -43,11 +44,11 @@ void	exec_cmd(t_exec *cmd, t_list **env, char **envp)
 {
 	int	check_cmd_val;
 
-	check_cmd_val = check_cmd(cmd);
+	check_cmd_val = check_cmd(cmd, env);
 	if (!cmd->cmd || check_cmd_val != 1)
 	{
 		if (cmd->cmd && !check_cmd_val)
-			print_error(cmd->cmd, NULL, ": command not found.");
+			print_error(cmd->cmd, NULL, "command not found.");
 		if (cmd->cmd && check_cmd_val == 3)
 			print_error(cmd->cmd, NULL, ": Is a directory.");
 		if (cmd->cmd && check_cmd_val == 4)

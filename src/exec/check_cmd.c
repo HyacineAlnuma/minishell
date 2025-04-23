@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_cmd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 09:32:09 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/18 17:00:18 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/23 09:37:31 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int	check_cmd_path(char *paths, char **path, int i, t_exec *cmd)
 		free(paths);
 		return (0);
 	}
-	if (!access(*path, F_OK))
+	if (!access(*path, F_OK | X_OK))
 	{
 		cmd->path = *path;
 		return (1);
@@ -89,15 +89,10 @@ int	check_cmd_with_env(t_exec *cmd, char *paths)
 	int		i;
 	int		check_cmd_val;
 
-	path = NULL;
-	path = fill_dishwasher(ft_strjoin(path, ":"), free, get_sink(NULL));
-	if (!path)
-	{
-		perror("malloc error");
-		return (2);
-	}
 	path = paths;
 	i = -1;
+	if (strchr(cmd->cmd, '/'))
+		return (1);
 	while (paths[++i])
 	{
 		if (paths[i] == ':')
@@ -110,7 +105,7 @@ int	check_cmd_with_env(t_exec *cmd, char *paths)
 	return (free(paths), 0);
 }
 
-int	check_cmd(t_exec *cmd)
+int	check_cmd(t_exec *cmd, t_list **env)
 {
 	char		*paths;
 	struct stat	fs;
@@ -119,9 +114,9 @@ int	check_cmd(t_exec *cmd)
 		return (1);
 	if (stat(cmd->cmd, &fs) == 0 && !S_ISREG(fs.st_mode))
 		return (3);
-	if (stat(cmd->cmd, &fs) == 0 && (fs.st_mode & S_IXUSR))
-		return (1);
-	paths = getenv("PATH");
+	// if (stat(cmd->cmd, &fs) == 0 && !(fs.st_mode & S_IXUSR))
+	// 	return (1);
+	paths = find_node(env, "$PATH");
 	if (!paths)
 		return (check_cmd_no_env(cmd));
 	else
