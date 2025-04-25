@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 09:18:38 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/11 16:32:01 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/25 14:30:10 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,8 @@ t_list	**lst_env(char **envp)
 	{
 		if (!strncmp(envp[i], "SHLVL=", 6))
 			envp[i] = increment_shlvl(envp[i]);
+		if (!envp[i])
+			return (NULL);
 		new_line = fill_dishwasher(ft_lstnew(envp[i]), free, get_sink(NULL));
 		if (!new_line)
 			return (NULL);

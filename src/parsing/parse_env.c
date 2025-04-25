@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 10:05:15 by secros            #+#    #+#             */
-/*   Updated: 2025/04/23 13:47:54 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/25 14:34:39 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,13 @@ char	*find_node(t_list **env, char *var_env)
 	{
 		if (!ft_strcmp((char *)lst->content, var_env + 1))
 		{
-			while (((char *)lst->content)[i] != '=')
+			while (((char *)lst->content)[i]
+				&& ((char *)lst->content)[i] != '=')
 				i++;
 			free (var_env);
-			return (&((char *)lst->content)[i + 1]);
+			if (((char *)lst->content)[i])
+				return (&((char *)lst->content)[i + 1]);
+			return (NULL);
 		}
 		lst = lst->next;
 	}
@@ -92,7 +95,8 @@ char	*handle_env(char *str, t_list **env, t_sink **bin)
 	while (str && str[i])
 	{
 		len = 1;
-		if (str[i] == '$' && (ft_isalnum(str[i + 1]) || str[i + 1] == '?'))
+		if (str[i] == '$' && (ft_isalnum(str[i + 1]) || str[i + 1] == '?'
+				|| str[i + 1] == '_'))
 		{
 			if (ft_isdigit(str[i + len]))
 				return (handle_env(replace_env(str, env, \
@@ -100,7 +104,8 @@ char	*handle_env(char *str, t_list **env, t_sink **bin)
 			if (str[i + len] == '?')
 				return (handle_env(replace_env(str, env, \
 					(t_vect){i, len + 1}, bin), env, bin));
-			while (str[i + len] && ft_isalnum(str[i + len]))
+			while (str[i + len] && (ft_isalnum(str[i + len])
+					|| str[i + len] == '_'))
 				len++;
 			return (handle_env(replace_env(str, env, \
 			(t_vect){i, len}, bin), env, bin));

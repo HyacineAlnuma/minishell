@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:59:00 by secros            #+#    #+#             */
-/*   Updated: 2025/04/23 13:51:30 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/25 14:02:17 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int	env_handling(t_list *tokens, t_list **env, t_sink **bin)
 			if (!new_str)
 				return (0);
 			i = ft_strlen(new_str);
-			if (new_str[i - 1] == '$' && n_tok && (is_quote(n_tok[0])))
+			if (i > 0 && new_str[i - 1] == '$' && n_tok && (is_quote(n_tok[0])))
 				new_str[i - 1] = '\0';
 			tokens->content = new_str;
 		}
