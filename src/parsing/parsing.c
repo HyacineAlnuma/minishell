@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/04/23 13:51:41 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/25 09:50:02 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,26 @@ t_list	**str_to_tokens(char *str, t_list **env, t_sink **bin, size_t *count)
 	return (piped);
 }
 
+int	unclosed(char *str)
+{
+	int		i;
+	char	quote;
+
+	i = 0;
+	quote = 0;
+	while (str[i])
+	{
+		if (!quote && (str[i] == '"' || str[i] == '\''))
+			quote = str[i];
+		else if (str[i] == quote)
+			quote = 0;
+		i++;
+	}
+	if (quote)
+		print_error(NULL, NULL, "Unclosed quote not supported");
+	return (quote);
+}
+
 t_exec	**parsing(char *str, t_list **env, t_sink **bin)
 {
 	t_list	**piped;
@@ -91,6 +111,8 @@ t_exec	**parsing(char *str, t_list **env, t_sink **bin)
 	size_t	count;
 	size_t	i;
 
+	if (unclosed(str))
+		return (NULL);
 	piped = str_to_tokens(str, env, bin, &count);
 	if (!piped)
 		return (NULL);
