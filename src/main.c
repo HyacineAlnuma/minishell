@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
+/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 11:45:00 by secros            #+#    #+#             */
-/*   Updated: 2025/04/21 14:14:05 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/25 14:40:59 by halnuma          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,8 @@ int	main(int ac, char **av, char **envp)
 		return (1);
 	}
 	env = lst_env(envp);
+	if (!env)
+		return (1);
 	if (!isatty(STDIN_FILENO))
 	{
 		if (no_interactive_shell(envp, env))
