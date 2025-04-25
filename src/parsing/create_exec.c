@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 12:57:54 by secros            #+#    #+#             */
-/*   Updated: 2025/04/23 13:30:49 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/25 09:22:44 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,16 +32,6 @@ void	cut_pipe(t_list **tokens)
 	}
 }
 
-void	print_lst(t_list *lst)
-{
-	while (lst)
-	{
-		ft_printf("[%s]-", (char *)lst->content);
-		lst = lst->next;
-	}
-	ft_printf("\n");
-}
-
 int	check_pipe(t_list **pipe, int count)
 {
 	int	i;
@@ -49,7 +39,6 @@ int	check_pipe(t_list **pipe, int count)
 	i = 0;
 	while (i <= count)
 	{
-		print_lst(pipe[i]);
 		while (pipe[i])
 		{
 			if (pipe[i]->content)

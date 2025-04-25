@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_cmd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: halnuma <halnuma@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 09:32:09 by halnuma           #+#    #+#             */
-/*   Updated: 2025/04/23 14:20:01 by halnuma          ###   ########.fr       */
+/*   Updated: 2025/04/25 09:21:55 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ int	check_cmd_with_env(t_exec *cmd, char *paths)
 				return (check_cmd_val);
 		}
 	}
-	return (free(paths), 0);
+	return (0);
 }
 
 int	check_cmd(t_exec *cmd, t_list **env)
