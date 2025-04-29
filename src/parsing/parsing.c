@@ -6,7 +6,7 @@
 /*   By: secros <secros@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by secros            #+#    #+#             */
-/*   Updated: 2025/04/25 09:50:02 by secros           ###   ########.fr       */
+/*   Updated: 2025/04/29 10:14:23 by secros           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ void	verif_doc(t_doc **docs)
 	{
 		if (docs[i]->type >= HEREDOC)
 		{
-			ft_printf("YOOOO\n");
 			docs[i]->str = NULL;
 			close(docs[i]->type);
 			count--;
